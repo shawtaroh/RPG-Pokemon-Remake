@@ -40,17 +40,17 @@ public class BitMap {
 	private int height;
 
 	public BitMap(int w, int h) {
-		this.width = w;
-		this.height = h;
-		this.pixels = new int[w * h];
-		this.image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-		this.pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
+		width = w;
+		height = h;
+		pixels = new int[w * h];
+		image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+		pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
 	}
 
 	public BitMap(int w, int h, int[] p) {
-		this.width = w;
-		this.height = h;
-		this.pixels = p;
+		width = w;
+		height = h;
+		pixels = p;
 	}
 
 	public BufferedImage getBufferedImage() {
@@ -58,7 +58,7 @@ public class BitMap {
 	}
 
 	public void blit(BitMap bitmap, int x, int y) {
-		this.blit(bitmap, x, y, bitmap.width, bitmap.height);
+		blit(bitmap, x, y, bitmap.width, bitmap.height);
 	}
 
 	// loads images

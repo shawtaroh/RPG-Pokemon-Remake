@@ -105,7 +105,7 @@ public class SplashScreen extends JWindow {
 
 				progressBar.setValue(count);
 
-				System.out.println(count);
+				// System.out.println(count);
 
 				if (count == 100) {
 

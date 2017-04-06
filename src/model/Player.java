@@ -31,13 +31,13 @@ import java.util.ArrayList;
 
 import driver.Key;
 import graphics.BitMap;
-import maps.Map;
+import maps.MapOne;
 
 public class Player {
 
 	private ArrayList<Key> keys;
-	public int xPosition = -TILE_WIDTH * 10;
-	public int yPosition = -TILE_HEIGHT * 10;
+	public int xPosition = -TILE_WIDTH * 0;
+	public int yPosition = -TILE_HEIGHT * 0;
 	private static int TILE_WIDTH = 64;
 	private static int TILE_HEIGHT = 64;
 	int facing = 0;
@@ -60,7 +60,7 @@ public class Player {
 	public void setCenter(BitMap screen) {
 	}
 
-	public void initialize(Map world) {
+	public void initialize(MapOne world) {
 
 	}
 
@@ -132,13 +132,22 @@ public class Player {
 		} else
 			screen.blit(player[facing][0], (screen.getWidth() - TILE_WIDTH * 2) / 2 + xPosition,
 					(screen.getHeight() - TILE_HEIGHT) / 2 + yPosition, TILE_WIDTH, TILE_HEIGHT);
-
 	}
 
 	private void handleMovement() {
 		if (lockWalking) {
-			xPosition += xAccel;
-			yPosition += yAccel;
+			if (xPosition > -TILE_WIDTH * 13 && xPosition < TILE_WIDTH * 12)
+				xPosition += xAccel;
+			else {
+				if (xAccel > 0)
+					xPosition += xAccel;
+			}
+			if (yPosition > -TILE_WIDTH * 12 && yPosition < TILE_WIDTH * 12)
+				yPosition += yAccel;
+			else {
+				if (yAccel > 0)
+					yPosition += yAccel;
+			}
 		}
 		if (xPosition % TILE_WIDTH == 0 && yPosition % TILE_HEIGHT == 0) {
 			lockWalking = false;

@@ -36,6 +36,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferStrategy;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -44,8 +45,13 @@ import javax.swing.WindowConstants;
 import graphics.BitMap;
 import graphics.SplashScreen;
 import graphics.InGameMenu;
-import maps.Map;
+import maps.MapOne;
+import maps.MapTwo;
 import model.Player;
+import model.Pokedex;
+import songplayer.EndOfSongEvent;
+import songplayer.EndOfSongListener;
+import songplayer.SongPlayer;
 
 public class GameGUI extends JFrame implements Runnable {
 
@@ -53,8 +59,8 @@ public class GameGUI extends JFrame implements Runnable {
 	 * 
 	 */
 	private static final long serialVersionUID = 60158402771325988L;
-	private int width = 1920;
-	private int height = 1728;
+	private int width = 2880;
+	private int height = 2592;
 	private int FPS = 60;
 	private BitMap screen;
 	private int scale;
@@ -62,8 +68,10 @@ public class GameGUI extends JFrame implements Runnable {
 	private boolean running = true;
 	private ArrayList<Key> keys = new ArrayList<>();
 	private InputHandler inputHandler;
-	private Map world;
+	private MapTwo world;
+	//private MapOne world;
 	private Player player;
+	private ObjectWaitingForSongToEnd waiter=new ObjectWaitingForSongToEnd();
 
 	public GameGUI() {
 		scale = 1;
@@ -78,7 +86,8 @@ public class GameGUI extends JFrame implements Runnable {
 		addKeyListener(myMenuListener);
 		addWindowListener(new myWindowListener());
 		player = new Player(keys);
-		world = new Map(90, 60, player);
+		//world = new MapOne(90, 60, player);
+		world = new MapTwo(180, 135, player);
 		menu = new InGameMenu();
 		add(menu);
 
@@ -91,12 +100,13 @@ public class GameGUI extends JFrame implements Runnable {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 		start();
+		SongPlayer.playFile(waiter, Pokedex.class.getResource("/art/sounds/101-opening.wav").toString().substring(6));
 	}
 
 	public static void main(String[] args) {
 		SplashScreen execute = new SplashScreen("/art/splash/pika loading.gif", "Loading Safari World!");
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -105,6 +115,16 @@ public class GameGUI extends JFrame implements Runnable {
 
 	}
 
+
+	// song waiter
+	public class ObjectWaitingForSongToEnd implements EndOfSongListener, Serializable {
+
+		public void songFinishedPlaying(EndOfSongEvent eosEvent) {
+				//SongPlayer.playFile(waiter, playMe.getAudioFileName());
+				System.out.println("Hello");
+			}
+		}
+	
 	private class menuListener implements KeyListener {
 
 		@Override
@@ -183,7 +203,7 @@ public class GameGUI extends JFrame implements Runnable {
 
 			if (shouldRender) {
 				Graphics g = bufferStrategy.getDrawGraphics();
-				g.setColor(Color.LIGHT_GRAY);
+				g.setColor(Color.BLACK);
 				g.fillRect(0, 0, this.getWidth(), this.getHeight());
 				g.translate((((this.getWidth() - (width) * scale)) / 2) - this.player.xPosition * scale,
 						((this.getHeight() - (height) * scale) / 2) - this.player.yPosition * scale);

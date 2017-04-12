@@ -33,7 +33,6 @@ import java.util.ArrayList;
 
 import driver.Key;
 import graphics.BitMap;
-import maps.Map;
 
 public class Player implements Serializable {
 
@@ -44,6 +43,8 @@ public class Player implements Serializable {
 	private ArrayList<Key> keys;
 	private int xPosition = -TILE_WIDTH * 0;
 	private int yPosition = -TILE_HEIGHT * 0;
+	private int map;
+	public boolean stepTracker = false;
 
 	public int getxPosition() {
 		return xPosition;
@@ -71,7 +72,7 @@ public class Player implements Serializable {
 
 	private static int TILE_WIDTH = 64;
 	private static int TILE_HEIGHT = 64;
-	private int steps;
+	private int steps = 500;
 	private int facing = 0;
 	private int turning = 0;
 	private byte animationTick = 0;
@@ -85,15 +86,20 @@ public class Player implements Serializable {
 
 	private static Player uniqueInstance;
 
-	public static Player getInstance(ArrayList<Key> keys) {
+	public static Player getInstance(ArrayList<Key> keys, int map) {
 		if (uniqueInstance == null)
-			uniqueInstance = new Player(keys);
+			uniqueInstance = new Player(keys, map);
 		return uniqueInstance;
 	}
 
-	public Player(ArrayList<Key> keys) {
+	public Player(ArrayList<Key> keys, int map) {
 		this.keys = keys;
+		this.map = map;
 		player = BitMap.cut("/art/player/player.png", 64, 64, 0, 0);
+	}
+
+	public int getMap() {
+		return map;
 	}
 
 	public void tick() {
@@ -144,6 +150,7 @@ public class Player implements Serializable {
 				else
 					facing = 3;
 				lockWalking = true;
+
 			}
 		}
 		handleMovement();
@@ -168,6 +175,7 @@ public class Player implements Serializable {
 
 	private void handleMovement() {
 		if (lockWalking) {
+			stepTracker = true;
 			if (xPosition > -TILE_WIDTH * 13 && xPosition < TILE_WIDTH * 12)
 				xPosition += xAccel;
 			else {
@@ -183,7 +191,13 @@ public class Player implements Serializable {
 		}
 		if (xPosition % TILE_WIDTH == 0 && yPosition % TILE_HEIGHT == 0) {
 			lockWalking = false;
-			steps++;
+			if (stepTracker) {
+				// if corrupted save state doesnt save steps
+				if (steps > 500)
+					steps = 500;
+				steps--;
+				stepTracker = false;
+			}
 			xAccel = 0;
 			yAccel = 0;
 			turning = facing;

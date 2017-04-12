@@ -52,6 +52,8 @@ import javax.swing.WindowConstants;
 import graphics.BitMap;
 import graphics.InGameMenu;
 import graphics.SplashScreen;
+import maps.Map;
+import maps.MapTypeOne;
 import maps.MapTypeTwo;
 import model.Player;
 import model.Pokedex;
@@ -74,12 +76,12 @@ public class GameGUI extends JFrame implements Runnable {
 	private boolean running = true;
 	private ArrayList<Key> keys = new ArrayList<>();
 	private InputHandler inputHandler;
-	private MapTypeTwo world;
+	private Map world;
 
 	private Player player;
 	private ObjectWaitingForSongToEnd waiter = new ObjectWaitingForSongToEnd();
 
-	public GameGUI() {
+	public GameGUI(int map) {
 		scale = 1;
 		screen = new BitMap(width, height);
 		keys.add(new Key("up"));
@@ -87,13 +89,16 @@ public class GameGUI extends JFrame implements Runnable {
 		keys.add(new Key("left"));
 		keys.add(new Key("right"));
 		inputHandler = new InputHandler(keys);
-		player = Player.getInstance(keys);
+		player = Player.getInstance(keys, map);
 		menuListener myMenuListener = new menuListener();
 		addKeyListener(inputHandler);
 		addKeyListener(myMenuListener);
 		addWindowListener(new myWindowListener());
 		// world = new MapOne(90, 60, player);
-		world = new MapTypeTwo(180, 135, player);
+		if (map == 1)
+			world = new MapTypeTwo(180, 135, player);
+		else
+			world = new MapTypeOne(180, 135, player);
 		menu = new InGameMenu();
 		add(menu);
 
@@ -122,17 +127,19 @@ public class GameGUI extends JFrame implements Runnable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				GameGUI game = new GameGUI();
-				game.player = Player.getInstance(game.keys);
 				Player loaded = (Player) inFile.readObject();
+				GameGUI game = new GameGUI(loaded.getMap());
+				game.player = Player.getInstance(game.keys, loaded.getMap());
 				game.player.setxPosition(loaded.getxPosition());
 				game.player.setyPosition(loaded.getyPosition());
 				game.player.setSteps(loaded.getSteps());
-				// inFile.close();
 			} catch (ClassNotFoundException | IOException e) {
 				e.printStackTrace();
 			}
 		} else {
+			Object[] options = { "Map One", "Map Two" };
+			int map = JOptionPane.showOptionDialog(null, "choose a map", "choose a map",
+					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 			SplashScreen execute = new SplashScreen("/art/splash/pika loading.gif", "Loading Safari World!");
 			try {
 				Thread.sleep(1000);
@@ -140,7 +147,7 @@ public class GameGUI extends JFrame implements Runnable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			GameGUI game = new GameGUI();
+			GameGUI game = new GameGUI(map);
 		}
 
 	}
@@ -171,6 +178,7 @@ public class GameGUI extends JFrame implements Runnable {
 				} else {
 					running = true;
 					System.out.println("SecondTime");
+					menu.setText(player.getSteps());
 					menu.setFocusable(false);
 					menu.setVisible(false);
 					start();

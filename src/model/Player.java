@@ -1,5 +1,7 @@
 package model;
 
+import java.io.Serializable;
+
 /*
 								Player.java
                                   ,'\
@@ -24,44 +26,74 @@ Shawtaroh Granzier-Nakajima
 
 @description
 CS 335 Final Project
-Implements Pokemon SafariZone Player, manages player specific information
+Implements Pokemon Trainer
 */
 
 import java.util.ArrayList;
 
 import driver.Key;
 import graphics.BitMap;
-import maps.MapOne;
+import maps.Map;
 
-public class Player {
+public class Player implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7403201549575621783L;
 	private ArrayList<Key> keys;
-	public int xPosition = -TILE_WIDTH * 0;
-	public int yPosition = -TILE_HEIGHT * 0;
+	private int xPosition = -TILE_WIDTH * 0;
+	private int yPosition = -TILE_HEIGHT * 0;
+
+	public int getxPosition() {
+		return xPosition;
+	}
+
+	public void setxPosition(int xPosition) {
+		this.xPosition = xPosition;
+	}
+
+	public int getyPosition() {
+		return yPosition;
+	}
+
+	public void setyPosition(int yPosition) {
+		this.yPosition = yPosition;
+	}
+
+	public int getSteps() {
+		return steps;
+	}
+
+	public void setSteps(int steps) {
+		this.steps = steps;
+	}
+
 	private static int TILE_WIDTH = 64;
 	private static int TILE_HEIGHT = 64;
-	int facing = 0;
-	int turning = 0;
-	byte animationTick = 0;
-	byte animationPointer = 0;
+	private int steps;
+	private int facing = 0;
+	private int turning = 0;
+	private byte animationTick = 0;
+	private byte animationPointer = 0;
 	private static BitMap[][] player;
-	int testValue = 0;
 
 	int xAccel;
 	int yAccel;
 
 	boolean lockWalking;
 
+	private static Player uniqueInstance;
+
+	public static Player getInstance(ArrayList<Key> keys) {
+		if (uniqueInstance == null)
+			uniqueInstance = new Player(keys);
+		return uniqueInstance;
+	}
+
 	public Player(ArrayList<Key> keys) {
 		this.keys = keys;
 		player = BitMap.cut("/art/player/player.png", 64, 64, 0, 0);
-	}
-
-	public void setCenter(BitMap screen) {
-	}
-
-	public void initialize(MapOne world) {
-
 	}
 
 	public void tick() {
@@ -151,6 +183,7 @@ public class Player {
 		}
 		if (xPosition % TILE_WIDTH == 0 && yPosition % TILE_HEIGHT == 0) {
 			lockWalking = false;
+			steps++;
 			xAccel = 0;
 			yAccel = 0;
 			turning = facing;

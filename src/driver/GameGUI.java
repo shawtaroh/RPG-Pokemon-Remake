@@ -59,8 +59,8 @@ public class GameGUI extends JFrame implements Runnable {
 	 * 
 	 */
 	private static final long serialVersionUID = 60158402771325988L;
-	private int width = 4096;
-	private int height = 3672;
+	private int width = 2880;
+	private int height = 2592;
 	private int FPS = 60;
 	private BitMap screen;
 	private int scale;
@@ -87,15 +87,15 @@ public class GameGUI extends JFrame implements Runnable {
 		addWindowListener(new myWindowListener());
 		player = new Player(keys);
 		//world = new MapOne(90, 60, player);
-		world = new MapTwo(360, 240, player);
+		world = new MapTwo(180, 135, player);
 		menu = new InGameMenu();
 		add(menu);
 
 		pack();
 		setResizable(true);
 		Insets inset = getInsets();
-		setSize(new Dimension((int)(inset.left + inset.right + width * scale /5),
-				(int)(inset.top + inset.bottom + height * scale /5)));
+		setSize(new Dimension(inset.left + inset.right + width * scale / 2,
+				inset.top + inset.bottom + height * scale / 2));
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);

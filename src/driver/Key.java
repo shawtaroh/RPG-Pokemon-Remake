@@ -29,13 +29,8 @@ Mainly distinguishes key held down and key tapped
 */
 
 import java.awt.event.KeyEvent;
-import java.io.Serializable;
 
-public class Key implements Serializable{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2206297702059012724L;
+public class Key {
 	private boolean isTapped;
 	private boolean isTappedDown;
 	private boolean isPressedDown;

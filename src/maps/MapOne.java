@@ -1,7 +1,7 @@
 package maps;
 
 /*
-							Map.java
+							TestWorld.java
                                   ,'\
     _.----.        ____         ,'  _\   ___    ___     ____
 _,-'       `.     |    |  /`.   \,-'    |   \  /   |   |    \  |`.
@@ -30,18 +30,18 @@ Implements Pokemon SafariZone map, loads up tiles and art in hard-coded manner
 import graphics.BitMap;
 import model.Player;
 
-public class Map {
+public class MapOne {
 
 	private final int width;
 	private final int height;
 	private static int TILE_WIDTH = 64;
 	private static int TILE_HEIGHT = 64;
 	private Player myPlayer;
-	protected static BitMap tile = BitMap.load("/art/floor/tile.png");
-	protected static BitMap[][] house = BitMap.cut("/art/house/houseOne.png", 64, 64, 0, 0);
-	protected static BitMap tree = BitMap.load("/art/wall/tree.png");
+	private static BitMap tile = BitMap.load("/art/floor/tile.png");
+	private static BitMap[][] house = BitMap.cut("/art/house/houseOne.png", 64, 64, 0, 0);
+	private static BitMap tree = BitMap.load("/art/wall/tree.png");
 
-	public Map(int w, int h, Player player) {
+	public MapOne(int w, int h, Player player) {
 		this.width = w;
 		this.height = h;
 		this.myPlayer = player;
@@ -83,5 +83,6 @@ public class Map {
 		screen.blit(house[0][1], 1 * TILE_WIDTH, 2 * TILE_HEIGHT);
 		screen.blit(house[1][1], 2 * TILE_WIDTH, 2 * TILE_HEIGHT);
 		screen.blit(house[2][1], 3 * TILE_WIDTH, 2 * TILE_HEIGHT);
+
 	}
 }

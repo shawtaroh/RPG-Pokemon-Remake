@@ -36,23 +36,17 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferStrategy;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
 import graphics.BitMap;
-import graphics.InGameMenu;
 import graphics.SplashScreen;
-import maps.MapTypeTwo;
+import graphics.InGameMenu;
+import maps.MapOne;
+import maps.MapTwo;
 import model.Player;
 import model.Pokedex;
 import songplayer.EndOfSongEvent;
@@ -74,10 +68,10 @@ public class GameGUI extends JFrame implements Runnable {
 	private boolean running = true;
 	private ArrayList<Key> keys = new ArrayList<>();
 	private InputHandler inputHandler;
-	private MapTypeTwo world;
-
+	private MapTwo world;
+	//private MapOne world;
 	private Player player;
-	private ObjectWaitingForSongToEnd waiter = new ObjectWaitingForSongToEnd();
+	private ObjectWaitingForSongToEnd waiter=new ObjectWaitingForSongToEnd();
 
 	public GameGUI() {
 		scale = 1;
@@ -87,13 +81,13 @@ public class GameGUI extends JFrame implements Runnable {
 		keys.add(new Key("left"));
 		keys.add(new Key("right"));
 		inputHandler = new InputHandler(keys);
-		player = Player.getInstance(keys);
 		menuListener myMenuListener = new menuListener();
 		addKeyListener(inputHandler);
 		addKeyListener(myMenuListener);
 		addWindowListener(new myWindowListener());
-		// world = new MapOne(90, 60, player);
-		world = new MapTypeTwo(180, 135, player);
+		player = new Player(keys);
+		//world = new MapOne(90, 60, player);
+		world = new MapTwo(180, 135, player);
 		menu = new InGameMenu();
 		add(menu);
 
@@ -110,50 +104,27 @@ public class GameGUI extends JFrame implements Runnable {
 	}
 
 	public static void main(String[] args) {
-		int choice = JOptionPane.showConfirmDialog(null, "Load previous save state?");
-
-		if (choice == 0) {
-			try {
-				ObjectInputStream inFile = new ObjectInputStream(new FileInputStream("game.save"));
-				SplashScreen execute = new SplashScreen("/art/splash/pika loading.gif", "Loading Safari World!");
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				GameGUI game = new GameGUI();
-				game.player = Player.getInstance(game.keys);
-				Player loaded = (Player) inFile.readObject();
-				game.player.setxPosition(loaded.getxPosition());
-				game.player.setyPosition(loaded.getyPosition());
-				game.player.setSteps(loaded.getSteps());
-				// inFile.close();
-			} catch (ClassNotFoundException | IOException e) {
-				e.printStackTrace();
-			}
-		} else {
-			SplashScreen execute = new SplashScreen("/art/splash/pika loading.gif", "Loading Safari World!");
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			GameGUI game = new GameGUI();
+		SplashScreen execute = new SplashScreen("/art/splash/pika loading.gif", "Loading Safari World!");
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		GameGUI game = new GameGUI();
 
 	}
+
 
 	// song waiter
 	public class ObjectWaitingForSongToEnd implements EndOfSongListener, Serializable {
 
 		public void songFinishedPlaying(EndOfSongEvent eosEvent) {
-			SongPlayer.playFile(waiter,
-					Pokedex.class.getResource("/art/sounds/101-opening.wav").toString().substring(6));
+				//SongPlayer.playFile(waiter, playMe.getAudioFileName());
+				System.out.println("Hello");
+			}
 		}
-	}
-
+	
 	private class menuListener implements KeyListener {
 
 		@Override
@@ -234,12 +205,12 @@ public class GameGUI extends JFrame implements Runnable {
 				Graphics g = bufferStrategy.getDrawGraphics();
 				g.setColor(Color.BLACK);
 				g.fillRect(0, 0, this.getWidth(), this.getHeight());
-				g.translate((((this.getWidth() - (width) * scale)) / 2) - this.player.getxPosition() * scale,
-						((this.getHeight() - (height) * scale) / 2) - this.player.getyPosition() * scale);
+				g.translate((((this.getWidth() - (width) * scale)) / 2) - this.player.xPosition * scale,
+						((this.getHeight() - (height) * scale) / 2) - this.player.yPosition * scale);
 				g.clipRect(0, 0, width * scale, height * scale);
 				if (world != null) {
-					int xScroll = (player.getxPosition());
-					int yScroll = (player.getyPosition());
+					int xScroll = (player.xPosition);
+					int yScroll = (player.yPosition);
 					world.render(screen, xScroll, yScroll);
 				}
 				g.drawImage(screen.getBufferedImage(), 0, 0, width * scale, height * scale, null);
@@ -309,19 +280,7 @@ public class GameGUI extends JFrame implements Runnable {
 		public void windowClosing(WindowEvent e) {
 			setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 			stop();
-			int choice = JOptionPane.showConfirmDialog(null, "Save State?");
-			if (choice == 0) {
-				try {
-					FileOutputStream savefile = new FileOutputStream("game.save");
-					ObjectOutputStream outFile = new ObjectOutputStream(savefile);
-					outFile.writeObject(player);
-					outFile.close();
-				} catch (FileNotFoundException e1) {
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}
+			System.out.println("HELLO");
 			SplashScreen close = new SplashScreen("/art/splash/gamecredits.gif", "Thanks for playing!!");
 
 		}

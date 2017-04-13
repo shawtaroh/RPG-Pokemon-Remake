@@ -29,6 +29,7 @@ _,-'       `.     |    |  /`.   \,-'    |   \  /   |   |    \  |`.
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
@@ -67,8 +68,8 @@ public class GameGUI extends JFrame implements Runnable {
 	 * 
 	 */
 	private static final long serialVersionUID = 60158402771325988L;
-	private int width = 2880;
-	private int height = 2592;
+	private int width = 2944;
+	private int height = 2688;
 	private int FPS = 60;
 	private BitMap screen;
 	private int scale;
@@ -94,11 +95,10 @@ public class GameGUI extends JFrame implements Runnable {
 		addKeyListener(inputHandler);
 		addKeyListener(myMenuListener);
 		addWindowListener(new myWindowListener());
-		// world = new MapOne(90, 60, player);
 		if (map == 1)
-			world = new MapTypeTwo(180, 135, player);
+			world = new MapTypeTwo(46, 42, player);
 		else
-			world = new MapTypeOne(180, 135, player);
+			world = new MapTypeOne(46, 42, player);
 		menu = new InGameMenu();
 		add(menu);
 
@@ -251,6 +251,17 @@ public class GameGUI extends JFrame implements Runnable {
 					world.render(screen, xScroll, yScroll);
 				}
 				g.drawImage(screen.getBufferedImage(), 0, 0, width * scale, height * scale, null);
+				if (Player.isEnterHome()) {
+					g.setFont( new Font("Verdana", Font.BOLD, 24));
+					g.drawString("Please purchase the DLC", 100, 100);
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					Player.setEnterHome(false);
+				}
 			}
 
 			long now = System.nanoTime();

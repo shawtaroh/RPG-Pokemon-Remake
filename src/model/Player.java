@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.Point;
 import java.io.Serializable;
 
 /*
@@ -44,7 +45,16 @@ public class Player implements Serializable {
 	private int xPosition = -TILE_WIDTH * 0;
 	private int yPosition = -TILE_HEIGHT * 0;
 	private int map;
-	public boolean stepTracker = false;
+	private boolean stepTracker = false;
+	private static boolean enterHome = false;
+
+	public static boolean isEnterHome() {
+		return enterHome;
+	}
+
+	public static void setEnterHome(boolean enterHome) {
+		enterHome = enterHome;
+	}
 
 	public int getxPosition() {
 		return xPosition;
@@ -78,9 +88,10 @@ public class Player implements Serializable {
 	private byte animationTick = 0;
 	private byte animationPointer = 0;
 	private static BitMap[][] player;
+	private ArrayList<Point> restrictedX = new ArrayList<>();
 
-	int xAccel;
-	int yAccel;
+	private int xAccel;
+	private int yAccel;
 
 	boolean lockWalking;
 
@@ -95,6 +106,7 @@ public class Player implements Serializable {
 	public Player(ArrayList<Key> keys, int map) {
 		this.keys = keys;
 		this.map = map;
+		loadRestrictions();
 		player = BitMap.cut("/art/player/player.png", 64, 64, 0, 0);
 	}
 
@@ -167,25 +179,49 @@ public class Player implements Serializable {
 	public void render(BitMap screen) {
 		if (lockWalking) {
 			screen.blit(player[turning][animationPointer], (screen.getWidth() - TILE_WIDTH * 2) / 2 + xPosition,
-					(screen.getHeight() - TILE_HEIGHT) / 2 + yPosition, TILE_WIDTH, TILE_HEIGHT);
+					(screen.getHeight() - TILE_HEIGHT) / 2 + yPosition + 16, TILE_WIDTH, TILE_HEIGHT);
 		} else
 			screen.blit(player[facing][0], (screen.getWidth() - TILE_WIDTH * 2) / 2 + xPosition,
-					(screen.getHeight() - TILE_HEIGHT) / 2 + yPosition, TILE_WIDTH, TILE_HEIGHT);
+					(screen.getHeight() - TILE_HEIGHT) / 2 + yPosition + 16, TILE_WIDTH, TILE_HEIGHT);
+	}
+
+	private boolean restrictedTile(int x, int y) {
+		for (Point p : restrictedX)
+			if (x == p.getY() && y == p.getX())
+				return true;
+		return false;
+	}
+
+	// perimeter squares
+	private void loadRestrictions() {
+		restrictedX.add(new Point(-21 * TILE_WIDTH, -18 * TILE_WIDTH));
+		restrictedX.add(new Point(-20 * TILE_WIDTH, -18 * TILE_WIDTH));
+		restrictedX.add(new Point(-19 * TILE_WIDTH, -18 * TILE_WIDTH));
+		// restrictedX.add(new Point(-18*TILE_WIDTH,-18*TILE_WIDTH));
+		restrictedX.add(new Point(-18 * TILE_WIDTH, -19 * TILE_WIDTH));
+		restrictedX.add(new Point(-18 * TILE_WIDTH, -20 * TILE_WIDTH));
+
 	}
 
 	private void handleMovement() {
 		if (lockWalking) {
 			stepTracker = true;
-			if (xPosition > -TILE_WIDTH * 13 && xPosition < TILE_WIDTH * 12)
+			if (xPosition == -TILE_WIDTH * 20 && yPosition == TILE_WIDTH * -18 && facing == 3)
+				enterHome = true;
+			if (xPosition > -TILE_WIDTH * 21 && xPosition < TILE_WIDTH * 22 && !restrictedTile(xPosition, yPosition))
 				xPosition += xAccel;
 			else {
-				if (xAccel > 0)
+				if ((xPosition == -TILE_WIDTH * 21 || restrictedTile(xPosition, yPosition)) && xAccel > 0)
+					xPosition += xAccel;
+				else if (xPosition == TILE_WIDTH * 22 && xAccel < 0)
 					xPosition += xAccel;
 			}
-			if (yPosition > -TILE_WIDTH * 12 && yPosition < TILE_WIDTH * 12)
+			if (yPosition > -TILE_WIDTH * 20 && yPosition < TILE_WIDTH * 19 && !restrictedTile(xPosition, yPosition))
 				yPosition += yAccel;
 			else {
-				if (yAccel > 0)
+				if ((yPosition == -TILE_WIDTH * 20 || restrictedTile(xPosition, yPosition)) && yAccel > 0)
+					yPosition += yAccel;
+				else if (yPosition == TILE_WIDTH * 19 && yAccel < 0)
 					yPosition += yAccel;
 			}
 		}

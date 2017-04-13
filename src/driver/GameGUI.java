@@ -100,6 +100,7 @@ public class GameGUI extends JFrame implements Runnable {
 		else
 			world = new MapTypeOne(46, 42, player);
 		menu = new InGameMenu();
+		menu.setVisible(false);
 		add(menu);
 
 		pack();
@@ -252,10 +253,11 @@ public class GameGUI extends JFrame implements Runnable {
 				}
 				g.drawImage(screen.getBufferedImage(), 0, 0, width * scale, height * scale, null);
 				if (Player.isEnterHome()) {
-					g.setFont( new Font("Verdana", Font.BOLD, 24));
-					g.drawString("Please purchase the DLC", 100, 100);
+					g.setColor(Color.WHITE);
+					g.setFont( new Font("Verdana", Font.BOLD, 25));
+					g.drawString("Please purchase the DLC", 75, 100);
 					try {
-						Thread.sleep(1000);
+						Thread.sleep(500);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

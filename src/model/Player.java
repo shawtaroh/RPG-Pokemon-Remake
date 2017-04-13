@@ -52,8 +52,8 @@ public class Player implements Serializable {
 		return enterHome;
 	}
 
-	public static void setEnterHome(boolean enterHome) {
-		enterHome = enterHome;
+	public static void setEnterHome(boolean the) {
+		enterHome = the;
 	}
 
 	public int getxPosition() {
@@ -116,6 +116,8 @@ public class Player implements Serializable {
 
 	public void tick() {
 		if (!lockWalking) {
+			if (xPosition == -TILE_WIDTH * 20 && yPosition == TILE_WIDTH * -18 && facing == 3)
+				enterHome = true;
 			if (keys.get(0).isTappedDown()) {
 				facing = 3;
 				animationTick = 0;
@@ -206,8 +208,6 @@ public class Player implements Serializable {
 	private void handleMovement() {
 		if (lockWalking) {
 			stepTracker = true;
-			if (xPosition == -TILE_WIDTH * 20 && yPosition == TILE_WIDTH * -18 && facing == 3)
-				enterHome = true;
 			if (xPosition > -TILE_WIDTH * 21 && xPosition < TILE_WIDTH * 22 && !restrictedTile(xPosition, yPosition))
 				xPosition += xAccel;
 			else {

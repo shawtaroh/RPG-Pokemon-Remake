@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.TreeMap;
 
 /*
@@ -57,5 +58,10 @@ public class Inventory {
 
 	public boolean isItemBattleUsable(String name){
 		return items.get(name).isBattleUsable();
+	}
+	
+	public String getItemAtLocation(int index){
+		ArrayList<ItemList> list = (ArrayList<ItemList>)items.values();
+		return list.get(index).toString();
 	}
 }

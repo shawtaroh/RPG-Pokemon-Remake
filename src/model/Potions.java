@@ -8,13 +8,17 @@ public class Potions extends ItemList{
 	}
 
 	@Override
-	public boolean menuUsable() {
+	public boolean isMenuUsable() {
 		return true;
 	}
 
 	@Override
-	public boolean battleUsable() {
+	public boolean isBattleUsable() {
 		return false;
 	}
 
+	@Override
+	public String toString(){
+		return "Potions";
+	}
 }

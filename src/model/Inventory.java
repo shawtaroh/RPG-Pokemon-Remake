@@ -1,5 +1,7 @@
 package model;
 
+import java.util.TreeMap;
+
 /*
 							Inventory.java
                                   ,'\
@@ -29,36 +31,31 @@ Implements Pokemon SafariZone inventory object (manages three items)
 
 public class Inventory {
 
-	@SuppressWarnings("unused")
-	private ItemList safariBalls, potions;
+	private TreeMap<String, ItemList> items;
 	
 	public Inventory() {
-		safariBalls = new SafariBalls(30);
-		potions = new Potions(0);
+		items = new TreeMap<String, ItemList>();
+		items.put("Safari Balls", new SafariBalls(30));
+		items.put("Potions", new Potions(0));
 	}
 
-	public int getNumPotions() {
-		return potions.getQuantity();
+	public int getNumItem(String name){
+		return items.get(name).getQuantity();
 	}
 
-	public void addPotions(int numPotions) {
-		potions.add(numPotions);
+	public void addItems(String name, int amount) {
+		items.get(name).add(amount);
 	}
 	
-	public boolean usePotion(){
-		return potions.decrement();
-	}
-	
-
-	public int getNumSafariballs() {
-		return safariBalls.getQuantity();
+	public boolean useItem(String name){
+		return items.get(name).decrement();
 	}
 
-	public void addSafariballs(int numSafariballs) {
-		safariBalls.add(numSafariballs);
+	public boolean isItemMenuUsable(String name){
+		return items.get(name).isMenuUsable();
 	}
 
-	public boolean useSafariBall(){
-		return safariBalls.decrement();
+	public boolean isItemBattleUsable(String name){
+		return items.get(name).isBattleUsable();
 	}
 }

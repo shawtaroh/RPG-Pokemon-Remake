@@ -7,13 +7,17 @@ public class SafariBalls extends ItemList{
 	}
 
 	@Override
-	public boolean menuUsable() {
+	public boolean isMenuUsable() {
 		return false;
 	}
 
 	@Override
-	public boolean battleUsable() {
+	public boolean isBattleUsable() {
 		return true;
 	}
-
+	
+	@Override
+	public String toString(){
+		return "Safari Balls";
+	}
 }

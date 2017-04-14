@@ -23,8 +23,8 @@ public abstract class ItemList {
 		return false;
 	}
 	
-	public abstract boolean menuUsable();
-	public abstract boolean battleUsable();
+	public abstract boolean isMenuUsable();
+	public abstract boolean isBattleUsable();
 
 
 }

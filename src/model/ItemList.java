@@ -25,6 +25,7 @@ public abstract class ItemList {
 	
 	public abstract boolean isMenuUsable();
 	public abstract boolean isBattleUsable();
-
+	public abstract Effect getEffect();
+	public abstract int getEffectAmount();
 
 }

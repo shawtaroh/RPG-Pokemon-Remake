@@ -60,8 +60,12 @@ public class Inventory {
 		return items.get(name).isBattleUsable();
 	}
 	
-	public String getItemAtLocation(int index){
+	public String getItemNameAtLocation(int index){
 		ArrayList<ItemList> list = (ArrayList<ItemList>)items.values();
 		return list.get(index).toString();
+	}
+	
+	public int getNumItems(){
+		return items.size();
 	}
 }

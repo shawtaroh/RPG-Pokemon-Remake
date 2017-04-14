@@ -21,4 +21,15 @@ public class Potions extends ItemList{
 	public String toString(){
 		return "Potions";
 	}
+
+	@Override
+	public Effect getEffect() {
+		return Effect.HEALING;
+	}
+
+	@Override
+	public int getEffectAmount() {
+		return 50;
+	}
+	
 }

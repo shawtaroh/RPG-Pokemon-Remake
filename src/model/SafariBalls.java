@@ -20,4 +20,14 @@ public class SafariBalls extends ItemList{
 	public String toString(){
 		return "Safari Balls";
 	}
+
+	@Override
+	public Effect getEffect() {
+		return null;
+	}
+
+	@Override
+	public int getEffectAmount() {
+		return 0;
+	}
 }

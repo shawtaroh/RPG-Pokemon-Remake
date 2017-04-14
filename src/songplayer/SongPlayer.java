@@ -24,7 +24,7 @@ public class SongPlayer implements Serializable{
 	 * @param audioFileName
 	 *            The name of the file to be written to your output device.
 	 */
-	public static void playFile(EndOfSongListener waiter, String audioFileName) {
+	public static void playFile(final EndOfSongListener waiter, final String audioFileName) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 

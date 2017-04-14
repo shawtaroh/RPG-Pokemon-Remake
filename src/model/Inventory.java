@@ -29,36 +29,36 @@ Implements Pokemon SafariZone inventory object (manages three items)
 
 public class Inventory {
 
-	private int numPokeballs;
-	private int numPotions;
-	private int numSafariballs;
-
+	@SuppressWarnings("unused")
+	private ItemList safariBalls, potions;
+	
 	public Inventory() {
-		numPokeballs = 30;
-	}
-
-	public int getNumPokeballs() {
-		return numPokeballs;
-	}
-
-	public void setNumPokeballs(int numPokeballs) {
-		this.numPokeballs = numPokeballs;
+		safariBalls = new SafariBalls(30);
+		potions = new Potions(0);
 	}
 
 	public int getNumPotions() {
-		return numPotions;
+		return potions.getQuantity();
 	}
 
-	public void setNumPotions(int numPotions) {
-		this.numPotions = numPotions;
+	public void addPotions(int numPotions) {
+		potions.add(numPotions);
 	}
+	
+	public boolean usePotion(){
+		return potions.decrement();
+	}
+	
 
 	public int getNumSafariballs() {
-		return numSafariballs;
+		return safariBalls.getQuantity();
 	}
 
-	public void setNumSafariballs(int numSafariballs) {
-		this.numSafariballs = numSafariballs;
+	public void addSafariballs(int numSafariballs) {
+		safariBalls.add(numSafariballs);
 	}
 
+	public boolean useSafariBall(){
+		return safariBalls.decrement();
+	}
 }

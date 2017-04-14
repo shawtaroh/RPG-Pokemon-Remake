@@ -89,6 +89,7 @@ public class GameGUI extends JFrame implements Runnable {
 		//world = new MapOne(90, 60, player);
 		world = new MapTwo(180, 135, player);
 		menu = new InGameMenu();
+		Pokedex p = new Pokedex();
 		add(menu);
 
 		pack();

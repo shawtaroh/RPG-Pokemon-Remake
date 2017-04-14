@@ -1,5 +1,7 @@
 package driver;
 
+import java.awt.Canvas;
+
 /*
  							GameGUI.java
                                   ,'\
@@ -31,12 +33,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -46,8 +50,10 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import graphics.BitMap;
@@ -78,8 +84,9 @@ public class GameGUI extends JFrame implements Runnable {
 	private ArrayList<Key> keys = new ArrayList<>();
 	private InputHandler inputHandler;
 	private Map world;
-
+	private BufferedImage currentImage;
 	private Player player;
+	private jPanel2 painting;
 	private ObjectWaitingForSongToEnd waiter = new ObjectWaitingForSongToEnd();
 
 	public GameGUI(int map) {
@@ -102,7 +109,8 @@ public class GameGUI extends JFrame implements Runnable {
 		menu = new InGameMenu();
 		menu.setVisible(false);
 		add(menu);
-
+		painting = new jPanel2();
+		add(painting);
 		pack();
 		setResizable(true);
 		Insets inset = getInsets();
@@ -233,9 +241,9 @@ public class GameGUI extends JFrame implements Runnable {
 				world.tick();
 				shouldRender = true;
 			}
-			BufferStrategy bufferStrategy = this.getBufferStrategy();
+			BufferStrategy bufferStrategy = painting.getBufferStrategy();
 			if (bufferStrategy == null) {
-				this.createBufferStrategy(4);
+				painting.createBufferStrategy(4);
 				continue;
 			}
 
@@ -251,11 +259,16 @@ public class GameGUI extends JFrame implements Runnable {
 					int yScroll = (player.getyPosition());
 					world.render(screen, xScroll, yScroll);
 				}
+				//currentImage = screen.getBufferedImage();
+				//painting.repaint();
 				g.drawImage(screen.getBufferedImage(), 0, 0, width * scale, height * scale, null);
 				if (Player.isEnterHome()) {
 					g.setColor(Color.WHITE);
-					g.setFont( new Font("Verdana", Font.BOLD, 25));
+					g.setFont(new Font("Verdana", Font.BOLD, 25));
 					g.drawString("Please purchase the DLC", 75, 100);
+					// Image test = new
+					// ImageIcon(getClass().getResource("/res/pokemon/amaura.gif")).getImage();
+
 					try {
 						Thread.sleep(500);
 					} catch (InterruptedException e) {
@@ -373,4 +386,22 @@ public class GameGUI extends JFrame implements Runnable {
 
 	}
 
+	class jPanel2 extends Canvas {
+
+		jPanel2() {
+			pack();
+			setResizable(true);
+			Insets inset = getInsets();
+			setSize(new Dimension(inset.left + inset.right + width * scale / 2,
+					inset.top + inset.bottom + height * scale / 2));
+			setLocationRelativeTo(null);
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			setVisible(true);
+		}
+
+		public void paintComponent(Graphics g) {
+			//g.drawImage(currentImage, 0, 0, width * scale, height * scale, null);
+		}
+
+	}
 }

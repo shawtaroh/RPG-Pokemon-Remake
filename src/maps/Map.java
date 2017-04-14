@@ -43,6 +43,7 @@ public class Map {
 	protected static BitMap[][] house = BitMap.cut("/art/house/houseOne.png", 64, 64, 0, 0);
 	protected static BitMap tree = BitMap.load("/art/wall/tree.png");
 	protected static BitMap flowers = BitMap.load("/art/floor/flowersOne.png");
+	
 
 	public Map(int w, int h, Player player) {
 		this.width = w;

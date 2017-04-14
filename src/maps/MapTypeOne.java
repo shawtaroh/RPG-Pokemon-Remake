@@ -31,6 +31,8 @@ Implements Pokemon SafariZone Map 1
 
 public class MapTypeOne extends Map {
 
+	
+	
 	public MapTypeOne(int w, int h, Player player) {
 		super(w, h, player);
 	}

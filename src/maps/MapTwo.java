@@ -54,6 +54,5 @@ public class MapTwo extends Map{
 		screen.blit(house[0][1], 11 * TILE_WIDTH, 12 * TILE_HEIGHT);
 		screen.blit(house[1][1], 12 * TILE_WIDTH, 12 * TILE_HEIGHT);
 		screen.blit(house[2][1], 13 * TILE_WIDTH, 12 * TILE_HEIGHT);
-
 	}
 }

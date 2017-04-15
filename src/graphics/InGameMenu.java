@@ -57,39 +57,37 @@ import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Text;
 import driver.GameGUI;
 
 public class InGameMenu extends JPanel {
-	
-	private GameGUI	gui;
-	
-	private JLabel	header;
-	private JButton	quit;
-	private JLabel	mapLabel;
-	private JButton	mapOne;
-	private JButton	mapTwo;
-	private JButton	save;
-	private JButton	resume;
-	
-	private String	backgroundPNG	= "/art/background.png";
-	private String	stepsPNG		= "/art/on_screen_icons/steps.png";
-	private String	hpPNG			= "/art/on_screen_icons/hp.png";
-	private String	pokeballPNG		= "/art/on_screen_icons/pokeball.png";
-	private String	potionPNG		= "/art/on_screen_icons/potion.png";
-	private String	safariballPNG	= "/art/on_screen_icons/safariball.png";
-	
-	
-	
+
+	private GameGUI gui;
+
+	private JLabel header;
+	private JButton quit;
+	private JLabel mapLabel;
+	private JButton mapOne;
+	private JButton mapTwo;
+	private JButton save;
+	private JButton resume;
+
+	private String backgroundPNG = "/art/background.png";
+	private String stepsPNG = "/art/on_screen_icons/steps.png";
+	private String hpPNG = "/art/on_screen_icons/hp.png";
+	private String pokeballPNG = "/art/on_screen_icons/pokeball.png";
+	private String potionPNG = "/art/on_screen_icons/potion.png";
+	private String safariballPNG = "/art/on_screen_icons/safariball.png";
+
 	public InGameMenu(GameGUI gui) {
 		super();
-		
+
 		this.gui = gui;
-		
+
 		repaint();
-		
+
 		JPanel contents = new JPanel();
 		contents.setLayout(new BoxLayout(contents, BoxLayout.PAGE_AXIS));
 		contents.setOpaque(false);
 		contents.setSize(200, 400);
 		this.add(contents);
-		
+
 		header = new JLabel("Pokemon Safari Zone");
 		header.setAlignmentX(JLabel.CENTER_ALIGNMENT);
 		header.setFont(new Font("Verdana", Font.BOLD, 50));
@@ -97,7 +95,7 @@ public class InGameMenu extends JPanel {
 		header.setOpaque(false);
 		header.setHorizontalAlignment(SwingConstants.CENTER);
 		contents.add(header);
-		
+
 		mapLabel = new JLabel("  ");
 		mapLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
 		mapLabel.setFont(new Font("Verdana", Font.BOLD, 30));
@@ -105,16 +103,16 @@ public class InGameMenu extends JPanel {
 		mapLabel.setOpaque(false);
 		mapLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		contents.add(mapLabel);
-		
+
 		Dimension buttonSize = new Dimension(300, 50);
 		Color buttonColor = Color.LIGHT_GRAY;
 		Color buttonText = Color.BLACK;
 		Font buttonFont = new Font("Verdana", Font.BOLD, 20);
-		
+
 		JLabel spacer = new JLabel(" ");
 		spacer.setPreferredSize(buttonSize);
 		contents.add(spacer);
-		
+
 		mapOne = new JButton("Go To World One");
 		mapOne.setAlignmentX(JButton.CENTER_ALIGNMENT);
 		mapOne.setMaximumSize(buttonSize);
@@ -123,11 +121,11 @@ public class InGameMenu extends JPanel {
 		mapOne.setBackground(buttonColor);
 		mapOne.setForeground(buttonText);
 		contents.add(mapOne);
-		
+
 		spacer = new JLabel(" ");
 		spacer.setPreferredSize(buttonSize);
 		contents.add(spacer);
-		
+
 		mapTwo = new JButton("Go To World Two");
 		mapTwo.setAlignmentX(JButton.CENTER_ALIGNMENT);
 		mapTwo.setMaximumSize(buttonSize);
@@ -136,11 +134,11 @@ public class InGameMenu extends JPanel {
 		mapTwo.setBackground(buttonColor);
 		mapTwo.setForeground(buttonText);
 		contents.add(mapTwo);
-		
+
 		spacer = new JLabel(" ");
 		spacer.setPreferredSize(buttonSize);
 		contents.add(spacer);
-		
+
 		save = new JButton("Save Game");
 		save.setAlignmentX(JButton.CENTER_ALIGNMENT);
 		save.setMaximumSize(buttonSize);
@@ -149,11 +147,11 @@ public class InGameMenu extends JPanel {
 		save.setBackground(buttonColor);
 		save.setForeground(buttonText);
 		contents.add(save);
-		
+
 		spacer = new JLabel(" ");
 		spacer.setPreferredSize(buttonSize);
 		contents.add(spacer);
-		
+
 		resume = new JButton("Resume");
 		resume.setAlignmentX(JButton.CENTER_ALIGNMENT);
 		resume.setMaximumSize(buttonSize);
@@ -162,11 +160,11 @@ public class InGameMenu extends JPanel {
 		resume.setBackground(buttonColor);
 		resume.setForeground(buttonText);
 		contents.add(resume);
-		
+
 		spacer = new JLabel(" ");
 		spacer.setPreferredSize(buttonSize);
 		contents.add(spacer);
-		
+
 		quit = new JButton("Quit");
 		quit.setAlignmentX(JButton.CENTER_ALIGNMENT);
 		quit.setMaximumSize(buttonSize);
@@ -176,53 +174,40 @@ public class InGameMenu extends JPanel {
 		quit.setForeground(buttonText);
 		contents.add(quit);
 	}
-	
-	
-	
+
 	/*
 	 * Listens for Buttons
 	 */
 	private class MenuListener implements ActionListener {
-		
+
 		private JButton button;
-		
-		
-		
+
 		public MenuListener(JButton btn) {
 			this.button = btn;
 		}
-		
-		
-		
+
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			
+
 			if (button == quit) {
 				gui.closeWindow();
-			}
-			else if (button == mapOne) {
+			} else if (button == mapOne) {
 				System.out.println("map changing not implemented");
-			}
-			else if (button == mapTwo) {
+			} else if (button == mapTwo) {
 				System.out.println("map changing not implemented");
-			}
-			else if (button == save) {
+			} else if (button == save) {
 				try {
 					gui.saveState();
-				}
-				catch (IOException e) {
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
-			}
-			else if (button == resume) {
+			} else if (button == resume) {
 				gui.resumeFromMenu();
 			}
 		}
-		
+
 	}
-	
-	
-	
+
 	/*
 	 * Background Image
 	 * 
@@ -231,74 +216,59 @@ public class InGameMenu extends JPanel {
 	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
 	 */
 	public void paintComponent(Graphics g) {
-		
+
 		super.paintComponent(g);
 		// g.setColor(Color.white);
 		// g.fillRect(0, 0, this.getWidth(), this.getHeight());
-		
-		Image bkgnd = new ImageIcon(this.getClass().getResource(backgroundPNG))
-		        .getImage();
-		g.drawImage(bkgnd, 0, 0, this.getWidth(), this.getHeight(), Color.RED,
-		        null);
-		
+
+		Image bkgnd = new ImageIcon(this.getClass().getResource(backgroundPNG)).getImage();
+		g.drawImage(bkgnd, 0, 0, this.getWidth(), this.getHeight(), Color.RED, null);
+
 		int x = 40;
 		int y = 80;
 		int spacing = 10;
 		int size = 75;
-		
+
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("Verdana", Font.BOLD, 40));
-		
-		Image steps = new ImageIcon(this.getClass().getResource(stepsPNG))
-		        .getImage();
-		g.drawImage(steps, x, y + 0 * (size + spacing), size, size, Color.RED,
-		        null);
-		g.drawString("x ##", x + size + spacing, y + 1 * (size + spacing) - 2*spacing);
-		
+
+		Image steps = new ImageIcon(this.getClass().getResource(stepsPNG)).getImage();
+		g.drawImage(steps, x, y + 0 * (size + spacing), size, size, Color.RED, null);
+		g.drawString("x ##", x + size + spacing, y + 1 * (size + spacing) - 2 * spacing);
+
 		Image hp = new ImageIcon(this.getClass().getResource(hpPNG)).getImage();
-		g.drawImage(hp, x, y + 1 * (size + spacing), size, size, Color.RED,
-		        null);
-		g.drawString("x ##", x + size + spacing, y + 2 * (size + spacing) - 2*spacing);
-		
-		Image pokeball = new ImageIcon(this.getClass().getResource(pokeballPNG))
-		        .getImage();
-		g.drawImage(pokeball, x, y + 2 * (size + spacing), size, size,
-		        Color.RED, null);
-		g.drawString("x ##", x + size + spacing, y + 3 * (size + spacing) - 2*spacing);
-		
-		Image potion = new ImageIcon(this.getClass().getResource(potionPNG))
-		        .getImage();
-		g.drawImage(potion, x, y + 3 * (size + spacing), size, size, Color.RED,
-		        null);
-		g.drawString("x ##", x + size + spacing, y + 4 * (size + spacing) - 2*spacing);
-		
-		Image safariball = new ImageIcon(
-		        this.getClass().getResource(safariballPNG)).getImage();
-		g.drawImage(safariball, x, y + 4 * (size + spacing), size, size,
-		        Color.RED, null);
-		g.drawString("x ##", x + size + spacing, y + 5 * (size + spacing) - 2*spacing);
+		g.drawImage(hp, x, y + 1 * (size + spacing), size, size, Color.RED, null);
+		g.drawString("x ##", x + size + spacing, y + 2 * (size + spacing) - 2 * spacing);
+
+		Image pokeball = new ImageIcon(this.getClass().getResource(pokeballPNG)).getImage();
+		g.drawImage(pokeball, x, y + 2 * (size + spacing), size, size, Color.RED, null);
+		g.drawString("x ##", x + size + spacing, y + 3 * (size + spacing) - 2 * spacing);
+
+		Image potion = new ImageIcon(this.getClass().getResource(potionPNG)).getImage();
+		g.drawImage(potion, x, y + 3 * (size + spacing), size, size, Color.RED, null);
+		g.drawString("x ##", x + size + spacing, y + 4 * (size + spacing) - 2 * spacing);
+
+		Image safariball = new ImageIcon(this.getClass().getResource(safariballPNG)).getImage();
+		g.drawImage(safariball, x, y + 4 * (size + spacing), size, size, Color.RED, null);
+		g.drawString("x ##", x + size + spacing, y + 5 * (size + spacing) - 2 * spacing);
 	}
-	
-	
-	
+
 	/*
 	 * For showing menu panel
 	 */
 	public void on() {
-		
+
 		this.setFocusable(true);
 		this.setVisible(true);
-		mapLabel.setText(gui.getWorld().getName());
-		
+		// mapLabel.setText(gui.getWorld().getName());
+
 	}
-	
-	
-	
+
 	/*
 	 * For hiding menu panel
 	 */
 	public void off() {
-		
+
 		this.setFocusable(false);
 		this.setVisible(false);
 	}

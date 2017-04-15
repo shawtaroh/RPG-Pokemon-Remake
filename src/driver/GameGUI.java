@@ -40,15 +40,18 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
 import graphics.BitMap;
 import graphics.SplashScreen;
 import graphics.InGameMenu;
+import maps.Map;
 import maps.MapOne;
 import maps.MapTwo;
 import model.Player;
 import model.Pokedex;
+import model.PokemonGame;
 import songplayer.EndOfSongEvent;
 import songplayer.EndOfSongListener;
 import songplayer.SongPlayer;
@@ -66,28 +69,31 @@ public class GameGUI extends JFrame implements Runnable {
 	private int scale;
 	private static InGameMenu menu;
 	private boolean running = true;
-	private ArrayList<Key> keys = new ArrayList<>();
+	//private ArrayList<Key> keys = new ArrayList<>();
 	private InputHandler inputHandler;
-	private MapTwo world;
-	//private MapOne world;
-	private Player player;
+	//private MapTwo world;
+	//private Map world;
+	private PokemonGame game;
+	//private Player player;
+	private static int mapSelection;
 	private ObjectWaitingForSongToEnd waiter=new ObjectWaitingForSongToEnd();
 
 	public GameGUI() {
+		game = new PokemonGame(mapSelection);
 		scale = 1;
 		screen = new BitMap(width, height);
-		keys.add(new Key("up"));
-		keys.add(new Key("down"));
-		keys.add(new Key("left"));
-		keys.add(new Key("right"));
-		inputHandler = new InputHandler(keys);
+		//keys.add(new Key("up"));
+		//keys.add(new Key("down"));
+		//keys.add(new Key("left"));
+		//keys.add(new Key("right"));
+		inputHandler = new InputHandler(game.getKeys()); //game.getKeys();
 		menuListener myMenuListener = new menuListener();
 		addKeyListener(inputHandler);
 		addKeyListener(myMenuListener);
 		addWindowListener(new myWindowListener());
-		player = new Player(keys);
+		//player = new Player(game.getKeys());
 		//world = new MapOne(90, 60, player);
-		world = new MapTwo(180, 135, player);
+		//game.getWorld = new MapOne(180, 135, player);
 		menu = new InGameMenu();
 		add(menu);
 
@@ -105,6 +111,11 @@ public class GameGUI extends JFrame implements Runnable {
 
 	public static void main(String[] args) {
 		SplashScreen execute = new SplashScreen("/art/splash/pika loading.gif", "Loading Safari World!");
+		Object[] options = {"Map Two","Map One"};
+		mapSelection = JOptionPane.showOptionDialog(execute, "Would you like to play on \nMap "
+				+ "One(Description) or Map Two(Description)", "Map Selection", JOptionPane.YES_NO_OPTION,
+			    JOptionPane.QUESTION_MESSAGE, null, options, null);
+		System.out.println(mapSelection);
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
@@ -190,9 +201,9 @@ public class GameGUI extends JFrame implements Runnable {
 
 			for (int i = 0; i < toTick; i++) {
 				tick--;
-				for (Key k : keys)
+				for (Key k : game.getKeys())
 					k.tick();
-				world.tick();
+				game.getWorld().tick();
 				shouldRender = true;
 			}
 			BufferStrategy bufferStrategy = this.getBufferStrategy();
@@ -205,13 +216,13 @@ public class GameGUI extends JFrame implements Runnable {
 				Graphics g = bufferStrategy.getDrawGraphics();
 				g.setColor(Color.BLACK);
 				g.fillRect(0, 0, this.getWidth(), this.getHeight());
-				g.translate((((this.getWidth() - (width) * scale)) / 2) - this.player.xPosition * scale,
-						((this.getHeight() - (height) * scale) / 2) - this.player.yPosition * scale);
+				g.translate((((this.getWidth() - (width) * scale)) / 2) - game.getPlayerXPos() * scale,
+						((this.getHeight() - (height) * scale) / 2) - game.getPlayerYPos() * scale);
 				g.clipRect(0, 0, width * scale, height * scale);
-				if (world != null) {
-					int xScroll = (player.xPosition);
-					int yScroll = (player.yPosition);
-					world.render(screen, xScroll, yScroll);
+				if (game.getWorld() != null) {
+					int xScroll = (game.getPlayerXPos());
+					int yScroll = (game.getPlayerYPos());
+					game.getWorld().render(screen, xScroll, yScroll);
 				}
 				g.drawImage(screen.getBufferedImage(), 0, 0, width * scale, height * scale, null);
 			}

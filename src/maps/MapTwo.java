@@ -30,45 +30,17 @@ Implements Pokemon SafariZone map, loads up tiles and art in hard-coded manner
 import graphics.BitMap;
 import model.Player;
 
-public class MapTwo {
+public class MapTwo extends Map{
 
-	private final int width;
-	private final int height;
-	private static int TILE_WIDTH = 64;
-	private static int TILE_HEIGHT = 64;
-	private Player myPlayer;
 	private static BitMap tile = BitMap.load("/art/floor/tileTwo.png");
 	private static BitMap[][] house = BitMap.cut("/art/house/houseTwo.png", 64, 64, 0, 0);
 	private static BitMap tree = BitMap.load("/art/wall/treeTwo.png");
 
 	public MapTwo(int w, int h, Player player) {
-		this.width = w;
-		this.height = h;
-		this.myPlayer = player;
-
+		super(w,h,player);
 	}
 
-	public void tick() {
-		myPlayer.tick();
-	}
-
-	public void render(BitMap screen, int xScroll, int yScroll) {
-		int gridX0 = xScroll / TILE_WIDTH - 1;
-		int gridY0 = yScroll / TILE_HEIGHT - 1;
-		int gridX1 = (xScroll + screen.getWidth()) / TILE_WIDTH + 1;
-		int gridY1 = (yScroll + screen.getHeight()) / TILE_HEIGHT + 1;
-
-		if (xScroll < 0)
-			gridX0--;
-		if (yScroll < 0)
-			gridY0--;
-
-		renderTiles(screen, gridX0, gridY0, gridX1, gridY1);
-
-		myPlayer.render(screen);
-	}
-
-	private void renderTiles(BitMap screen, int x0, int y0, int x1, int y1) {
+	public void renderTiles(BitMap screen, int x0, int y0, int x1, int y1) {
 		for (int y = y0; y < y1; y++)
 			for (int x = x0; x < x1; x++) {
 				screen.blit(tile, x * TILE_WIDTH, y * TILE_HEIGHT);

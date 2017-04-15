@@ -76,25 +76,67 @@ public class GameGUI extends JFrame implements Runnable {
 	/**
 	 * 
 	 */
-<<<<<<< HEAD
-	private static final long serialVersionUID = 60158402771325988L;
-	private int width = 2944;
-	private int height = 2688;
-	private int FPS = 60;
-	private BitMap screen;
-	private int scale;
-	private static InGameMenu menu;
-	private boolean running = true;
-	private ArrayList<Key> keys = new ArrayList<>();
-	private InputHandler inputHandler;
-	private Map world;
-	private BufferedImage currentImage;
-	private BufferedImage msgBox, clouds, fog;
-	private Player player;
-	private jPanel2 painting;
-	private ObjectWaitingForSongToEnd waiter = new ObjectWaitingForSongToEnd();
-
-	public GameGUI(int map) {
+	private static final long			serialVersionUID	= 60158402771325988L;
+	private int							width				= 2944;
+	private int							height				= 2688;
+	private int							FPS					= 60;
+	private BitMap						screen;
+	private int							scale;
+	private InGameMenu					menu;
+	private boolean						running				= true;
+	private ArrayList<Key>				keys				= new ArrayList<>();
+	private InputHandler				inputHandler;
+	private Map							world;
+	
+	private BufferedImage				msgBox,clouds,fog;
+	private Player						player;
+	private jPanel2						painting;
+	private ObjectWaitingForSongToEnd	waiter				= new ObjectWaitingForSongToEnd();
+	
+	
+	
+	public GameGUI(int mapNum) {
+		loadTransperantImages();
+		scale = 1;
+		screen = new BitMap(width, height);
+		keys.add(new Key("up"));
+		keys.add(new Key("down"));
+		keys.add(new Key("left"));
+		keys.add(new Key("right"));
+		inputHandler = new InputHandler(keys);
+		player = Player.getInstance(keys, mapNum);
+		menuListener myMenuListener = new menuListener();
+		addKeyListener(inputHandler);
+		addKeyListener(myMenuListener);
+		addWindowListener(new myWindowListener());
+		if (mapNum == 1)
+			world = new MapTypeTwo(46, 42, player);
+		else
+			world = new MapTypeOne(46, 42, player);
+		
+		painting = new jPanel2();
+		add(painting);
+		
+		// Menu Second for Layering
+		menu = new InGameMenu(this);
+		menu.setVisible(false);
+		add(menu);
+		
+		pack();
+		setResizable(true);
+		Insets inset = getInsets();
+		setSize(new Dimension(inset.left + inset.right + width * scale / 2,
+		        inset.top + inset.bottom + height * scale / 2));
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setVisible(true);
+		start();
+		SongPlayer.playFile(waiter,
+		        Pokedex.class.getResource("/art/sounds/101-opening.wav")
+		                .toString().substring(6));
+	}
+	
+	public void loadTransperantImages(){
 		try {
 			msgBox = ImageIO.read(GameGUI.class.getResource("/art/msgBox.png"));
 			fog = ImageIO.read(GameGUI.class.getResource("/art/clouds2.png"));
@@ -124,68 +166,8 @@ public class GameGUI extends JFrame implements Runnable {
 		// set the transparency level in range 0.0f - 1.0f
 		g2d.drawImage(msgBox, 0, 0, null);
 		msgBox = tmpImg;
-=======
-	private static final long			serialVersionUID	= 60158402771325988L;
-	private int							width				= 2944;
-	private int							height				= 2688;
-	private int							FPS					= 60;
-	private BitMap						screen;
-	private int							scale;
-	private InGameMenu					menu;
-	private boolean						running				= true;
-	private ArrayList<Key>				keys				= new ArrayList<>();
-	private InputHandler				inputHandler;
-	private Map							world;
-	
-	private BufferedImage				currentImage;
-	private Player						player;
-	private jPanel2						painting;
-	private ObjectWaitingForSongToEnd	waiter				= new ObjectWaitingForSongToEnd();
-	
-	
-	
-	public GameGUI(int mapNum) {
->>>>>>> origin/MenuAndMainGUITestArea
-		scale = 1;
-		screen = new BitMap(width, height);
-		keys.add(new Key("up"));
-		keys.add(new Key("down"));
-		keys.add(new Key("left"));
-		keys.add(new Key("right"));
-		inputHandler = new InputHandler(keys);
-		player = Player.getInstance(keys, mapNum);
-		menuListener myMenuListener = new menuListener();
-		addKeyListener(inputHandler);
-		addKeyListener(myMenuListener);
-		addWindowListener(new myWindowListener());
-		if (mapNum == 1)
-			world = new MapTypeTwo(46, 42, player);
-		else
-			world = new MapTypeOne(46, 42, player);
-		
-		painting = new jPanel2();
-		painting.setFocusable(false);
-		add(painting);
-		
-		// Menu Second for Layering
-		menu = new InGameMenu(this);
-		menu.setVisible(false);
-		add(menu);
-		
-		pack();
-		setResizable(true);
-		Insets inset = getInsets();
-		setSize(new Dimension(inset.left + inset.right + width * scale / 2,
-		        inset.top + inset.bottom + height * scale / 2));
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setVisible(true);
-		start();
-		SongPlayer.playFile(waiter,
-		        Pokedex.class.getResource("/art/sounds/101-opening.wav")
-		                .toString().substring(6));
+
 	}
-	
 	
 	
 	public static void main(String[] args) {
@@ -217,27 +199,20 @@ public class GameGUI extends JFrame implements Runnable {
 			catch (ClassNotFoundException | IOException e) {
 				e.printStackTrace();
 			}
-<<<<<<< HEAD
-		} else {
+		}
+		else {
 			Object[] options = { "Map One", "Map Two" };
-			int map = JOptionPane.showOptionDialog(null, "choose a map", "choose a map",
+			int map = JOptionPane.showOptionDialog(null, "Choose a map", "Choose a map",
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 			Object[] options2 = { "Normal", "Story" };
 			int winCondition = JOptionPane.showOptionDialog(null, "choose a mode", "choose a mode",
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-			if (winCondition==1)
-				String message="A trecherous fog has appeared. Find the oracle";
-			SplashScreen execute = new SplashScreen("/art/splash/pika loading.gif", "Loading Safari World!");
-=======
-		}
-		else {
-			Object[] options = {"Map One", "Map Two"};
-			int map = JOptionPane.showOptionDialog(null, "choose a map",
-			        "choose a map", JOptionPane.YES_NO_CANCEL_OPTION,
-			        JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+			if (winCondition==1){
+				//TODO
+			}
+
 			SplashScreen execute = new SplashScreen(
 			        "/art/splash/pika loading.gif", "Loading Safari World!");
->>>>>>> origin/MenuAndMainGUITestArea
 			try {
 				Thread.sleep(1000);
 			}
@@ -416,7 +391,6 @@ public class GameGUI extends JFrame implements Runnable {
 				}
 				// currentImage = screen.getBufferedImage();
 				// painting.repaint();
-<<<<<<< HEAD
 				g.drawImage(screen.getBufferedImage(), 0, 0, width * scale, height * scale, null);
 				g.drawImage(msgBox, this.player.getxPosition() + 64 * 15, this.player.getyPosition() + 64 * 26,
 						width * scale / 3, height * scale / 32, null);
@@ -429,17 +403,9 @@ public class GameGUI extends JFrame implements Runnable {
 						((this.getHeight() - (height) * scale) / 2) - this.player.getyPosition() * scale, width * scale,
 						height * scale / 4, null);
 
-				// g.drawImage(msgBox, this.player.getxPosition()+64*11+25,
-				// this.player.getyPosition()+64*26, width * scale/2, height *
-				// scale/4, null);
-				// g.drawImage(fog, (((this.getWidth() - (width) * scale)) / 2)
-				// - this.player.getxPosition() * scale, ((this.getHeight() -
-				// (height) * scale) / 2) - this.player.getyPosition() * scale,
-				// width * scale, height * scale / 4, null);
-=======
-				g.drawImage(screen.getBufferedImage(), 0, 0, width * scale,
-				        height * scale, null);
->>>>>>> origin/MenuAndMainGUITestArea
+				// g.drawImage(msgBox, this.player.getxPosition()+64*11+25,this.player.getyPosition()+64*26, width * scale/2, height *scale/4, null);
+				// g.drawImage(fog, (((this.getWidth() - (width) * scale)) / 2)- this.player.getxPosition() * scale, ((this.getHeight() -(height) * scale) / 2) - this.player.getyPosition() * scale,width * scale, height * scale / 4, null);
+
 				if (Player.isEnterHome()) {
 					g.setColor(Color.WHITE);
 					g.setFont(new Font("Verdana", Font.BOLD, 25));
@@ -654,10 +620,7 @@ public class GameGUI extends JFrame implements Runnable {
 		
 		
 		public void paintComponent(Graphics g) {
-<<<<<<< HEAD
-=======
 			
->>>>>>> origin/MenuAndMainGUITestArea
 			// g.drawImage(currentImage, 0, 0, width * scale, height * scale,
 			// null);
 		}

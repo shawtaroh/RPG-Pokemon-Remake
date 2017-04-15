@@ -55,18 +55,21 @@ public class Pokedex {
 			try {
 				// consistent random types with ratios 6:3:1 like in the spec
 				double rand = generator.nextDouble();
+				String rarity;
 				if (rand > .4)
-					pokedex.add(new Pokemon(pokeNum, file.getName(), ImageIO.read(file), Common));
+					rarity = Common;
 				if (rand < .3)
-					pokedex.add(new Pokemon(pokeNum, file.getName(), ImageIO.read(file), Uncommon));
+					rarity = Uncommon;
 				else
-					pokedex.add(new Pokemon(pokeNum, file.getName(), ImageIO.read(file), Rare));
+					rarity = Rare;
+				pokedex.add(new Pokemon(pokeNum, file.getName().replaceFirst(".gif", ""), ImageIO.read(file), rarity));
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		for (Pokemon p : pokedex) {
-			// System.out.println(p.getName());
+			//System.out.println(p.getName());
 		}
 	}
 }

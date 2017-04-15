@@ -1,5 +1,8 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.TreeMap;
+
 /*
 							Inventory.java
                                   ,'\
@@ -29,36 +32,40 @@ Implements Pokemon SafariZone inventory object (manages three items)
 
 public class Inventory {
 
-	private int numPokeballs;
-	private int numPotions;
-	private int numSafariballs;
-
+	private TreeMap<String, ItemList> items;
+	
 	public Inventory() {
-		numPokeballs = 30;
+		items = new TreeMap<String, ItemList>();
+		items.put("Safari Balls", new SafariBalls(30));
+		items.put("Potions", new Potions(0));
 	}
 
-	public int getNumPokeballs() {
-		return numPokeballs;
+	public int getNumItem(String name){
+		return items.get(name).getQuantity();
 	}
 
-	public void setNumPokeballs(int numPokeballs) {
-		this.numPokeballs = numPokeballs;
+	public void addItems(String name, int amount) {
+		items.get(name).add(amount);
+	}
+	
+	public boolean useItem(String name){
+		return items.get(name).decrement();
 	}
 
-	public int getNumPotions() {
-		return numPotions;
+	public boolean isItemMenuUsable(String name){
+		return items.get(name).isMenuUsable();
 	}
 
-	public void setNumPotions(int numPotions) {
-		this.numPotions = numPotions;
+	public boolean isItemBattleUsable(String name){
+		return items.get(name).isBattleUsable();
 	}
-
-	public int getNumSafariballs() {
-		return numSafariballs;
+	
+	public String getItemNameAtLocation(int index){
+		ArrayList<ItemList> list = (ArrayList<ItemList>)items.values();
+		return list.get(index).toString();
 	}
-
-	public void setNumSafariballs(int numSafariballs) {
-		this.numSafariballs = numSafariballs;
+	
+	public int getNumItems(){
+		return items.size();
 	}
-
 }

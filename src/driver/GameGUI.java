@@ -350,7 +350,7 @@ public class GameGUI extends JFrame implements Runnable {
 						(((this.getWidth() - (width) * scale)) / 2) - pokemonGame.getPlayer().getxPosition() * scale,
 						((this.getHeight() - (height) * scale) / 2) - pokemonGame.getPlayer().getyPosition() * scale,
 						width * scale, height * scale / 4, null);
-				if (pokemonGame.getPlayer().getSteps() <= 450) {
+				if (pokemonGame.getPlayer().getSteps() <= 0) {
 					JOptionPane.showMessageDialog(null,
 							"You ran out of steps, and caught no pokemon. This is only iteration one, goodbye.");
 					stop();

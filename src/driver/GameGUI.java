@@ -87,7 +87,7 @@ public class GameGUI extends JFrame implements Runnable {
 	private boolean running = true;
 	private InputHandler inputHandler;
 	private PokemonGame pokemonGame;
-	private String message,message2;
+	private String message, message2;
 
 	private BufferedImage msgBox, clouds, fog;
 	private jPanel2 painting;
@@ -99,7 +99,7 @@ public class GameGUI extends JFrame implements Runnable {
 		scale = 1;
 		screen = new BitMap(width, height);
 		message = "Welcome to Safari Zone. To turn, tap the arrow keys. To move, hold-down the arrow ";
-		message2="keys. To open menu, space-bar. Have fun!";
+		message2 = "keys. To open menu, space-bar. Have fun! Hint: Home is North-East";
 
 		inputHandler = new InputHandler(pokemonGame.getKeys());
 
@@ -180,7 +180,10 @@ public class GameGUI extends JFrame implements Runnable {
 				}
 				Player loaded = (Player) inFile.readObject();
 				GameGUI game = new GameGUI(loaded.getMap());
-				game.getPokemonGame().setPlayer(loaded);
+				game.getPokemonGame().getPlayer().setSteps(loaded.getSteps());
+				game.getPokemonGame().getPlayer().setxPosition(loaded.getxPosition());
+				game.getPokemonGame().getPlayer().setyPosition(loaded.getyPosition());
+
 			} catch (ClassNotFoundException | IOException e) {
 				e.printStackTrace();
 			}
@@ -336,18 +339,20 @@ public class GameGUI extends JFrame implements Runnable {
 						pokemonGame.getPlayer().getyPosition() + 64 * 26, width * scale / 3, height * scale / 32, null);
 				g.setFont(new Font("Arial", Font.BOLD, 24));
 				g.setColor(Color.WHITE);
-				g.drawString("Steps: "+pokemonGame.getPlayer().getSteps(), pokemonGame.getPlayer().getxPosition() + 64 * 15,
+				g.drawString("Steps: " + pokemonGame.getPlayer().getSteps(),
+						pokemonGame.getPlayer().getxPosition() + 64 * 15,
 						pokemonGame.getPlayer().getyPosition() + 64 * 26);
-				g.drawString(message, pokemonGame.getPlayer().getxPosition() + 64 * 15+15,
+				g.drawString(message, pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15,
 						pokemonGame.getPlayer().getyPosition() + 64 * 26 + 30);
-				g.drawString(message2, pokemonGame.getPlayer().getxPosition() + 64 * 15+15,
+				g.drawString(message2, pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15,
 						pokemonGame.getPlayer().getyPosition() + 64 * 26 + 60);
 				g.drawImage(clouds,
 						(((this.getWidth() - (width) * scale)) / 2) - pokemonGame.getPlayer().getxPosition() * scale,
 						((this.getHeight() - (height) * scale) / 2) - pokemonGame.getPlayer().getyPosition() * scale,
 						width * scale, height * scale / 4, null);
-				if(pokemonGame.getPlayer().getSteps()<=450){
-					JOptionPane.showMessageDialog(null, "You ran out of steps, and caught no pokemon. This is only iteration one, goodbye.");
+				if (pokemonGame.getPlayer().getSteps() <= 450) {
+					JOptionPane.showMessageDialog(null,
+							"You ran out of steps, and caught no pokemon. This is only iteration one, goodbye.");
 					stop();
 					System.exit(0);
 				}

@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -30,7 +31,7 @@ CS 335 Final Project
 Implements Pokemon SafariZone inventory object (manages three items)
 */
 
-public class Inventory {
+public class Inventory implements Serializable{
 
 	private TreeMap<String, ItemList> items;
 	

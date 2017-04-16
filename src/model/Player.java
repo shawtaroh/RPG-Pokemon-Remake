@@ -47,6 +47,7 @@ public class Player implements Serializable {
 	private int map;
 	private boolean stepTracker = false;
 	private static boolean enterHome = false;
+	private Inventory myBag;
 
 	public static boolean isEnterHome() {
 		return enterHome;
@@ -108,6 +109,7 @@ public class Player implements Serializable {
 		this.map = map;
 		loadRestrictions();
 		player = BitMap.cut("/art/player/player.png", 64, 64, 0, 0);
+		myBag = new Inventory();
 	}
 
 	public int getMap() {

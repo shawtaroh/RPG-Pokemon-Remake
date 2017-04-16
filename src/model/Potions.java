@@ -1,6 +1,8 @@
 package model;
 
-public class Potions extends ItemList{
+import java.io.Serializable;
+
+public class Potions extends ItemList implements Serializable{
 
 	public Potions(int quantity) {
 		super(quantity);

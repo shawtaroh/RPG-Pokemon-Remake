@@ -87,7 +87,8 @@ public class GameGUI extends JFrame implements Runnable {
 	private boolean running = true;
 	private InputHandler inputHandler;
 	private PokemonGame pokemonGame;
-	private String message, message2;
+	private String message, message2, message3;
+	private boolean isNextPage = false;
 
 	private BufferedImage msgBox, clouds, fog;
 	private jPanel2 painting;
@@ -100,6 +101,7 @@ public class GameGUI extends JFrame implements Runnable {
 		screen = new BitMap(width, height);
 		message = "Welcome to Safari Zone. To turn, tap the arrow keys. To move, hold-down the arrow ";
 		message2 = "keys. To open menu, space-bar. Have fun! Hint: Home is North-East";
+		message3 = "Press Enter for next page.";
 
 		inputHandler = new InputHandler(pokemonGame.getKeys());
 
@@ -342,10 +344,23 @@ public class GameGUI extends JFrame implements Runnable {
 				g.drawString("Steps: " + pokemonGame.getPlayer().getSteps(),
 						pokemonGame.getPlayer().getxPosition() + 64 * 15,
 						pokemonGame.getPlayer().getyPosition() + 64 * 26);
-				g.drawString(message, pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15,
-						pokemonGame.getPlayer().getyPosition() + 64 * 26 + 30);
-				g.drawString(message2, pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15,
-						pokemonGame.getPlayer().getyPosition() + 64 * 26 + 60);
+				if (!isNextPage) {
+					g.drawString(message, pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15,
+							pokemonGame.getPlayer().getyPosition() + 64 * 26 + 30);
+					g.drawString(message2, pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15,
+							pokemonGame.getPlayer().getyPosition() + 64 * 26 + 60);
+				} else if (pokemonGame.getPlayer().getWinCondition() == 1) {
+					g.drawString("A fog has fallen upon the Safari Zone. Quick, find Professor Mercer to teach the",
+							pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15,
+							pokemonGame.getPlayer().getyPosition() + 64 * 26 + 30);
+					g.drawString("game developers how to turn the fog component invisible!",
+							pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15,
+							pokemonGame.getPlayer().getyPosition() + 64 * 26 + 60);
+				}
+				g.setFont(new Font("Arial", Font.BOLD, 12));
+				g.setColor(Color.LIGHT_GRAY);
+				g.drawString(message3, pokemonGame.getPlayer().getxPosition() + 64 * 15 + 420,
+						pokemonGame.getPlayer().getyPosition() + 64 * 26 + 75);
 				g.drawImage(clouds,
 						(((this.getWidth() - (width) * scale)) / 2) - pokemonGame.getPlayer().getxPosition() * scale,
 						((this.getHeight() - (height) * scale) / 2) - pokemonGame.getPlayer().getyPosition() * scale,
@@ -359,10 +374,13 @@ public class GameGUI extends JFrame implements Runnable {
 				// g.drawImage(msgBox,
 				// this.player.getxPosition()+64*11+25,this.player.getyPosition()+64*26,
 				// width * scale/2, height *scale/4, null);
-				// g.drawImage(fog, (((this.getWidth() - (width) * scale)) / 2)-
-				// this.player.getxPosition() * scale, ((this.getHeight()
-				// -(height) * scale) / 2) - this.player.getyPosition() *
-				// scale,width * scale, height * scale / 4, null);
+				if (pokemonGame.getPlayer().getWinCondition() == 1)
+					g.drawImage(fog,
+							(((this.getWidth() - (width) * scale)) / 2)
+									- pokemonGame.getPlayer().getxPosition() * scale,
+							((this.getHeight() - (height) * scale) / 2)
+									- pokemonGame.getPlayer().getyPosition() * scale-600,
+							width * scale*2, height * scale*2, null);
 
 				if (Player.isEnterHome()) {
 					g.setColor(Color.WHITE);
@@ -414,6 +432,11 @@ public class GameGUI extends JFrame implements Runnable {
 					key = k;
 				}
 			}
+
+			if (myKey == KeyEvent.VK_ENTER) {
+				isNextPage = true;
+			}
+
 			if (key != null) {
 				if (tick > 0)
 					key.setTapped(false);

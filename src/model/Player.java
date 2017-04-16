@@ -44,6 +44,8 @@ public class Player implements Serializable {
 	private ArrayList<Key> keys;
 	private int xPosition = -TILE_WIDTH * 0;
 	private int yPosition = -TILE_HEIGHT * 0;
+	private int xLastPosition = -TILE_WIDTH * 0;
+	private int yLastPosition = -TILE_HEIGHT * 0;
 	private int map;
 	private boolean stepTracker = false;
 	private static boolean enterHome = false;
@@ -71,6 +73,22 @@ public class Player implements Serializable {
 
 	public void setyPosition(int yPosition) {
 		this.yPosition = yPosition;
+	}
+
+	public int getxLastPosition() {
+		return xLastPosition;
+	}
+
+	public void setxLastPosition(int xLastPosition) {
+		this.xLastPosition = xLastPosition;
+	}
+
+	public int getyLastPosition() {
+		return yLastPosition;
+	}
+
+	public void setyLastPosition(int yLastPosition) {
+		this.yLastPosition = yLastPosition;
 	}
 
 	public int getSteps() {
@@ -233,7 +251,11 @@ public class Player implements Serializable {
 				// if corrupted save state doesnt save steps
 				if (steps > 500)
 					steps = 500;
-				steps--;
+				if (Math.abs(xLastPosition - xPosition) > 10 || Math.abs(yLastPosition - yPosition) > 10) {
+					steps--;
+					xLastPosition = xPosition;
+					yLastPosition = yPosition;
+				}
 				stepTracker = false;
 			}
 			xAccel = 0;

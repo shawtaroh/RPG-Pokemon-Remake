@@ -183,6 +183,8 @@ public class GameGUI extends JFrame implements Runnable {
 				game.getPokemonGame().getPlayer().setSteps(loaded.getSteps());
 				game.getPokemonGame().getPlayer().setxPosition(loaded.getxPosition());
 				game.getPokemonGame().getPlayer().setyPosition(loaded.getyPosition());
+				game.getPokemonGame().getPlayer().setxLastPosition(loaded.getxLastPosition());
+				game.getPokemonGame().getPlayer().setyLastPosition(loaded.getyLastPosition());
 
 			} catch (ClassNotFoundException | IOException e) {
 				e.printStackTrace();

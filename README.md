@@ -29,5 +29,6 @@ _,-'       `.     |    |  /`.   \,-'    |   \  /   |   |    \  |`.
 		Note 2: A .classpath is included to ensure that art sprites are in the correct build path of eclipse projects.
 				If a user encounters any exceptions related to art files, make sure it is added to the build path as a source folder.
 				Also, macs might have problems playing .wav files?
-		TODO: Battle GUI
+		TODO Iteration 1: Unit Testing, general refactoring.
+		TODO Iteration 2: Battle GUI
     

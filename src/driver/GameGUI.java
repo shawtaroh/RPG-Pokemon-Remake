@@ -93,9 +93,9 @@ public class GameGUI extends JFrame implements Runnable {
 	private jPanel2 painting;
 	private ObjectWaitingForSongToEnd waiter = new ObjectWaitingForSongToEnd();
 
-	public GameGUI(int mapNum) {
+	public GameGUI(int mapNum, int winCondition) {
 		loadTransperantImages();
-		pokemonGame = new PokemonGame(mapNum);
+		pokemonGame = new PokemonGame(mapNum, winCondition);
 		scale = 1;
 		screen = new BitMap(width, height);
 		message = "Welcome to Safari Zone. To turn, tap the arrow keys. To move, hold-down the arrow ";
@@ -179,12 +179,13 @@ public class GameGUI extends JFrame implements Runnable {
 					e.printStackTrace();
 				}
 				Player loaded = (Player) inFile.readObject();
-				GameGUI game = new GameGUI(loaded.getMap());
+				GameGUI game = new GameGUI(loaded.getMap(), loaded.getWinCondition());
 				game.getPokemonGame().getPlayer().setSteps(loaded.getSteps());
 				game.getPokemonGame().getPlayer().setxPosition(loaded.getxPosition());
 				game.getPokemonGame().getPlayer().setyPosition(loaded.getyPosition());
 				game.getPokemonGame().getPlayer().setxLastPosition(loaded.getxLastPosition());
 				game.getPokemonGame().getPlayer().setyLastPosition(loaded.getyLastPosition());
+				game.getPokemonGame().getPlayer().setWinCondition(loaded.getWinCondition());
 
 			} catch (ClassNotFoundException | IOException e) {
 				e.printStackTrace();
@@ -196,9 +197,6 @@ public class GameGUI extends JFrame implements Runnable {
 			Object[] options2 = { "Normal", "Story" };
 			int winCondition = JOptionPane.showOptionDialog(null, "choose a mode", "choose a mode",
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options2, options2[0]);
-			if (winCondition == 1) {
-				// TODO
-			}
 
 			SplashScreen execute = new SplashScreen("/art/splash/pika loading.gif", "Loading Safari World!");
 			try {
@@ -207,7 +205,7 @@ public class GameGUI extends JFrame implements Runnable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			GameGUI game = new GameGUI(map);
+			GameGUI game = new GameGUI(map, winCondition);
 		}
 
 	}
@@ -467,12 +465,11 @@ public class GameGUI extends JFrame implements Runnable {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-		}
-		else if (choice== 1){
+		} else if (choice == 1) {
 			@SuppressWarnings("unused")
 			SplashScreen close = new SplashScreen("/art/splash/gamecredits.gif", "Thanks for playing!!");
 		}
-			
+
 	}
 
 	/*

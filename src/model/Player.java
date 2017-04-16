@@ -111,23 +111,33 @@ public class Player implements Serializable {
 
 	private int xAccel;
 	private int yAccel;
+	private int winCondition;
 
 	boolean lockWalking;
 
 	private static Player uniqueInstance;
 
-	public static Player getInstance(ArrayList<Key> keys, int map) {
+	public static Player getInstance(ArrayList<Key> keys, int map, int winCondition) {
 		if (uniqueInstance == null)
-			uniqueInstance = new Player(keys, map);
+			uniqueInstance = new Player(keys, map, winCondition);
 		return uniqueInstance;
 	}
 
-	public Player(ArrayList<Key> keys, int map) {
+	public Player(ArrayList<Key> keys, int map, int winCondition) {
 		this.keys = keys;
 		this.map = map;
+		this.winCondition = winCondition;
 		loadRestrictions();
 		player = BitMap.cut("/art/player/player.png", 64, 64, 0, 0);
 		myBag = new Inventory();
+	}
+
+	public int getWinCondition() {
+		return winCondition;
+	}
+
+	public void setWinCondition(int winCondition) {
+		this.winCondition = winCondition;
 	}
 
 	public int getMap() {
@@ -247,7 +257,7 @@ public class Player implements Serializable {
 		}
 		if (xPosition % TILE_WIDTH == 0 && yPosition % TILE_HEIGHT == 0) {
 			lockWalking = false;
-			if (stepTracker) {
+			if (stepTracker&&winCondition==0) {
 				// if corrupted save state doesnt save steps
 				if (steps > 500)
 					steps = 500;

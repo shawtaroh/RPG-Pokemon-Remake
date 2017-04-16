@@ -15,13 +15,11 @@ _,-'       `.     |    |  /`.   \,-'    |   \  /   |   |    \  |`.
         \_.-'       |__|    `-._ |              '-.|     '-.| |   |
                                 `'                            '-._|
                                 
-
 @authors  
 Eric Evans
 Joey McClanahan
 Matt Shaffer
 Shawtaroh Granzier-Nakajima
-
 @description
 CS 335 Final Project
 Implements Pokemon SafariZone helper class for Game GUI Input Handler
@@ -29,8 +27,13 @@ Mainly distinguishes key held down and key tapped
 */
 
 import java.awt.event.KeyEvent;
+import java.io.Serializable;
 
-public class Key {
+public class Key implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2206297702059012724L;
 	private boolean isTapped;
 	private boolean isTappedDown;
 	private boolean isPressedDown;

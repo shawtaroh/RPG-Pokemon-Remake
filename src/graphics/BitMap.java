@@ -30,10 +30,15 @@ Implements Pokemon SafariZone image cutting, loading, blending. helper method fo
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.IOException;
+import java.io.Serializable;
 
 import javax.imageio.ImageIO;
 
-public class BitMap {
+public class BitMap implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4032751192331951262L;
 	private BufferedImage image;
 	private int[] pixels;
 	private int width;

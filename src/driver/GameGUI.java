@@ -87,7 +87,7 @@ public class GameGUI extends JFrame implements Runnable {
 	private boolean running = true;
 	private InputHandler inputHandler;
 	private PokemonGame pokemonGame;
-	private String message;
+	private String message,message2;
 
 	private BufferedImage msgBox, clouds, fog;
 	private jPanel2 painting;
@@ -98,7 +98,8 @@ public class GameGUI extends JFrame implements Runnable {
 		pokemonGame = new PokemonGame(mapNum);
 		scale = 1;
 		screen = new BitMap(width, height);
-		message = "Hey! Get good at this game!";
+		message = "Welcome to Safari Zone. To turn, tap the arrow keys. To move, hold-down the arrow ";
+		message2="keys. To open menu, space-bar. Have fun!";
 
 		inputHandler = new InputHandler(pokemonGame.getKeys());
 
@@ -330,8 +331,6 @@ public class GameGUI extends JFrame implements Runnable {
 					int yScroll = (pokemonGame.getPlayer().getyPosition());
 					pokemonGame.getWorld().render(screen, xScroll, yScroll);
 				}
-				// currentImage = screen.getBufferedImage();
-				// painting.repaint();
 				g.drawImage(screen.getBufferedImage(), 0, 0, width * scale, height * scale, null);
 				g.drawImage(msgBox, pokemonGame.getPlayer().getxPosition() + 64 * 15,
 						pokemonGame.getPlayer().getyPosition() + 64 * 26, width * scale / 3, height * scale / 32, null);
@@ -339,13 +338,19 @@ public class GameGUI extends JFrame implements Runnable {
 				g.setColor(Color.WHITE);
 				g.drawString("Steps: "+pokemonGame.getPlayer().getSteps(), pokemonGame.getPlayer().getxPosition() + 64 * 15,
 						pokemonGame.getPlayer().getyPosition() + 64 * 26);
-				g.drawString(message, pokemonGame.getPlayer().getxPosition() + 64 * 15,
+				g.drawString(message, pokemonGame.getPlayer().getxPosition() + 64 * 15+15,
 						pokemonGame.getPlayer().getyPosition() + 64 * 26 + 30);
+				g.drawString(message2, pokemonGame.getPlayer().getxPosition() + 64 * 15+15,
+						pokemonGame.getPlayer().getyPosition() + 64 * 26 + 60);
 				g.drawImage(clouds,
 						(((this.getWidth() - (width) * scale)) / 2) - pokemonGame.getPlayer().getxPosition() * scale,
 						((this.getHeight() - (height) * scale) / 2) - pokemonGame.getPlayer().getyPosition() * scale,
 						width * scale, height * scale / 4, null);
-
+				if(pokemonGame.getPlayer().getSteps()<=450){
+					JOptionPane.showMessageDialog(null, "You ran out of steps, and caught no pokemon. This is only iteration one, goodbye.");
+					stop();
+					System.exit(0);
+				}
 				// g.drawImage(msgBox,
 				// this.player.getxPosition()+64*11+25,this.player.getyPosition()+64*26,
 				// width * scale/2, height *scale/4, null);

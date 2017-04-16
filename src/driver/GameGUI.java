@@ -87,6 +87,7 @@ public class GameGUI extends JFrame implements Runnable {
 	private boolean running = true;
 	private InputHandler inputHandler;
 	private PokemonGame pokemonGame;
+	private String message;
 
 	private BufferedImage msgBox, clouds, fog;
 	private jPanel2 painting;
@@ -97,6 +98,7 @@ public class GameGUI extends JFrame implements Runnable {
 		pokemonGame = new PokemonGame(mapNum);
 		scale = 1;
 		screen = new BitMap(width, height);
+		message = "Hey! Get good at this game!";
 
 		inputHandler = new InputHandler(pokemonGame.getKeys());
 
@@ -334,9 +336,8 @@ public class GameGUI extends JFrame implements Runnable {
 				g.drawImage(msgBox, pokemonGame.getPlayer().getxPosition() + 64 * 15,
 						pokemonGame.getPlayer().getyPosition() + 64 * 26, width * scale / 3, height * scale / 32, null);
 				g.setFont(new Font("Arial", Font.BOLD, 24));
-				String message = "Hey! Get good at this game!";
 				g.setColor(Color.WHITE);
-				g.drawString("Message Box", pokemonGame.getPlayer().getxPosition() + 64 * 15,
+				g.drawString("Steps: "+pokemonGame.getPlayer().getSteps(), pokemonGame.getPlayer().getxPosition() + 64 * 15,
 						pokemonGame.getPlayer().getyPosition() + 64 * 26);
 				g.drawString(message, pokemonGame.getPlayer().getxPosition() + 64 * 15,
 						pokemonGame.getPlayer().getyPosition() + 64 * 26 + 30);

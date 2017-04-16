@@ -123,7 +123,7 @@ public class GameGUI extends JFrame implements Runnable {
 		setSize(new Dimension(inset.left + inset.right + width * scale / 2,
 				inset.top + inset.bottom + height * scale / 2));
 		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setVisible(true);
 		start();
 		SongPlayer.playFile(waiter, Pokedex.class.getResource("/art/sounds/101-opening.wav").toString().substring(6));
@@ -454,21 +454,23 @@ public class GameGUI extends JFrame implements Runnable {
 	 */
 	public void closeWindow() {
 
-		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		stop();
 		int choice = JOptionPane.showConfirmDialog(null, "Save State?");
 		if (choice == 0) {
 			try {
 				saveState();
-
+				@SuppressWarnings("unused")
+				SplashScreen close = new SplashScreen("/art/splash/gamecredits.gif", "Thanks for playing!!");
 			} catch (FileNotFoundException e1) {
 				e1.printStackTrace();
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
 		}
-		@SuppressWarnings("unused")
-		SplashScreen close = new SplashScreen("/art/splash/gamecredits.gif", "Thanks for playing!!");
+		else if (choice== 1){
+			@SuppressWarnings("unused")
+			SplashScreen close = new SplashScreen("/art/splash/gamecredits.gif", "Thanks for playing!!");
+		}
+			
 	}
 
 	/*

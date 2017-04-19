@@ -2,7 +2,6 @@ package model;
 
 import java.util.ArrayList;
 
-import driver.Key;
 import maps.Map;
 import maps.MapTypeOne;
 import maps.MapTypeTwo;
@@ -11,7 +10,6 @@ public class PokemonGame {
 	private Player player;
 	private ArrayList<Key> keys = new ArrayList<>();
 	private Map world;
-	private int winCondition;
 
 	public PokemonGame(int mapSelection, int winCondition) {
 		keys.add(new Key("up"));

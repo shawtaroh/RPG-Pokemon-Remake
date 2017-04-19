@@ -31,8 +31,8 @@ Implements Pokemon Trainer
 */
 
 import java.util.ArrayList;
+import java.util.Random;
 
-import driver.Key;
 import graphics.BitMap;
 
 public class Player implements Serializable {
@@ -56,9 +56,8 @@ public class Player implements Serializable {
 		return enterHome;
 	}
 
-	
 	public Inventory getMyBag() {
-		
+
 		return this.myBag;
 	}
 
@@ -107,10 +106,10 @@ public class Player implements Serializable {
 	}
 
 	public int getHP() {
-		
-		return hp ;
+
+		return hp;
 	}
-	
+
 	private static int TILE_WIDTH = 64;
 	private static int TILE_HEIGHT = 64;
 	private int steps = 500;
@@ -160,19 +159,19 @@ public class Player implements Serializable {
 		if (!lockWalking) {
 			if (xPosition == -TILE_WIDTH * 20 && yPosition == TILE_WIDTH * -18 && facing == 3)
 				enterHome = true;
-			if (keys.get(0).isTappedDown()) {
+			if (keys.get(0).isTappedDown()) {// up
 				facing = 3;
 				animationTick = 0;
 				animationPointer = 0;
-			} else if (keys.get(1).isTappedDown()) {
+			} else if (keys.get(1).isTappedDown()) {// down
 				facing = 0;
 				animationTick = 0;
 				animationPointer = 0;
-			} else if (keys.get(2).isTappedDown()) {
+			} else if (keys.get(2).isTappedDown()) {// left
 				facing = 1;
 				animationTick = 0;
 				animationPointer = 0;
-			} else if (keys.get(3).isTappedDown()) {
+			} else if (keys.get(3).isTappedDown()) {// right
 				facing = 2;
 				animationTick = 0;
 				animationPointer = 0;
@@ -229,39 +228,65 @@ public class Player implements Serializable {
 					(screen.getHeight() - TILE_HEIGHT) / 2 + yPosition + 16, TILE_WIDTH, TILE_HEIGHT);
 	}
 
-	private boolean restrictedTile(int x, int y) {
+	private boolean perimeterTile(int x, int y) {
 		for (Point p : restrictedX)
-			if (x == p.getY() && y == p.getX())
-				return true;
+			if ((x == p.getY() && Math.abs(p.getX() - y) <= 64) || (y == p.getX() && Math.abs(p.getY() - x) <= 64)) {
+				if (x == p.getY()) {
+					if ((y > p.getX()) && facing == 3)
+						return true;
+					if ((y < p.getX()) && facing == 0)
+						return true;
+				} else {
+					if ((x > p.getY()) && facing == 1)
+						return true;
+					if ((x < p.getY()) && facing == 2)
+						return true;
+				}
+			}
 		return false;
 	}
 
 	// perimeter squares
 	private void loadRestrictions() {
-		restrictedX.add(new Point(-21 * TILE_WIDTH, -18 * TILE_WIDTH));
-		restrictedX.add(new Point(-20 * TILE_WIDTH, -18 * TILE_WIDTH));
-		restrictedX.add(new Point(-19 * TILE_WIDTH, -18 * TILE_WIDTH));
-		// restrictedX.add(new Point(-18*TILE_WIDTH,-18*TILE_WIDTH));
-		restrictedX.add(new Point(-18 * TILE_WIDTH, -19 * TILE_WIDTH));
-		restrictedX.add(new Point(-18 * TILE_WIDTH, -20 * TILE_WIDTH));
-
+		restrictedX.add(new Point(-10 * TILE_WIDTH, -9 * TILE_WIDTH));
+		restrictedX.add(new Point(-10 * TILE_WIDTH, -10 * TILE_WIDTH));
+		restrictedX.add(new Point(-10 * TILE_WIDTH, -11 * TILE_WIDTH));
+		restrictedX.add(new Point(-9 * TILE_WIDTH, -9 * TILE_WIDTH));
+		restrictedX.add(new Point(-9 * TILE_WIDTH, -10 * TILE_WIDTH));
+		restrictedX.add(new Point(-9 * TILE_WIDTH, -11 * TILE_WIDTH));
+		Random generator = new Random(420);
+		for (int i = 0; i < 41; i++)
+			for (int j = 0; j < 45; j++)
+				if (generator.nextDouble() > .97)
+					restrictedX.add(new Point((j-21) * TILE_WIDTH , (i-22) * TILE_WIDTH ));
 	}
 
 	private void handleMovement() {
+		if (perimeterTile(xPosition, yPosition) && lockWalking) {
+			System.out.println("IS PERIMETER" + xPosition / 64 + "," + yPosition / 64);
+			try {
+				Thread.sleep(80);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			lockWalking = false;
+			return;
+		}
 		if (lockWalking) {
 			stepTracker = true;
-			if (xPosition > -TILE_WIDTH * 21 && xPosition < TILE_WIDTH * 22 && !restrictedTile(xPosition, yPosition))
+			if (xPosition > -TILE_WIDTH * 21 && xPosition < TILE_WIDTH * 22)
 				xPosition += xAccel;
 			else {
-				if ((xPosition == -TILE_WIDTH * 21 || restrictedTile(xPosition, yPosition)) && xAccel > 0)
+				if (xPosition == -TILE_WIDTH * 21 && xAccel > 0)
 					xPosition += xAccel;
 				else if (xPosition == TILE_WIDTH * 22 && xAccel < 0)
 					xPosition += xAccel;
 			}
-			if (yPosition > -TILE_WIDTH * 20 && yPosition < TILE_WIDTH * 19 && !restrictedTile(xPosition, yPosition))
+			if (yPosition > -TILE_WIDTH * 20 && yPosition < TILE_WIDTH * 19)
 				yPosition += yAccel;
 			else {
-				if ((yPosition == -TILE_WIDTH * 20 || restrictedTile(xPosition, yPosition)) && yAccel > 0)
+				if (yPosition == -TILE_WIDTH * 20 && yAccel > 0)
 					yPosition += yAccel;
 				else if (yPosition == TILE_WIDTH * 19 && yAccel < 0)
 					yPosition += yAccel;
@@ -269,7 +294,7 @@ public class Player implements Serializable {
 		}
 		if (xPosition % TILE_WIDTH == 0 && yPosition % TILE_HEIGHT == 0) {
 			lockWalking = false;
-			if (stepTracker&&winCondition==0) {
+			if (stepTracker && winCondition == 0) {
 				// if corrupted save state doesnt save steps
 				if (steps > 500)
 					steps = 500;
@@ -287,7 +312,4 @@ public class Player implements Serializable {
 			lockWalking = true;
 	}
 
-
-	
-	
 }

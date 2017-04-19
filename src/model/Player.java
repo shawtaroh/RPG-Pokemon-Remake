@@ -177,7 +177,7 @@ public class Player implements Serializable {
 				animationPointer = 0;
 			}
 		}
-		if (!lockWalking) {
+		if (!lockWalking&&!perimeterTile(xPosition, yPosition)) {
 			if (keys.get(0).isPressedDown()) {
 				if (facing == 3)
 					yAccel = yAccel - 2;
@@ -262,14 +262,8 @@ public class Player implements Serializable {
 	}
 
 	private void handleMovement() {
-		if (perimeterTile(xPosition, yPosition) && lockWalking) {
-			System.out.println("IS PERIMETER" + xPosition / 64 + "," + yPosition / 64);
-			try {
-				Thread.sleep(80);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		if (perimeterTile(xPosition, yPosition) ) {
+			//System.out.println("IS PERIMETER" + xPosition / 64 + "," + yPosition / 64);
 			lockWalking = false;
 			return;
 		}

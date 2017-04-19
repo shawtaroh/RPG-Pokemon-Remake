@@ -59,7 +59,6 @@ import javax.swing.WindowConstants;
 import graphics.BitMap;
 import graphics.InGameMenu;
 import graphics.SplashScreen;
-import model.Key;
 import model.Player;
 import model.Pokedex;
 import model.PokemonGame;

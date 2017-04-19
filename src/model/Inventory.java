@@ -38,6 +38,7 @@ public class Inventory {
 		items = new TreeMap<String, ItemList>();
 		items.put("Safari Balls", new SafariBalls(30));
 		items.put("Potions", new Potions(0));
+		items.put("Snacks", new Snacks(0));
 	}
 
 	public int getNumItem(String name){

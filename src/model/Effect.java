@@ -1,5 +1,5 @@
 package model;
 
 public enum Effect {
-	HEALING;
+	HEALING, WALKDISTANCE;
 }

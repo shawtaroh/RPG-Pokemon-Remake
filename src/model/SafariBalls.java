@@ -1,6 +1,8 @@
 package model;
 
-public class SafariBalls extends ItemList{
+import java.io.Serializable;
+
+public class SafariBalls extends ItemList implements Serializable{
 
 	public SafariBalls(int quantity) {
 		super(quantity);

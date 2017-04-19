@@ -35,7 +35,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -53,21 +52,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import graphics.BitMap;
 import graphics.InGameMenu;
 import graphics.SplashScreen;
-import maps.Map;
-import maps.MapTypeOne;
-import maps.MapTypeTwo;
 import model.Player;
 import model.Pokedex;
 import model.PokemonGame;
+import model.Key;
 import songplayer.EndOfSongEvent;
 import songplayer.EndOfSongListener;
 import songplayer.SongPlayer;
@@ -87,16 +82,21 @@ public class GameGUI extends JFrame implements Runnable {
 	private boolean running = true;
 	private InputHandler inputHandler;
 	private PokemonGame pokemonGame;
+	private String message, message2, message3;
+	private boolean isNextPage = false;
 
 	private BufferedImage msgBox, clouds, fog;
 	private jPanel2 painting;
 	private ObjectWaitingForSongToEnd waiter = new ObjectWaitingForSongToEnd();
 
-	public GameGUI(int mapNum) {
+	public GameGUI(int mapNum, int winCondition) {
 		loadTransperantImages();
-		pokemonGame = new PokemonGame(mapNum);
+		pokemonGame = new PokemonGame(mapNum, winCondition);
 		scale = 1;
 		screen = new BitMap(width, height);
+		message = "Welcome to Safari Zone. To turn, tap the arrow keys. To move, hold-down the arrow ";
+		message2 = "keys. To open menu, space-bar. Have fun! Hint: Home is North-East";
+		message3 = "Press Enter for next page.";
 
 		inputHandler = new InputHandler(pokemonGame.getKeys());
 
@@ -110,7 +110,7 @@ public class GameGUI extends JFrame implements Runnable {
 		add(painting);
 
 		// Menu Second for Layering
-		menu = new InGameMenu(this);
+		menu = new InGameMenu(pokemonGame, this);
 		menu.setVisible(false);
 		add(menu);
 
@@ -120,19 +120,63 @@ public class GameGUI extends JFrame implements Runnable {
 		setSize(new Dimension(inset.left + inset.right + width * scale / 2,
 				inset.top + inset.bottom + height * scale / 2));
 		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setVisible(true);
 		start();
 		SongPlayer.playFile(waiter, Pokedex.class.getResource("/art/sounds/101-opening.wav").toString().substring(6));
 	}
 
+	public static void main(String[] args) {
+		int choice = JOptionPane.showConfirmDialog(null, "Load previous save state?");
+		if (choice == 0) {
+			try {
+				ObjectInputStream inFile = new ObjectInputStream(new FileInputStream("game.save"));
+				SplashScreen execute = new SplashScreen("/art/splash/pika loading.gif", "Loading Safari World!");
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Player loaded = (Player) inFile.readObject();
+				GameGUI game = new GameGUI(loaded.getMap(), loaded.getWinCondition());
+				game.getPokemonGame().getPlayer().setSteps(loaded.getSteps());
+				game.getPokemonGame().getPlayer().setxPosition(loaded.getxPosition());
+				game.getPokemonGame().getPlayer().setyPosition(loaded.getyPosition());
+				game.getPokemonGame().getPlayer().setxLastPosition(loaded.getxLastPosition());
+				game.getPokemonGame().getPlayer().setyLastPosition(loaded.getyLastPosition());
+				game.getPokemonGame().getPlayer().setWinCondition(loaded.getWinCondition());
+
+			} catch (ClassNotFoundException | IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			Object[] options = { "Map One", "Map Two" };
+			int map = JOptionPane.showOptionDialog(null, "Choose a map", "Choose a map",
+					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+			Object[] options2 = { "Normal", "Story" };
+			int winCondition = JOptionPane.showOptionDialog(null, "choose a mode", "choose a mode",
+					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options2, options2[0]);
+
+			SplashScreen execute = new SplashScreen("/art/splash/pika loading.gif", "Loading Safari World!");
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			GameGUI game = new GameGUI(map, winCondition);
+		}
+
+	}
+
+	// makes art files transperant
 	public void loadTransperantImages() {
 		try {
 			msgBox = ImageIO.read(GameGUI.class.getResource("/art/msgBox.png"));
 			fog = ImageIO.read(GameGUI.class.getResource("/art/clouds2.png"));
 			clouds = ImageIO.read(GameGUI.class.getResource("/art/clouds3.png"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -159,49 +203,9 @@ public class GameGUI extends JFrame implements Runnable {
 
 	}
 
+	// returns game
 	public PokemonGame getPokemonGame() {
 		return this.pokemonGame;
-	}
-
-	public static void main(String[] args) {
-		int choice = JOptionPane.showConfirmDialog(null, "Load previous save state?");
-		if (choice == 0) {
-			try {
-				ObjectInputStream inFile = new ObjectInputStream(new FileInputStream("game.save"));
-				SplashScreen execute = new SplashScreen("/art/splash/pika loading.gif", "Loading Safari World!");
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				Player loaded = (Player) inFile.readObject();
-				GameGUI game = new GameGUI(loaded.getMap());
-				game.getPokemonGame().setPlayer(loaded);
-			} catch (ClassNotFoundException | IOException e) {
-				e.printStackTrace();
-			}
-		} else {
-			Object[] options = { "Map One", "Map Two" };
-			int map = JOptionPane.showOptionDialog(null, "Choose a map", "Choose a map",
-					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-			Object[] options2 = { "Normal", "Story" };
-			int winCondition = JOptionPane.showOptionDialog(null, "choose a mode", "choose a mode",
-					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options2, options2[0]);
-			if (winCondition == 1) {
-				// TODO
-			}
-
-			SplashScreen execute = new SplashScreen("/art/splash/pika loading.gif", "Loading Safari World!");
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			GameGUI game = new GameGUI(map);
-		}
-
 	}
 
 	// song waiter
@@ -281,6 +285,7 @@ public class GameGUI extends JFrame implements Runnable {
 
 		running = false;
 	}
+	
 
 	// updates graphics in separate thread
 	public void run() {
@@ -328,30 +333,19 @@ public class GameGUI extends JFrame implements Runnable {
 					int yScroll = (pokemonGame.getPlayer().getyPosition());
 					pokemonGame.getWorld().render(screen, xScroll, yScroll);
 				}
-				// currentImage = screen.getBufferedImage();
-				// painting.repaint();
+				//draws main screen
 				g.drawImage(screen.getBufferedImage(), 0, 0, width * scale, height * scale, null);
-				g.drawImage(msgBox, pokemonGame.getPlayer().getxPosition() + 64 * 15,
-						pokemonGame.getPlayer().getyPosition() + 64 * 26, width * scale / 3, height * scale / 32, null);
-				g.setFont(new Font("Arial", Font.BOLD, 24));
-				String message = "Hey! Get good at this game!";
-				g.setColor(Color.WHITE);
-				g.drawString("Message Box", pokemonGame.getPlayer().getxPosition() + 64 * 15,
-						pokemonGame.getPlayer().getyPosition() + 64 * 26);
-				g.drawString(message, pokemonGame.getPlayer().getxPosition() + 64 * 15,
-						pokemonGame.getPlayer().getyPosition() + 64 * 26 + 30);
-				g.drawImage(clouds,
-						(((this.getWidth() - (width) * scale)) / 2) - pokemonGame.getPlayer().getxPosition() * scale,
-						((this.getHeight() - (height) * scale) / 2) - pokemonGame.getPlayer().getyPosition() * scale,
-						width * scale, height * scale / 4, null);
-
+				//draws environmental effects
+				renderMsgBoxAndClouds(g);
+				if (pokemonGame.getPlayer().getSteps() <= 0) {
+					JOptionPane.showMessageDialog(null,
+							"You ran out of steps, and caught no pokemon. This is only iteration one, goodbye.");
+					stop();
+					System.exit(0);
+				}
 				// g.drawImage(msgBox,
 				// this.player.getxPosition()+64*11+25,this.player.getyPosition()+64*26,
 				// width * scale/2, height *scale/4, null);
-				// g.drawImage(fog, (((this.getWidth() - (width) * scale)) / 2)-
-				// this.player.getxPosition() * scale, ((this.getHeight()
-				// -(height) * scale) / 2) - this.player.getyPosition() *
-				// scale,width * scale, height * scale / 4, null);
 
 				if (Player.isEnterHome()) {
 					g.setColor(Color.WHITE);
@@ -382,6 +376,57 @@ public class GameGUI extends JFrame implements Runnable {
 		}
 	}
 
+	private void renderMsgBoxAndClouds(Graphics g) {
+		g.drawImage(msgBox, pokemonGame.getPlayer().getxPosition() + 64 * 15,
+				pokemonGame.getPlayer().getyPosition() + 64 * 26, width * scale / 3, height * scale / 32, null);
+		g.setFont(new Font("Arial", Font.BOLD, 24));
+		g.setColor(Color.WHITE);
+		g.drawString("Steps: " + pokemonGame.getPlayer().getSteps(),
+				pokemonGame.getPlayer().getxPosition() + 64 * 15,
+				pokemonGame.getPlayer().getyPosition() + 64 * 26);
+		if (!isNextPage) {
+			g.drawString(message, pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15,
+					pokemonGame.getPlayer().getyPosition() + 64 * 26 + 30);
+			g.drawString(message2, pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15,
+					pokemonGame.getPlayer().getyPosition() + 64 * 26 + 60);
+		}else if (pokemonGame.getPlayer().getWinCondition() == 1) {
+			g.drawString("A fog has fallen upon the Safari Zone. Quick, find Professor Mercer to teach the",
+					pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15,
+					pokemonGame.getPlayer().getyPosition() + 64 * 26 + 30);
+			g.drawString("game developers how to turn the fog component invisible!",
+					pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15,
+					pokemonGame.getPlayer().getyPosition() + 64 * 26 + 60);
+		}
+		g.setFont(new Font("Arial", Font.BOLD, 12));
+		g.setColor(Color.LIGHT_GRAY);
+		g.drawString(message3, pokemonGame.getPlayer().getxPosition() + 64 * 15 + 420,
+				pokemonGame.getPlayer().getyPosition() + 64 * 26 + 75);
+		g.drawImage(clouds,
+				(((this.getWidth() - (width) * scale)) / 2) - pokemonGame.getPlayer().getxPosition() * scale,
+				((this.getHeight() - (height) * scale) / 2) - pokemonGame.getPlayer().getyPosition() * scale,
+				width * scale, height * scale / 4, null);
+		g.drawImage(clouds,
+				(((this.getWidth() - (width) * scale)) / 2) +1500- pokemonGame.getPlayer().getxPosition() * scale,
+				((this.getHeight() - (height) * scale) / 2) +750- pokemonGame.getPlayer().getyPosition() * scale,
+				width * scale, height * scale / 4, null);
+		g.drawImage(clouds,
+				(((this.getWidth() - (width) * scale)) / 2) +2000- pokemonGame.getPlayer().getxPosition() * scale,
+				((this.getHeight() - (height) * scale) / 2) +1750- pokemonGame.getPlayer().getyPosition() * scale,
+				width * scale, height * scale / 4, null);
+		g.drawImage(clouds,
+				(((this.getWidth() - (width) * scale)) / 2) -500- pokemonGame.getPlayer().getxPosition() * scale,
+				((this.getHeight() - (height) * scale) / 2) +1500- pokemonGame.getPlayer().getyPosition() * scale,
+				width * scale, height * scale / 4, null);
+		if (pokemonGame.getPlayer().getWinCondition() == 1)
+			g.drawImage(fog,
+					(((this.getWidth() - (width) * scale*2)) / 2)
+							- pokemonGame.getPlayer().getxPosition() * scale,
+					((this.getHeight() - (height) * scale) / 2) - pokemonGame.getPlayer().getyPosition() * scale
+							- 600,
+					width * scale * 3, height * scale * 2, null);
+		
+	}
+
 	/*
 	 * for interacting with player
 	 */
@@ -403,6 +448,11 @@ public class GameGUI extends JFrame implements Runnable {
 					key = k;
 				}
 			}
+
+			if (myKey == KeyEvent.VK_ENTER) {
+				isNextPage = true;
+			}
+
 			if (key != null) {
 				if (tick > 0)
 					key.setTapped(false);
@@ -443,21 +493,22 @@ public class GameGUI extends JFrame implements Runnable {
 	 */
 	public void closeWindow() {
 
-		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		stop();
 		int choice = JOptionPane.showConfirmDialog(null, "Save State?");
 		if (choice == 0) {
 			try {
 				saveState();
-
+				@SuppressWarnings("unused")
+				SplashScreen close = new SplashScreen("/art/splash/gamecredits.gif", "Thanks for playing!!");
 			} catch (FileNotFoundException e1) {
 				e1.printStackTrace();
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
+		} else if (choice == 1) {
+			@SuppressWarnings("unused")
+			SplashScreen close = new SplashScreen("/art/splash/gamecredits.gif", "Thanks for playing!!");
 		}
-		@SuppressWarnings("unused")
-		SplashScreen close = new SplashScreen("/art/splash/gamecredits.gif", "Thanks for playing!!");
+
 	}
 
 	/*

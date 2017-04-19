@@ -35,7 +35,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -53,18 +52,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import graphics.BitMap;
 import graphics.InGameMenu;
 import graphics.SplashScreen;
-import maps.Map;
-import maps.MapTypeOne;
-import maps.MapTypeTwo;
 import model.Player;
 import model.Pokedex;
 import model.PokemonGame;
@@ -115,7 +109,7 @@ public class GameGUI extends JFrame implements Runnable {
 		add(painting);
 
 		// Menu Second for Layering
-		menu = new InGameMenu(this);
+		menu = new InGameMenu(pokemonGame, this);
 		menu.setVisible(false);
 		add(menu);
 

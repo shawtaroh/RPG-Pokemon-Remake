@@ -50,9 +50,16 @@ public class Player implements Serializable {
 	private boolean stepTracker = false;
 	private static boolean enterHome = false;
 	private Inventory myBag;
+	private int hp = 100;
 
 	public static boolean isEnterHome() {
 		return enterHome;
+	}
+
+	
+	public Inventory getMyBag() {
+		
+		return this.myBag;
 	}
 
 	public static void setEnterHome(boolean the) {
@@ -99,6 +106,11 @@ public class Player implements Serializable {
 		this.steps = steps;
 	}
 
+	public int getHP() {
+		
+		return hp ;
+	}
+	
 	private static int TILE_WIDTH = 64;
 	private static int TILE_HEIGHT = 64;
 	private int steps = 500;
@@ -274,4 +286,8 @@ public class Player implements Serializable {
 		} else
 			lockWalking = true;
 	}
+
+
+	
+	
 }

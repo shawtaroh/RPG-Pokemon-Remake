@@ -1,5 +1,5 @@
 package driver;
-
+import model.Key;
 import java.awt.AlphaComposite;
 import java.awt.Canvas;
 

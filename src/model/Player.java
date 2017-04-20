@@ -159,15 +159,6 @@ public class Player implements Serializable {
 	}
 
 	public void tick() {
-		if((xPosition%300==0||yPosition%300==0)&&(xPosition!=0&&yPosition!=0)){
-			if(Math.random()>.5){
-				JOptionPane.showMessageDialog(null,
-						"You encountered a pokemon! TODO: Iteration 2");
-			}
-			else
-				JOptionPane.showMessageDialog(null,
-						"You found an item! TODO: Iteration 2");
-		}
 		if (!lockWalking) {
 			if (xPosition == -TILE_WIDTH * 20 && yPosition == TILE_WIDTH * -18 && facing == 3)
 				enterHome = true;

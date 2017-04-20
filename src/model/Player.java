@@ -283,7 +283,7 @@ public class Player implements Serializable {
 					restrictedX.add(new Point((j - 21) * TILE_WIDTH, (i - 22) * TILE_WIDTH));
 	}
 
-	private void handleMovement() {
+	public void handleMovement() {
 		if (perimeterTile(xPosition, yPosition)) {
 			lockWalking = false;
 			return;

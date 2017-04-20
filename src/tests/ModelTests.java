@@ -22,8 +22,36 @@ import model.Pokemon;
 import model.PokemonGame;
 import model.Potions;
 import model.SafariBalls;
+import model.Snacks;
 
-public class GameTests {
+/*
+							ModelTests.java
+                                  ,'\
+    _.----.        ____         ,'  _\   ___    ___     ____
+_,-'       `.     |    |  /`.   \,-'    |   \  /   |   |    \  |`.
+\      __    \    '-.  | /   `.  ___    |    \/    |   '-.   \ |  |
+ \.    \ \   |  __  |  |/    ,','_  `.  |          | __  |    \|  |
+   \    \/   /,' _`.|      ,' / / / /   |          ,' _`.|     |  |
+    \     ,-'/  /   \    ,'   | \/ / ,`.|         /  /   \  |     |
+     \    \ |   \_/  |   `-.  \    `'  /|  |    ||   \_/  | |\    |
+      \    \ \      /       `-.`.___,-' |  |\  /| \      /  | |   |
+       \    \ `.__,'|  |`-._    `|      |__| \/ |  `.__,'|  | |   |
+        \_.-'       |__|    `-._ |              '-.|     '-.| |   |
+                                `'                            '-._|
+
+
+@authors  
+Eric Evans
+Joey McClanahan
+Matt Shaffer
+Shawtaroh Granzier-Nakajima
+
+@description
+CS 335 Final Project
+This is a testing class that tests all classes that are part of the model
+*/
+
+public class ModelTests {
 
 	@Test
 	   public void testFullGame() {	
@@ -42,6 +70,7 @@ public class GameTests {
 	      int Y = game1.getPlayerYPos();
 	      //game2.invertory();
 	   }
+	
 	@Test
 	   public void testBalls() {	
 	      SafariBalls balls = new SafariBalls(50);
@@ -51,6 +80,7 @@ public class GameTests {
 	      assertTrue(balls.getEffect() == null);
 	      assertTrue(balls.getEffectAmount() == 0);
 	   }
+	
 	@Test
 	   public void testPotions() {	
 		  Potions potions = new Potions(50);
@@ -68,6 +98,7 @@ public class GameTests {
 	      }
 	      assertTrue(potions.decrement() == false);
 	   }
+	
 	@Test
 	   public void testKey() {
 	      Key key = new Key("up");
@@ -87,7 +118,6 @@ public class GameTests {
 	@Test
 	   public void testPokedex() {
 	      Pokedex pokedex = new Pokedex();
-	      
 	   }
 	
 	@Test
@@ -116,31 +146,37 @@ public class GameTests {
 	      assertTrue(player.getWinCondition() == 0);
 	      assertTrue(player.getMap() == 0);
 	      player.setLockWalking(true);
-	      BitMap screen = new BitMap(5000, 5000);
+	      BitMap screen = new BitMap(500, 500);
 	      player.render(screen);
+	      player.handleMovement();
 	      player.setLockWalking(false);
 	      player.render(screen);
 	      keys.get(0).setTappedDown(true);
 	      player.setLockWalking(false);
 	      player.tick();
+	      player.handleMovement();
 	      keys.get(0).setTappedDown(false);
 	      keys.get(2).setTappedDown(true);
+	      player.handleMovement();
 	      player.setLockWalking(false);
 	      player.tick();
+	      player.handleMovement();
 	      keys.get(2).setTappedDown(false);
 	      keys.get(1).setTappedDown(true);
+	      player.handleMovement();
 	      player.setLockWalking(false);
 	      player.tick();
 	      keys.get(1).setTappedDown(false);
 	      keys.get(3).setTappedDown(true);
+	      player.handleMovement();
 	      player.setLockWalking(false);
 	      player.tick();
-	      
 	      keys.get(0).setPressedDown(true);
 	      player.setLockWalking(false);
 	      player.tick();
 	      keys.get(0).setPressedDown(false);
 	      keys.get(2).setPressedDown(true);
+	      player.handleMovement();
 	      player.setLockWalking(false);
 	      player.tick();
 	      keys.get(2).setPressedDown(false);
@@ -149,31 +185,61 @@ public class GameTests {
 	      player.tick();
 	      keys.get(1).setPressedDown(false);
 	      keys.get(3).setPressedDown(true);
+	      player.handleMovement();
 	      player.setLockWalking(false);
 	      player.tick();
-	      
-	      
+	      player.setxPosition(1344);
+	      player.setyPosition(1344);
 	      player.setLockWalking(false);
 	      keys.get(2).setTappedDown(false);
 	      player.tick();
 	      keys.get(0).setTappedDown(false);
+	      player.tick();player.handleMovement();
+	      keys.get(1).setTappedDown(true);
 	      player.tick();
+	      keys.get(2).setTappedDown(true);
+	      player.tick();
+	      keys.get(3).setTappedDown(false);
+	      player.tick();player.handleMovement();
+	      keys.get(0).setTappedDown(true);
+	      player.tick();
+	      keys.get(1).setTappedDown(false);
+	      player.tick();
+	      keys.get(2).setTappedDown(true);player.handleMovement();
+	      player.tick();
+	      keys.get(3).setTappedDown(true);player.handleMovement();
+	      player.tick();
+	      keys.get(0).setTappedDown(false);
+	      player.tick();player.handleMovement();
 	      keys.get(1).setTappedDown(true);
 	      player.tick();
 	      keys.get(2).setTappedDown(true);
 	      player.tick();
 	      keys.get(3).setTappedDown(false);
 	      player.tick();
+	      player.setxPosition(-1344);
+	      player.setyPosition(-1344);
+	      player.setLockWalking(false);
+	      keys.get(2).setTappedDown(false);
+	      player.tick();
+	      keys.get(0).setTappedDown(false);
+	      player.tick();player.handleMovement();
+	      keys.get(1).setTappedDown(true);
+	      player.tick();
+	      keys.get(2).setTappedDown(true);
+	      player.tick();
+	      keys.get(3).setTappedDown(false);
+	      player.tick();player.handleMovement();
 	      keys.get(0).setTappedDown(true);
 	      player.tick();
 	      keys.get(1).setTappedDown(false);
 	      player.tick();
-	      keys.get(2).setTappedDown(true);
+	      keys.get(2).setTappedDown(true);player.handleMovement();
 	      player.tick();
-	      keys.get(3).setTappedDown(true);
+	      keys.get(3).setTappedDown(true);player.handleMovement();
 	      player.tick();
 	      keys.get(0).setTappedDown(false);
-	      player.tick();
+	      player.tick();player.handleMovement();
 	      keys.get(1).setTappedDown(true);
 	      player.tick();
 	      keys.get(2).setTappedDown(true);
@@ -200,6 +266,7 @@ public class GameTests {
 		assertTrue(pokemon.getCurrentHP() == 100);
 		assertTrue(pokemon.getType() == "CoolGuy");
 	}
+	
 	@Test
 	   public void testInventory() {
 		Inventory inventory = new Inventory();
@@ -210,5 +277,28 @@ public class GameTests {
 		inventory.isItemBattleUsable("Safari Balls");
 		assertTrue(inventory.getNumItems() > 0);
 		inventory.getItemNameAtLocation(0);
+	}
+	
+	@Test
+	   public void testSnacks() {
+		Snacks snack = new Snacks(100);
+		assertTrue(snack.isMenuUsable());
+		assertFalse(snack.isBattleUsable());
+		assertFalse(snack.getEffect() == null);
+		assertFalse(snack.getEffectAmount() != 50);
+	}
+	
+	@Test
+	   public void testMaps() {
+		ArrayList<Key> keys = new ArrayList<Key>();
+	      keys.add(new Key("up"));
+	      keys.add(new Key("down"));
+	      keys.add(new Key("left"));
+	      keys.add(new Key("right"));
+		Player player = new Player(keys, 0, 0);
+		Map map = new Map(100, 0, player, "TheMap");
+		map.tick();
+		BitMap screen = new BitMap(500, 500);
+		map.render(screen, 50, 50);
 	}
 }

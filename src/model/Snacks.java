@@ -1,5 +1,18 @@
 package model;
 
+/*
+@authors  
+Eric Evans
+Joey McClanahan
+Matt Shaffer
+Shawtaroh Granzier-Nakajima
+
+@description
+CS 335 Final Project
+This is an item class that allows the game to create edible snacks which
+increase the players available moves.
+*/
+
 public class Snacks extends ItemList {
 
 	public Snacks(int quantity) {

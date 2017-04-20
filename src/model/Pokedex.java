@@ -33,7 +33,7 @@ Shawtaroh Granzier-Nakajima
 
 @description
 CS 335 Final Project
-Implements Pokemon SafariZone pokedex object (lsit of many pokemon)
+Implements Pokemon SafariZone pokedex object (list of many pokemon)
 */
 
 public class Pokedex {

@@ -1,6 +1,6 @@
 package model;
 
-//Example of Loading GIFS
+//Example of Loading GIFS that is not implemented in project.
 
 import java.io.File;
 import java.io.IOException;

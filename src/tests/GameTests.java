@@ -1,11 +1,12 @@
 package tests;
 import static org.junit.Assert.*;
 
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import org.junit.Test;
+
+import com.sun.glass.events.KeyEvent;
 
 import junit.framework.*;
 import maps.Map;

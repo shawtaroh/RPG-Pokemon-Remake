@@ -15,6 +15,8 @@ public class MazeGenerator {
 	private int y;
 	private int[][] maze;
 	private static String[] stringMap;
+	private Random generator = new Random(420);
+
 	private static boolean[][] realMap = new boolean[32][16];
 
 	public MazeGenerator(int x, int y) {
@@ -83,7 +85,7 @@ public class MazeGenerator {
 	private void generateMaze(int cx, int cy) {
 		DIR[] dirs = DIR.values();
 		// Collections.shuffle(Arrays.asList(dirs), new Random(420));
-		Collections.shuffle(Arrays.asList(dirs));
+		Collections.shuffle(Arrays.asList(dirs), generator);
 		for (DIR dir : dirs) {
 			int nx = cx + dir.dx;
 			int ny = cy + dir.dy;

@@ -264,6 +264,19 @@ public class Player implements Serializable {
 			for (int j = 0; j < 45; j++)
 				if (generator.nextDouble() > .97)
 					restrictedX.add(new Point((j - 21) * TILE_WIDTH, (i - 22) * TILE_WIDTH));
+		boolean[][] maze = new model.MazeGenerator().randomMaze();
+
+		for (int i = 22; i < 38; i++)
+			for (int j = 6; j < 38; j++) {
+				Point tmp1=new Point((j - 21) * TILE_WIDTH, (i - 22) * TILE_WIDTH);
+				Point tmp2=new Point((i - 21) * TILE_WIDTH, (j - 22) * TILE_WIDTH);
+				restrictedX.remove(tmp1);
+				restrictedX.remove(tmp2);
+				if (maze[j-6][i-22]){
+					restrictedX.add(tmp1);
+					restrictedX.add(tmp2);
+				}
+			}
 	}
 
 	private void handleMovement() {

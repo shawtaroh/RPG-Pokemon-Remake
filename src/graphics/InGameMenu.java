@@ -74,12 +74,14 @@ public class InGameMenu extends JPanel {
 	private String		hpPNG			= "/art/on_screen_icons/hp.png";
 	private String		safariballPNG	= "/art/on_screen_icons/safariball.png";
 	private String		potionPNG		= "/art/on_screen_icons/potion.png";
+	private String		snacksPNG		= "/art/on_screen_icons/snacks.png";
 	
 	private String		mapStr;
 	private String		stepsStr;
 	private String		hpStr;
 	private String		safariballStr;
 	private String		potionStr;
+	private String		snacksStr;
 	
 	
 	
@@ -258,11 +260,17 @@ public class InGameMenu extends JPanel {
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 		        RenderingHints.VALUE_ANTIALIAS_ON);
 		
+		/*
+		 * Background
+		 */
 		Image bkgnd = new ImageIcon(this.getClass().getResource(backgroundPNG))
 		        .getImage();
 		g2.drawImage(bkgnd, 0, 0, this.getWidth(), this.getHeight(), null,
 		        null);
 		
+		/*
+		 * Game Title
+		 */
 		Font fontHdr = new Font("Verdana", Font.BOLD, 80);
 		FontMetrics metricsHdr = g2.getFontMetrics(fontHdr);
 		g2.setColor(Color.WHITE);
@@ -272,6 +280,9 @@ public class InGameMenu extends JPanel {
 		        this.getWidth() / 2 - metricsHdr.stringWidth(str) / 2,
 		        50 + metricsHdr.getHeight() / 2);
 		
+		/*
+		 * Map Label
+		 */
 		Font fontMap = new Font("Verdana", Font.BOLD, 50);
 		FontMetrics metricsMap = g2.getFontMetrics(fontMap);
 		g2.setColor(Color.WHITE);
@@ -283,6 +294,32 @@ public class InGameMenu extends JPanel {
 		/*
 		 * Player Stats and Inventory
 		 */
+		
+		drawStatsAndItems(g2);
+		
+		/*
+		 * Pokedex Inventory
+		 */
+		drawPokedex(g2);
+		
+	}
+	
+	
+	/*
+	 * Draw Player's Pokedex Inventory
+	 */
+	private void drawPokedex(Graphics2D g2) {
+		
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	/*
+	 * Draw Player Stats and Items
+	 */
+	private void drawStatsAndItems(Graphics2D g2) {
 		
 		int x = 40;
 		int y = 150;
@@ -317,6 +354,13 @@ public class InGameMenu extends JPanel {
 		        null);
 		g2.drawString(potionStr, x + size + spacing,
 		        y + 4 * (size + spacing) - 2 * spacing);
+		
+		Image snacks = new ImageIcon(this.getClass().getResource(snacksPNG))
+		        .getImage();
+		g2.drawImage(snacks, x, y + 4 * (size + spacing), size, size, null,
+		        null);
+		g2.drawString(snacksStr, x + size + spacing,
+		        y + 5 * (size + spacing) - 2 * spacing);
 	}
 	
 	
@@ -336,6 +380,7 @@ public class InGameMenu extends JPanel {
 		safariballStr = "x "
 		        + model.getPlayer().getMyBag().getNumItem("Safari Balls");
 		potionStr = "x " + model.getPlayer().getMyBag().getNumItem("Potions");
+		snacksStr = "x " + model.getPlayer().getMyBag().getNumItem("Snacks");
 		
 		repaint();
 	}

@@ -2,6 +2,8 @@ package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.TreeMap;
 
 /*
@@ -63,7 +65,7 @@ public class Inventory implements Serializable{
 	}
 	
 	public String getItemNameAtLocation(int index){
-		ArrayList<ItemList> list = (ArrayList<ItemList>)items.values();
+		List<ItemList> list = (List<ItemList>) items.values();
 		return list.get(index).toString();
 	}
 	

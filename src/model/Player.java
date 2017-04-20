@@ -160,8 +160,10 @@ public class Player implements Serializable {
 
 	public void tick() {
 		if (!lockWalking) {
-			if (xPosition == -TILE_WIDTH * 20 && yPosition == TILE_WIDTH * -18 && facing == 3)
-				enterHome = true;
+			if (xPosition == -TILE_WIDTH * 20 && yPosition == TILE_WIDTH * -18 && facing == 3) {
+				// enterHome = true;
+				// iteration 2
+			}
 			if (keys.get(0).isTappedDown()) {// up
 				facing = 3;
 				animationTick = 0;

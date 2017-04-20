@@ -31,6 +31,7 @@ import java.util.Random;
  */
 
 import graphics.BitMap;
+import model.MazeGenerator;
 import model.Player;
 
 public class Map {
@@ -68,11 +69,23 @@ public class Map {
 	}
 
 	public void randomizeBolders() {
-		generator=new Random(420);
+		generator = new Random(420);
 		for (int i = 0; i < 41; i++)
 			for (int j = 0; j < 45; j++)
 				if (generator.nextDouble() > .97)
 					areBolders[i][j] = true;
+
+		boolean[][] maze = new model.MazeGenerator().randomMaze();
+
+		for (int i = 22; i < 38; i++)
+			for (int j = 6; j < 38; j++) {
+				areBolders[i][j] = false;
+				areBolders[j][i] = false;
+				if (maze[j-6][i-22]){
+					areBolders[j][i] = true;
+					areBolders[i][j] = true;
+				}
+			}
 	}
 
 	public void tick() {

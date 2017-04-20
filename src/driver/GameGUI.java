@@ -329,6 +329,7 @@ public class GameGUI extends JFrame implements Runnable {
 					int yScroll = (pokemonGame.getPlayer().getyPosition());
 					pokemonGame.getWorld().render(screen, xScroll, yScroll);
 				}
+				//System.out.println(pokemonGame.getPlayer().getxPosition()+","+pokemonGame.getPlayer().getyPosition());
 				// draws main screen
 				g.drawImage(screen.getBufferedImage(), 0, 0, width * scale, height * scale, null);
 				// draws environmental effects
@@ -383,7 +384,6 @@ public class GameGUI extends JFrame implements Runnable {
 	}
 
 	private void renderMsgBoxAndClouds(Graphics g) {
-		System.out.println(""+pokemonGame.getPlayer().getxPosition()+","+pokemonGame.getPlayer().getyPosition());
 		int offsetX=0;
 		int offsetY=0;
 		if(pokemonGame.getPlayer().getxPosition()<-896)

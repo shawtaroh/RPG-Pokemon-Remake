@@ -137,7 +137,6 @@ public class GameGUI extends JFrame implements Runnable {
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				Player loaded = (Player) inFile.readObject();
@@ -164,7 +163,6 @@ public class GameGUI extends JFrame implements Runnable {
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			GameGUI game = new GameGUI(map, winCondition);
@@ -260,12 +258,10 @@ public class GameGUI extends JFrame implements Runnable {
 	public void resumeFromMenu() {
 
 		running = true;
-		// System.out.println("menu close");
 		menu.off();
 		painting.setVisible(true);
 		menu.setFocusable(false);
 		this.requestFocus();
-		// this.setFocusable(true);
 		start();
 		repaint();
 	}
@@ -275,7 +271,6 @@ public class GameGUI extends JFrame implements Runnable {
 	 */
 	private void pauseToMenu() {
 
-		// System.out.println("menu open");
 		stop();
 		menu.on();
 		painting.setVisible(false);
@@ -339,7 +334,6 @@ public class GameGUI extends JFrame implements Runnable {
 				// draws environmental effects
 				renderMsgBoxAndClouds(g);
 				if ((pokemonGame.getPlayer().getSteps() % 15 == 0)) {
-					System.out.println("test");
 					if (pokemonGame.getPlayer().getSteps() % 2 == 0) {
 						message = "You found a pokemon! TODO: Iteration 2";
 						message2 = "";
@@ -358,9 +352,7 @@ public class GameGUI extends JFrame implements Runnable {
 					stop();
 					System.exit(0);
 				}
-				// g.drawImage(msgBox,
-				// this.player.getxPosition()+64*11+25,this.player.getyPosition()+64*26,
-				// width * scale/2, height *scale/4, null);
+
 
 				if (Player.isEnterHome()) {
 					g.setColor(Color.WHITE);
@@ -372,7 +364,6 @@ public class GameGUI extends JFrame implements Runnable {
 					try {
 						Thread.sleep(500);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					Player.setEnterHome(false);
@@ -392,31 +383,32 @@ public class GameGUI extends JFrame implements Runnable {
 	}
 
 	private void renderMsgBoxAndClouds(Graphics g) {
+		System.out.println(""+this.getHeight());
 		g.drawImage(msgBox, pokemonGame.getPlayer().getxPosition() + 64 * 15,
-				pokemonGame.getPlayer().getyPosition() + 64 * 26, width * scale / 3, height * scale / 32, null);
+				pokemonGame.getPlayer().getyPosition() + 64 * 26-(1000-this.getHeight())/2, width * scale / 3, height * scale / 32, null);
 		g.setFont(new Font("Arial", Font.BOLD, 24));
 		g.setColor(Color.WHITE);
 		g.drawString("Steps: " + pokemonGame.getPlayer().getSteps(), pokemonGame.getPlayer().getxPosition() + 64 * 15,
-				pokemonGame.getPlayer().getyPosition() + 64 * 26);
+				pokemonGame.getPlayer().getyPosition() + 64 * 26-(1000-this.getHeight())/2);
 		if (!isNextPage) {
 			g.drawString(message, pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15,
-					pokemonGame.getPlayer().getyPosition() + 64 * 26 + 30);
+					pokemonGame.getPlayer().getyPosition() + 64 * 26 + 30-(1000-this.getHeight())/2);
 			g.drawString(message2, pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15,
-					pokemonGame.getPlayer().getyPosition() + 64 * 26 + 60);
+					pokemonGame.getPlayer().getyPosition() + 64 * 26 + 60-(1000-this.getHeight())/2);
 		} else if (pokemonGame.getPlayer().getWinCondition() == 1) {
 			g.drawString("A fog has fallen upon the Safari Zone. Quick, find Professor Mercer to teach the",
 					pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15,
-					pokemonGame.getPlayer().getyPosition() + 64 * 26 + 30);
+					pokemonGame.getPlayer().getyPosition() + 64 * 26 + 30-(1000-this.getHeight())/2);
 			g.drawString("game developers how to turn the fog component invisible!",
 					pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15,
-					pokemonGame.getPlayer().getyPosition() + 64 * 26 + 60);
+					pokemonGame.getPlayer().getyPosition() + 64 * 26 + 60-(1000-this.getHeight())/2);
 		} else {
 			isNextPage = false;
 		}
 		g.setFont(new Font("Arial", Font.BOLD, 12));
 		g.setColor(Color.LIGHT_GRAY);
 		g.drawString(message3, pokemonGame.getPlayer().getxPosition() + 64 * 15 + 420,
-				pokemonGame.getPlayer().getyPosition() + 64 * 26 + 75);
+				pokemonGame.getPlayer().getyPosition() + 64 * 26 + 75-(1000-this.getHeight())/2);
 		g.drawImage(clouds,
 				(((this.getWidth() - (width) * scale)) / 2) - pokemonGame.getPlayer().getxPosition() * scale,
 				((this.getHeight() - (height) * scale) / 2) - pokemonGame.getPlayer().getyPosition() * scale,
@@ -593,9 +585,6 @@ public class GameGUI extends JFrame implements Runnable {
 		}
 
 		public void paintComponent(Graphics g) {
-
-			// g.drawImage(currentImage, 0, 0, width * scale, height * scale,
-			// null);
 		}
 
 	}

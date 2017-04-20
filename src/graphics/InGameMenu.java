@@ -289,7 +289,7 @@ public class InGameMenu extends JPanel {
 		g2.setFont(fontMap);
 		g2.drawString(mapStr,
 		        this.getWidth() / 2 - metricsMap.stringWidth(mapStr) / 2,
-		        600 + metricsMap.getHeight() / 2);
+		        this.getHeight() - 100 + metricsMap.getHeight() / 2);
 		
 		/*
 		 * Player Stats and Inventory

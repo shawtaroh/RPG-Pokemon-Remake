@@ -1,5 +1,6 @@
 package driver;
 
+import model.Key;
 import java.awt.AlphaComposite;
 import java.awt.Canvas;
 
@@ -62,6 +63,7 @@ import graphics.SplashScreen;
 import model.Player;
 import model.Pokedex;
 import model.PokemonGame;
+import model.Key;
 import songplayer.EndOfSongEvent;
 import songplayer.EndOfSongListener;
 import songplayer.SongPlayer;
@@ -83,6 +85,7 @@ public class GameGUI extends JFrame implements Runnable {
 	private PokemonGame pokemonGame;
 	private String message, message2, message3;
 	private boolean isNextPage = false;
+	private int currentSteps = 500;
 
 	private BufferedImage msgBox, clouds, fog;
 	private jPanel2 painting;
@@ -149,7 +152,7 @@ public class GameGUI extends JFrame implements Runnable {
 			} catch (ClassNotFoundException | IOException e) {
 				e.printStackTrace();
 			}
-		} else {
+		} else if (choice == 1) {
 			Object[] options = { "Map One", "Map Two" };
 			int map = JOptionPane.showOptionDialog(null, "Choose a map", "Choose a map",
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
@@ -284,7 +287,6 @@ public class GameGUI extends JFrame implements Runnable {
 
 		running = false;
 	}
-	
 
 	// updates graphics in separate thread
 	public void run() {
@@ -332,10 +334,24 @@ public class GameGUI extends JFrame implements Runnable {
 					int yScroll = (pokemonGame.getPlayer().getyPosition());
 					pokemonGame.getWorld().render(screen, xScroll, yScroll);
 				}
-				//draws main screen
+				// draws main screen
 				g.drawImage(screen.getBufferedImage(), 0, 0, width * scale, height * scale, null);
-				//draws environmental effects
+				// draws environmental effects
 				renderMsgBoxAndClouds(g);
+				if ((pokemonGame.getPlayer().getSteps() % 15 == 0)) {
+					System.out.println("test");
+					if (pokemonGame.getPlayer().getSteps() % 2 == 0) {
+						message = "You found a pokemon! TODO: Iteration 2";
+						message2 = "";
+					} else {
+						if(pokemonGame.getPlayer().getSteps() % 5 == 0)
+						message = "You found an potion! TODO: Iteration 1";
+						if(currentSteps != pokemonGame.getPlayer().getSteps())
+						pokemonGame.getPlayer().getMyBag().addItems("Potions", 1);
+						message2 = "";
+					}
+					currentSteps = pokemonGame.getPlayer().getSteps();
+				}
 				if (pokemonGame.getPlayer().getSteps() <= 0) {
 					JOptionPane.showMessageDialog(null,
 							"You ran out of steps, and caught no pokemon. This is only iteration one, goodbye.");
@@ -380,21 +396,22 @@ public class GameGUI extends JFrame implements Runnable {
 				pokemonGame.getPlayer().getyPosition() + 64 * 26, width * scale / 3, height * scale / 32, null);
 		g.setFont(new Font("Arial", Font.BOLD, 24));
 		g.setColor(Color.WHITE);
-		g.drawString("Steps: " + pokemonGame.getPlayer().getSteps(),
-				pokemonGame.getPlayer().getxPosition() + 64 * 15,
+		g.drawString("Steps: " + pokemonGame.getPlayer().getSteps(), pokemonGame.getPlayer().getxPosition() + 64 * 15,
 				pokemonGame.getPlayer().getyPosition() + 64 * 26);
 		if (!isNextPage) {
 			g.drawString(message, pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15,
 					pokemonGame.getPlayer().getyPosition() + 64 * 26 + 30);
 			g.drawString(message2, pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15,
 					pokemonGame.getPlayer().getyPosition() + 64 * 26 + 60);
-		}else if (pokemonGame.getPlayer().getWinCondition() == 1) {
+		} else if (pokemonGame.getPlayer().getWinCondition() == 1) {
 			g.drawString("A fog has fallen upon the Safari Zone. Quick, find Professor Mercer to teach the",
 					pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15,
 					pokemonGame.getPlayer().getyPosition() + 64 * 26 + 30);
 			g.drawString("game developers how to turn the fog component invisible!",
 					pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15,
 					pokemonGame.getPlayer().getyPosition() + 64 * 26 + 60);
+		} else {
+			isNextPage = false;
 		}
 		g.setFont(new Font("Arial", Font.BOLD, 12));
 		g.setColor(Color.LIGHT_GRAY);
@@ -405,25 +422,23 @@ public class GameGUI extends JFrame implements Runnable {
 				((this.getHeight() - (height) * scale) / 2) - pokemonGame.getPlayer().getyPosition() * scale,
 				width * scale, height * scale / 4, null);
 		g.drawImage(clouds,
-				(((this.getWidth() - (width) * scale)) / 2) +1500- pokemonGame.getPlayer().getxPosition() * scale,
-				((this.getHeight() - (height) * scale) / 2) +750- pokemonGame.getPlayer().getyPosition() * scale,
+				(((this.getWidth() - (width) * scale)) / 2) + 1500 - pokemonGame.getPlayer().getxPosition() * scale,
+				((this.getHeight() - (height) * scale) / 2) + 750 - pokemonGame.getPlayer().getyPosition() * scale,
 				width * scale, height * scale / 4, null);
 		g.drawImage(clouds,
-				(((this.getWidth() - (width) * scale)) / 2) +2000- pokemonGame.getPlayer().getxPosition() * scale,
-				((this.getHeight() - (height) * scale) / 2) +1750- pokemonGame.getPlayer().getyPosition() * scale,
+				(((this.getWidth() - (width) * scale)) / 2) + 2000 - pokemonGame.getPlayer().getxPosition() * scale,
+				((this.getHeight() - (height) * scale) / 2) + 1750 - pokemonGame.getPlayer().getyPosition() * scale,
 				width * scale, height * scale / 4, null);
 		g.drawImage(clouds,
-				(((this.getWidth() - (width) * scale)) / 2) -500- pokemonGame.getPlayer().getxPosition() * scale,
-				((this.getHeight() - (height) * scale) / 2) +1500- pokemonGame.getPlayer().getyPosition() * scale,
+				(((this.getWidth() - (width) * scale)) / 2) - 500 - pokemonGame.getPlayer().getxPosition() * scale,
+				((this.getHeight() - (height) * scale) / 2) + 1500 - pokemonGame.getPlayer().getyPosition() * scale,
 				width * scale, height * scale / 4, null);
 		if (pokemonGame.getPlayer().getWinCondition() == 1)
 			g.drawImage(fog,
-					(((this.getWidth() - (width) * scale*2)) / 2)
-							- pokemonGame.getPlayer().getxPosition() * scale,
-					((this.getHeight() - (height) * scale) / 2) - pokemonGame.getPlayer().getyPosition() * scale
-							- 600,
+					(((this.getWidth() - (width) * scale * 2)) / 2) - pokemonGame.getPlayer().getxPosition() * scale,
+					((this.getHeight() - (height) * scale) / 2) - pokemonGame.getPlayer().getyPosition() * scale - 600,
 					width * scale * 3, height * scale * 2, null);
-		
+
 	}
 
 	/*
@@ -468,7 +483,6 @@ public class GameGUI extends JFrame implements Runnable {
 
 		@Override
 		public void keyPressed(KeyEvent e) {
-
 			if (!running)
 				return;
 

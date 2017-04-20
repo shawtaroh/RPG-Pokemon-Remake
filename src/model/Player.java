@@ -171,6 +171,10 @@ public class Player implements Serializable {
 		return map;
 	}
 
+	public void setLockWalking(Boolean bool){
+		this.lockWalking = bool;
+	}
+	
 	public void tick() {
 		if (!lockWalking) {
 			if (xPosition == -TILE_WIDTH * 20 && yPosition == TILE_WIDTH * -18 && facing == 3) {

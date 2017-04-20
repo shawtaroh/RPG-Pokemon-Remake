@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import com.sun.glass.events.KeyEvent;
 
+import graphics.BitMap;
 import junit.framework.*;
 import maps.Map;
 import model.Effect;
@@ -97,14 +98,63 @@ public class GameTests {
 	      keys.add(new Key("left"));
 	      keys.add(new Key("right"));
 	      Player player = new Player(keys, 0, 0);
-	      //player.lock
+	      player.setEnterHome(false);
+	      player.setxLastPosition(50);
+	      player.setyLastPosition(50);
+	      player.setxPosition(40);
+	      player.setyPosition(40);
+	      player.setSteps(500);
+	      assertTrue(player.getHP() >= 0);
+	      assertTrue(player.getSteps() >= 0);
+	      assertTrue(player.getxLastPosition() == 50);
+	      assertTrue(player.getyLastPosition() == 50);
+	      assertTrue(player.isEnterHome() == false);
+	      assertTrue(player.getMyBag() != null);
+	      assertTrue(player.getMyBag() != null);
+	      assertTrue(player.getInstance(keys, 0,0) != null);
+	      player.setWinCondition(0);
+	      assertTrue(player.getWinCondition() == 0);
+	      assertTrue(player.getMap() == 0);
+	      player.setLockWalking(true);
+	      BitMap screen = new BitMap(5000, 5000);
+	      player.render(screen);
+	      player.setLockWalking(false);
+	      player.render(screen);
 	      keys.get(0).setTappedDown(true);
+	      player.setLockWalking(false);
 	      player.tick();
-	      keys.get(1).setTappedDown(true);
-	      player.tick();
+	      keys.get(0).setTappedDown(false);
 	      keys.get(2).setTappedDown(true);
+	      player.setLockWalking(false);
 	      player.tick();
+	      keys.get(2).setTappedDown(false);
+	      keys.get(1).setTappedDown(true);
+	      player.setLockWalking(false);
+	      player.tick();
+	      keys.get(1).setTappedDown(false);
 	      keys.get(3).setTappedDown(true);
+	      player.setLockWalking(false);
+	      player.tick();
+	      
+	      keys.get(0).setPressedDown(true);
+	      player.setLockWalking(false);
+	      player.tick();
+	      keys.get(0).setPressedDown(false);
+	      keys.get(2).setPressedDown(true);
+	      player.setLockWalking(false);
+	      player.tick();
+	      keys.get(2).setPressedDown(false);
+	      keys.get(1).setPressedDown(true);
+	      player.setLockWalking(false);
+	      player.tick();
+	      keys.get(1).setPressedDown(false);
+	      keys.get(3).setPressedDown(true);
+	      player.setLockWalking(false);
+	      player.tick();
+	      
+	      
+	      player.setLockWalking(false);
+	      keys.get(2).setTappedDown(false);
 	      player.tick();
 	      keys.get(0).setTappedDown(false);
 	      player.tick();

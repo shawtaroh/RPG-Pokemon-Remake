@@ -383,7 +383,6 @@ public class GameGUI extends JFrame implements Runnable {
 	}
 
 	private void renderMsgBoxAndClouds(Graphics g) {
-		System.out.println(""+this.getHeight());
 		g.drawImage(msgBox, pokemonGame.getPlayer().getxPosition() + 64 * 15,
 				pokemonGame.getPlayer().getyPosition() + 64 * 26-(1000-this.getHeight())/2, width * scale / 3, height * scale / 32, null);
 		g.setFont(new Font("Arial", Font.BOLD, 24));

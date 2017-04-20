@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
 
 public class Loader {
 
-	public void Loader() {
+	public Loader() {
 
 		// Types
 		final String Rare = "Rare";

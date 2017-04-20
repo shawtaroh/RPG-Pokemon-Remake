@@ -16,7 +16,7 @@ _,-'       `.     |    |  /`.   \,-'    |   \  /   |   |    \  |`.
       @authors  
       Eric Evans
       Joey McClanahan
-      Matt Shaffer
+      Matthew Shaffer
       Shawtaroh Granzier-Nakajima
                 
       @description

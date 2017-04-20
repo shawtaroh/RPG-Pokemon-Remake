@@ -85,6 +85,7 @@ public class GameGUI extends JFrame implements Runnable {
 	private PokemonGame pokemonGame;
 	private String message, message2, message3;
 	private boolean isNextPage = false;
+	private int currentSteps = 500;
 
 	private BufferedImage msgBox, clouds, fog;
 	private jPanel2 painting;
@@ -337,6 +338,20 @@ public class GameGUI extends JFrame implements Runnable {
 				g.drawImage(screen.getBufferedImage(), 0, 0, width * scale, height * scale, null);
 				// draws environmental effects
 				renderMsgBoxAndClouds(g);
+				if ((pokemonGame.getPlayer().getSteps() % 15 == 0)) {
+					System.out.println("test");
+					if (pokemonGame.getPlayer().getSteps() % 2 == 0) {
+						message = "You found a pokemon! TODO: Iteration 2";
+						message2 = "";
+					} else {
+						if(pokemonGame.getPlayer().getSteps() % 5 == 0)
+						message = "You found an potion! TODO: Iteration 1";
+						if(currentSteps != pokemonGame.getPlayer().getSteps())
+						pokemonGame.getPlayer().getMyBag().addItems("Potions", 1);
+						message2 = "";
+					}
+					currentSteps = pokemonGame.getPlayer().getSteps();
+				}
 				if (pokemonGame.getPlayer().getSteps() <= 0) {
 					JOptionPane.showMessageDialog(null,
 							"You ran out of steps, and caught no pokemon. This is only iteration one, goodbye.");
@@ -395,6 +410,8 @@ public class GameGUI extends JFrame implements Runnable {
 			g.drawString("game developers how to turn the fog component invisible!",
 					pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15,
 					pokemonGame.getPlayer().getyPosition() + 64 * 26 + 60);
+		} else {
+			isNextPage = false;
 		}
 		g.setFont(new Font("Arial", Font.BOLD, 12));
 		g.setColor(Color.LIGHT_GRAY);
@@ -466,7 +483,6 @@ public class GameGUI extends JFrame implements Runnable {
 
 		@Override
 		public void keyPressed(KeyEvent e) {
-
 			if (!running)
 				return;
 

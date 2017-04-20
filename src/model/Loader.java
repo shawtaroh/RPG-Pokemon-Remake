@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
 
 public class Loader {
 
-	public static void main(String[] args) {
+	public void Loader() {
 
 		// Types
 		final String Rare = "Rare";
@@ -20,7 +20,7 @@ public class Loader {
 
 		Random generator = new Random(314);
 		ArrayList<Pokemon> pokedex = new ArrayList<>();
-		File[] files = new File(Pokedex.class.getResource("/art/pokemon").getFile()).listFiles();		
+		File[] files = new File(Pokedex.class.getResource("/art/pokemon").getFile()).listFiles();
 		int pokeNum = 1;
 		for (File file : files) {
 			try {

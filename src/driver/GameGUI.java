@@ -383,7 +383,7 @@ public class GameGUI extends JFrame implements Runnable {
 	}
 
 	private void renderMsgBoxAndClouds(Graphics g) {
-		System.out.println(""+pokemonGame.getPlayer().getxPosition()+","+pokemonGame.getPlayer().getyPosition());
+		//System.out.println(""+pokemonGame.getPlayer().getxPosition()+","+pokemonGame.getPlayer().getyPosition());
 		int offsetX=0;
 		int offsetY=0;
 		if(pokemonGame.getPlayer().getxPosition()<-896)

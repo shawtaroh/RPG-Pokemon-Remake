@@ -53,6 +53,19 @@ public class Player implements Serializable {
 	private static boolean enterHome = false;
 	private Inventory myBag;
 	private int hp = 100;
+	private ArrayList<Pokemon> myPokemon = new ArrayList<>();
+
+	
+	public ArrayList<Pokemon> getMyPokemon() {
+		
+		return this.myPokemon;
+	}
+
+	
+	public void setMyPokemon(ArrayList<Pokemon> myPokemon) {
+		
+		this.myPokemon = myPokemon;
+	}
 
 	public static boolean isEnterHome() {
 		return enterHome;

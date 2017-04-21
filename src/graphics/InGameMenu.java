@@ -197,6 +197,34 @@ public class InGameMenu extends JPanel {
 		
 	}
 	
+	/*
+	 * to view Player's Pokemon
+	 *
+	 * private void setupPlayersPokemon() {
+	 * 
+	 * int width = 75;
+	 * int height = 75;
+	 * 
+	 * int x = this.getWidth() - width * 4;
+	 * int y = 350;
+	 * 
+	 * int rows = 6;
+	 * int cols = 4;
+	 * 
+	 * JPanel tiles = new JPanel();
+	 * tiles.setLocation(x, y);
+	 * tiles.setSize(width * cols, height * rows);
+	 * this.add(tiles);
+	 * tiles.setLayout(new GridLayout(rows, cols));
+	 * 
+	 * for (int i = 0; i < rows * cols; i++) {
+	 * JButton slot = new JButton("" + i);
+	 * slot.setPreferredSize(new Dimension(width, height));
+	 * tiles.add(slot);
+	 * }
+	 * }
+	 */
+	
 	
 	
 	/*
@@ -305,17 +333,44 @@ public class InGameMenu extends JPanel {
 	}
 	
 	
+	
 	/*
 	 * Draw Player's Pokedex Inventory
 	 */
 	private void drawPokedex(Graphics2D g2) {
 		
-		// TODO Auto-generated method stub
+		int width = 75;
+		int height = 75;
+		
+		int x = this.getWidth() - width * 4 - 50;
+		int y = 160;
+		
+		g2.setFont(new Font("Verdana", Font.BOLD, 20));
+		g2.drawString("Pokedex", x + 15, y - 5);
+		
+		int rows = 6;
+		int cols = 4;
+		
+		Image tile = new ImageIcon(this.getClass()
+		        .getResource("/art/on_screen_icons/pokemon_placeholder.png"))
+		                .getImage();
+		
+		for (int c = 0; c < cols; c++) {
+			for (int r = 0; r < rows; r++) {
+				g2.drawImage(tile, x + c * width, y + r * height, width, height,
+				        Color.GRAY, null);
+			}
+		}
+		
+		g2.setFont(new Font("Verdana", Font.BOLD, 20));
+		g2.drawString(
+		        "Pokemon Caught: " + model.getPlayer().getMyPokemon().size(),
+		        x + 15, y + rows * height + 20);
 		
 	}
-
-
-
+	
+	
+	
 	/*
 	 * Draw Player Stats and Items
 	 */

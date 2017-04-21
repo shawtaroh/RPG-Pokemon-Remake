@@ -49,6 +49,8 @@ public class Map {
 	protected static BitMap stone = BitMap.load("/art/floor/inside.png");
 	protected static BitMap bolders = BitMap.load("/art/floor/highGround1.png");
 	protected static BitMap bolders2 = BitMap.load("/art/wall/grassbolder.png");
+	protected static BitMap pole = BitMap.load("/art/wall/poleOne.png");
+
 	private String name;
 	private Random generator = new Random(335);
 	private boolean areFlowers[][] = new boolean[42][46];
@@ -79,8 +81,12 @@ public class Map {
 		isHouse[12][12]=true;
 		isHouse[13][12]=true;
 		for(int i=7;i<18;i++)
-			for(int j=9;j<15;j++)
+			for(int j=9;j<15;j++){
 				isStone[i][j]=true;
+				if((i==7||i==17||j==9)&&j!=14){
+				areBolders2[i][j] = true;
+				}
+			}
 		
 	}
 	
@@ -145,6 +151,8 @@ public class Map {
 				if (x == 0 || y == 0 || y == 41 || x == 45) {
 					screen.blit(tree, x * TILE_WIDTH, y * TILE_HEIGHT);
 				} else {
+					if(isStone[Math.abs(x) % 41][Math.abs(y) % 46])
+						screen.blit(stone, x * TILE_WIDTH, y * TILE_HEIGHT);
 					if (areFlowers[Math.abs(x) % 41][Math.abs(y) % 46])
 						screen.blit(flowers, x * TILE_WIDTH, y * TILE_HEIGHT);
 					if (areBolders2[Math.abs(x) % 41][Math.abs(y) % 46])
@@ -152,21 +160,15 @@ public class Map {
 					if (areBolders[Math.abs(x) % 41][Math.abs(y) % 46])
 						screen.blit(bolders, x * TILE_WIDTH, y * TILE_HEIGHT);
 					if (isWater[Math.abs(x) % 41][Math.abs(y) % 46])
-						screen.blit(water, x * TILE_WIDTH, y * TILE_HEIGHT);
-					if(isStone[Math.abs(x) % 41][Math.abs(y) % 46])
-						screen.blit(stone, x * TILE_WIDTH, y * TILE_HEIGHT);					
+						screen.blit(water, x * TILE_WIDTH, y * TILE_HEIGHT);					
 					if(isHouse[Math.abs(x) % 41][Math.abs(y) % 46])
 						screen.blit(house[(Math.abs(x)-11)%3][(Math.abs(y)-11)%2], x * TILE_WIDTH, y * TILE_HEIGHT);
 				}
 
 			}
 		}
-		screen.blit(house[0][0], 11 * TILE_WIDTH, 11 * TILE_HEIGHT);
-		screen.blit(house[1][0], 12 * TILE_WIDTH, 11 * TILE_HEIGHT);
-		screen.blit(house[2][0], 13 * TILE_WIDTH, 11 * TILE_HEIGHT);
-		screen.blit(house[0][1], 11 * TILE_WIDTH, 12 * TILE_HEIGHT);
-		screen.blit(house[1][1], 12 * TILE_WIDTH, 12 * TILE_HEIGHT);
-		screen.blit(house[2][1], 13 * TILE_WIDTH, 12 * TILE_HEIGHT);
+		screen.blit(pole, 10 * TILE_WIDTH, 11 * TILE_HEIGHT);
+		screen.blit(pole, 14 * TILE_WIDTH, 11 * TILE_HEIGHT);
 	}
 
 	/*
@@ -175,5 +177,12 @@ public class Map {
 	public String getName() {
 
 		return name;
+	}
+
+	public void useAxe(int i, int x, int y) {
+		if(i==0){
+			areBolders[22+x/64][22+y/64]=false;
+		}
+		
 	}
 }

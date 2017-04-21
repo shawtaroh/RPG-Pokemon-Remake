@@ -76,7 +76,7 @@ public class GameGUI extends JFrame implements Runnable {
 	private static final long serialVersionUID = 60158402771325988L;
 	private int width = 2944;
 	private int height = 2688;
-	private int FPS = 60;
+	private int FPS = 120;
 	private BitMap screen;
 	private int scale;
 	private InGameMenu menu;
@@ -459,6 +459,12 @@ public class GameGUI extends JFrame implements Runnable {
 				if (k.getKey_code() == myKey) {
 					key = k;
 				}
+			}
+			
+			if(myKey==KeyEvent.VK_Z){
+				pokemonGame.getPlayer().useAxe();
+				pokemonGame.getWorld().useAxe(pokemonGame.getPlayer().getFacing(),pokemonGame.getPlayerXPos(),pokemonGame.getPlayerYPos());
+				System.out.println("AXED");
 			}
 
 			if (myKey == KeyEvent.VK_ENTER) {

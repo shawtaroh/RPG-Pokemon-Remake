@@ -39,7 +39,8 @@ public class MapTypeTwo extends Map {
 		this.tree = BitMap.load("/art/wall/treeTwo.png");
 		this.flowers = BitMap.load("/art/floor/leaves.png");
 		this.bolders = BitMap.load("/art/floor/highGround2.png");
-		this.bolders2= BitMap.load("/art/wall/snow.png");;
+		this.bolders2= BitMap.load("/art/wall/snow.png");
+		this.pole = BitMap.load("/art/wall/poleTwo.png");
 
 	}
 

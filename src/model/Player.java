@@ -36,6 +36,7 @@ import java.util.Random;
 import javax.swing.JOptionPane;
 
 import graphics.BitMap;
+import maps.Map;
 
 public class Player implements Serializable {
 
@@ -53,6 +54,16 @@ public class Player implements Serializable {
 	private static boolean enterHome = false;
 	private Inventory myBag;
 	private int hp = 100;
+	private boolean hasAxe=true;
+	private boolean[][] maze;
+
+	public boolean isHasAxe() {
+		return hasAxe;
+	}
+
+	public void setHasAxe(boolean hasAxe) {
+		this.hasAxe = hasAxe;
+	}
 
 	public static boolean isEnterHome() {
 		return enterHome;
@@ -264,7 +275,7 @@ public class Player implements Serializable {
 			for (int j = 0; j < 45; j++)
 				if (generator.nextDouble() > .97)
 					restrictedX.add(new Point((j - 21) * TILE_WIDTH, (i - 22) * TILE_WIDTH));
-		boolean[][] maze = new model.MazeGenerator().randomMaze();
+		maze = new model.MazeGenerator().randomMaze();
 
 		for (int i = 22; i < 38; i++)
 			for (int j = 6; j < 38; j++) {
@@ -275,6 +286,13 @@ public class Player implements Serializable {
 				if (maze[j-6][i-22]){
 					restrictedX.add(tmp1);
 					restrictedX.add(tmp2);
+				}
+			}
+		
+		for(int i=7;i<18;i++)
+			for(int j=9;j<15;j++){
+				if((i==7||i==17||j==9)&&j!=14){
+					restrictedX.add(new Point((j - 21) * TILE_WIDTH, (i - 22) * TILE_WIDTH));
 				}
 			}
 	}
@@ -321,6 +339,42 @@ public class Player implements Serializable {
 			turning = facing;
 		} else
 			lockWalking = true;
+	}
+
+	public void useAxe() {
+		if(this.facing==0){//down	
+			System.out.println((this.yPosition - 21 * TILE_WIDTH)+"," +(this.xPosition - 22 * TILE_WIDTH));
+			Point tmp1=new Point(this.yPosition - 21 * TILE_WIDTH-64, this.xPosition - 22 * TILE_WIDTH);
+			Point tmp2=new Point(this.xPosition - 21 * TILE_WIDTH, this.yPosition - 22 * TILE_WIDTH-64);
+			Point remove = null;
+			for (Point p : restrictedX)
+				if ((xPosition == p.getY() && yPosition-p.getX() <= 64)) 
+					remove=p;
+			if(restrictedX.remove(remove))
+				System.out.println("Noice");
+			for(Point p: restrictedX)
+				if(p.getY()==(this.yPosition - 21 * TILE_WIDTH-64)&p.getX()==(this.xPosition - 22 * TILE_WIDTH))
+					System.out.println("Weird");
+					if(restrictedX.remove(tmp1))
+						System.out.println("REMOVED");
+					if(restrictedX.remove(tmp2))
+						System.out.println("REMOVED");
+		}
+
+		if(this.facing==1){//right
+			
+		}
+		if(this.facing==2){//left
+			
+		}
+		if(this.facing==3){//up
+			
+		}
+		
+	}
+
+	public int getFacing() {
+		return facing;
 	}
 
 }

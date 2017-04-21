@@ -305,7 +305,7 @@ public class Player implements Serializable {
 		}
 		if (xPosition % TILE_WIDTH == 0 && yPosition % TILE_HEIGHT == 0) {
 			lockWalking = false;
-			if (stepTracker && winCondition == 0) {
+			if (stepTracker) {
 				// if corrupted save state doesnt save steps
 				if (steps > 500)
 					steps = 500;

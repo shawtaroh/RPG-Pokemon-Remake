@@ -1,23 +1,19 @@
 package driver;
 
-import model.Key;
-import java.awt.AlphaComposite;
-import java.awt.Canvas;
-
 /*
  * GameGUI.java
- * ,'\
- * _.----. ____ ,' _\ ___ ___ ____
- * _,-' `. | | /`. \,-' | \ / | | \ |`.
- * \ __ \ '-. | / `. ___ | \/ | '-. \ | |
- * \. \ \ | __ | |/ ,','_ `. | | __ | \| |
- * \ \/ /,' _`.| ,' / / / / | ,' _`.| | |
- * \ ,-'/ / \ ,' | \/ / ,`.| / / \ | |
- * \ \ | \_/ | `-. \ `' /| | || \_/ | |\ |
- * \ \ \ / `-.`.___,-' | |\ /| \ / | | |
- * \ \ `.__,'| |`-._ `| |__| \/ | `.__,'| | | |
- * \_.-' |__| `-._ | '-.| '-.| | |
- * `' '-._|
+                                  ,'\
+    _.----.        ____         ,'  _\   ___    ___     ____
+_,-'       `.     |    |  /`.   \,-'    |   \  /   |   |    \  |`.
+\      __    \    '-.  | /   `.  ___    |    \/    |   '-.   \ |  |
+ \.    \ \   |  __  |  |/    ,','_  `.  |          | __  |    \|  |
+   \    \/   /,' _`.|      ,' / / / /   |          ,' _`.|     |  |
+    \     ,-'/  /   \    ,'   | \/ / ,`.|         /  /   \  |     |
+     \    \ |   \_/  |   `-.  \    `'  /|  |    ||   \_/  | |\    |
+      \    \ \      /       `-.`.___,-' |  |\  /| \      /  | |   |
+       \    \ `.__,'|  |`-._    `|      |__| \/ |  `.__,'|  | |   |
+        \_.-'       |__|    `-._ |              '-.|     '-.| |   |
+                                `'                            '-._|
  * 
  * 
  * @authors
@@ -30,6 +26,10 @@ import java.awt.Canvas;
  * CS 335 Final Project
  * Implements Pokemon SafariZone Game GUI
  */
+
+import model.Key;
+import java.awt.AlphaComposite;
+import java.awt.Canvas;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -338,10 +338,10 @@ public class GameGUI extends JFrame implements Runnable {
 						message = "You found a pokemon! TODO: Iteration 2";
 						message2 = "";
 					} else {
-						if(pokemonGame.getPlayer().getSteps() % 5 == 0)
-						message = "You found an potion! TODO: Iteration 1";
-						if(currentSteps != pokemonGame.getPlayer().getSteps())
-						pokemonGame.getPlayer().getMyBag().addItems("Potions", 1);
+						if (pokemonGame.getPlayer().getSteps() % 5 == 0)
+							message = "You found an potion! TODO: Iteration 2";
+						if (currentSteps != pokemonGame.getPlayer().getSteps())
+							pokemonGame.getPlayer().getMyBag().addItems("Potions", 1);
 						message2 = "";
 					}
 					currentSteps = pokemonGame.getPlayer().getSteps();
@@ -353,7 +353,7 @@ public class GameGUI extends JFrame implements Runnable {
 					System.exit(0);
 				}
 
-				//TODO for iteration 2
+				// TODO for iteration 2
 				if (Player.isEnterHome()) {
 					g.setColor(Color.WHITE);
 					g.setFont(new Font("Verdana", Font.BOLD, 25));
@@ -383,38 +383,42 @@ public class GameGUI extends JFrame implements Runnable {
 	}
 
 	private void renderMsgBoxAndClouds(Graphics g) {
-		//System.out.println(""+pokemonGame.getPlayer().getxPosition()+","+pokemonGame.getPlayer().getyPosition());
-		int offsetX=0;
-		int offsetY=0;
-		if(pokemonGame.getPlayer().getxPosition()<-896)
-			offsetX=896+pokemonGame.getPlayer().getxPosition();
-		if(pokemonGame.getPlayer().getyPosition()>832)
-			offsetY=pokemonGame.getPlayer().getyPosition()-832;
-		g.drawImage(msgBox, pokemonGame.getPlayer().getxPosition() + 64 * 15-offsetX,
-				pokemonGame.getPlayer().getyPosition() + 64 * 26-(1000-this.getHeight())/2-offsetY, width * scale / 3, height * scale / 32, null);
+		// System.out.println(""+pokemonGame.getPlayer().getxPosition()+","+pokemonGame.getPlayer().getyPosition());
+		int offsetX = 0;
+		int offsetY = 0;
+		if (pokemonGame.getPlayer().getxPosition() < -896)
+			offsetX = 896 + pokemonGame.getPlayer().getxPosition();
+		if (pokemonGame.getPlayer().getxPosition() > 896)
+			offsetX = -896 + pokemonGame.getPlayer().getxPosition();
+		if (pokemonGame.getPlayer().getyPosition() > 832)
+			offsetY = pokemonGame.getPlayer().getyPosition() - 832;
+		g.drawImage(msgBox, pokemonGame.getPlayer().getxPosition() + 64 * 15 - offsetX,
+				pokemonGame.getPlayer().getyPosition() + 64 * 26 - (1000 - this.getHeight()) / 2 - offsetY,
+				width * scale / 3, height * scale / 32, null);
 		g.setFont(new Font("Arial", Font.BOLD, 24));
 		g.setColor(Color.WHITE);
-		g.drawString("Steps: " + pokemonGame.getPlayer().getSteps(), pokemonGame.getPlayer().getxPosition() + 64 * 15-offsetX,
-				pokemonGame.getPlayer().getyPosition() + 64 * 26-(1000-this.getHeight())/2-offsetY);
+		g.drawString("Steps: " + pokemonGame.getPlayer().getSteps(),
+				pokemonGame.getPlayer().getxPosition() + 64 * 15 - offsetX,
+				pokemonGame.getPlayer().getyPosition() + 64 * 26 - (1000 - this.getHeight()) / 2 - offsetY);
 		if (!isNextPage) {
-			g.drawString(message, pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15-offsetX,
-					pokemonGame.getPlayer().getyPosition() + 64 * 26 + 30-(1000-this.getHeight())/2-offsetY);
-			g.drawString(message2, pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15-offsetX,
-					pokemonGame.getPlayer().getyPosition() + 64 * 26 + 60-(1000-this.getHeight())/2-offsetY);
+			g.drawString(message, pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15 - offsetX,
+					pokemonGame.getPlayer().getyPosition() + 64 * 26 + 30 - (1000 - this.getHeight()) / 2 - offsetY);
+			g.drawString(message2, pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15 - offsetX,
+					pokemonGame.getPlayer().getyPosition() + 64 * 26 + 60 - (1000 - this.getHeight()) / 2 - offsetY);
 		} else if (pokemonGame.getPlayer().getWinCondition() == 1) {
 			g.drawString("A fog has fallen upon the Safari Zone. Quick, find Professor Mercer to teach the",
-					pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15-offsetX,
-					pokemonGame.getPlayer().getyPosition() + 64 * 26 + 30-(1000-this.getHeight())/2-offsetY);
+					pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15 - offsetX,
+					pokemonGame.getPlayer().getyPosition() + 64 * 26 + 30 - (1000 - this.getHeight()) / 2 - offsetY);
 			g.drawString("game developers how to turn the fog component invisible!",
-					pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15-offsetX,
-					pokemonGame.getPlayer().getyPosition() + 64 * 26 + 60-(1000-this.getHeight())/2-offsetY);
+					pokemonGame.getPlayer().getxPosition() + 64 * 15 + 15 - offsetX,
+					pokemonGame.getPlayer().getyPosition() + 64 * 26 + 60 - (1000 - this.getHeight()) / 2 - offsetY);
 		} else {
 			isNextPage = false;
 		}
 		g.setFont(new Font("Arial", Font.BOLD, 12));
 		g.setColor(Color.LIGHT_GRAY);
-		g.drawString(message3, pokemonGame.getPlayer().getxPosition() + 64 * 15 + 420-offsetX,
-				pokemonGame.getPlayer().getyPosition() + 64 * 26 + 75-(1000-this.getHeight())/2-offsetY);
+		g.drawString(message3, pokemonGame.getPlayer().getxPosition() + 64 * 15 + 420 - offsetX,
+				pokemonGame.getPlayer().getyPosition() + 64 * 26 + 75 - (1000 - this.getHeight()) / 2 - offsetY);
 		g.drawImage(clouds,
 				(((this.getWidth() - (width) * scale)) / 2) - pokemonGame.getPlayer().getxPosition() * scale,
 				((this.getHeight() - (height) * scale) / 2) - pokemonGame.getPlayer().getyPosition() * scale,

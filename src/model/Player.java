@@ -1,10 +1,7 @@
 package model;
 
-import java.awt.Point;
-import java.io.Serializable;
-
 /*
-								Player.java
+							Player.java
                                   ,'\
     _.----.        ____         ,'  _\   ___    ___     ____
 _,-'       `.     |    |  /`.   \,-'    |   \  /   |   |    \  |`.
@@ -18,7 +15,6 @@ _,-'       `.     |    |  /`.   \,-'    |   \  /   |   |    \  |`.
         \_.-'       |__|    `-._ |              '-.|     '-.| |   |
                                 `'                            '-._|
 
-
 @authors  
 Eric Evans
 Joey McClanahan
@@ -30,10 +26,11 @@ CS 335 Final Project
 Implements Pokemon Trainer
 */
 
+import java.awt.Point;
+import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.Random;
-
-import javax.swing.JOptionPane;
 
 import graphics.BitMap;
 
@@ -55,15 +52,13 @@ public class Player implements Serializable {
 	private int hp = 100;
 	private ArrayList<Pokemon> myPokemon = new ArrayList<>();
 
-	
 	public ArrayList<Pokemon> getMyPokemon() {
-		
+
 		return this.myPokemon;
 	}
 
-	
 	public void setMyPokemon(ArrayList<Pokemon> myPokemon) {
-		
+
 		this.myPokemon = myPokemon;
 	}
 
@@ -171,10 +166,10 @@ public class Player implements Serializable {
 		return map;
 	}
 
-	public void setLockWalking(Boolean bool){
+	public void setLockWalking(Boolean bool) {
 		this.lockWalking = bool;
 	}
-	
+
 	public void tick() {
 		if (!lockWalking) {
 			if (xPosition == -TILE_WIDTH * 20 && yPosition == TILE_WIDTH * -18 && facing == 3) {

@@ -1,34 +1,33 @@
 package maps;
-
-import java.util.Random;
-
 /*
-							Map.java
-                                  ,'\
-    _.----.        ____         ,'  _\   ___    ___     ____
+Map.java
+      ,'\
+_.----.        ____         ,'  _\   ___    ___     ____
 _,-'       `.     |    |  /`.   \,-'    |   \  /   |   |    \  |`.
 \      __    \    '-.  | /   `.  ___    |    \/    |   '-.   \ |  |
- \.    \ \   |  __  |  |/    ,','_  `.  |          | __  |    \|  |
-   \    \/   /,' _`.|      ,' / / / /   |          ,' _`.|     |  |
-    \     ,-'/  /   \    ,'   | \/ / ,`.|         /  /   \  |     |
-     \    \ |   \_/  |   `-.  \    `'  /|  |    ||   \_/  | |\    |
-      \    \ \      /       `-.`.___,-' |  |\  /| \      /  | |   |
-       \    \ `.__,'|  |`-._    `|      |__| \/ |  `.__,'|  | |   |
-        \_.-'       |__|    `-._ |              '-.|     '-.| |   |
-                                `'                            '-._|
- * 
- * 
- * @authors
- * Eric Evans
- * Joey McClanahan
- * Matt Shaffer
- * Shawtaroh Granzier-Nakajima
- * 
- * @description
- * CS 335 Final Project
- * Implements Pokemon SafariZone map, loads up tiles and art in hard-coded
- * manner
- */
+\.    \ \   |  __  |  |/    ,','_  `.  |          | __  |    \|  |
+\    \/   /,' _`.|      ,' / / / /   |          ,' _`.|     |  |
+\     ,-'/  /   \    ,'   | \/ / ,`.|         /  /   \  |     |
+\    \ |   \_/  |   `-.  \    `'  /|  |    ||   \_/  | |\    |
+\    \ \      /       `-.`.___,-' |  |\  /| \      /  | |   |
+\    \ `.__,'|  |`-._    `|      |__| \/ |  `.__,'|  | |   |
+\_.-'       |__|    `-._ |              '-.|     '-.| |   |
+    `'                            '-._|
+* 
+* 
+* @authors
+* Eric Evans
+* Joey McClanahan
+* Matt Shaffer
+* Shawtaroh Granzier-Nakajima
+* 
+* @description
+* CS 335 Final Project
+* Implements Pokemon SafariZone map, loads up tiles and art in hard-coded
+* manner
+*/
+
+import java.util.Random;
 
 import graphics.BitMap;
 import model.Player;
@@ -68,7 +67,7 @@ public class Map {
 	}
 
 	public void randomizeBolders() {
-		generator=new Random(420);
+		generator = new Random(420);
 		for (int i = 0; i < 41; i++)
 			for (int j = 0; j < 45; j++)
 				if (generator.nextDouble() > .97)

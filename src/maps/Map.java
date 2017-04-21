@@ -60,7 +60,6 @@ public class Map {
 	private boolean isHouse[][] = new boolean[42][46];
 	private boolean isStone[][] = new boolean[42][46];
 
-
 	public Map(int w, int h, Player player, String name) {
 		this.width = w;
 		this.height = h;
@@ -72,26 +71,26 @@ public class Map {
 		setHouse();
 
 	}
-	
-	public void setHouse(){
-		isHouse[11][11]=true;
-		isHouse[12][11]=true;
-		isHouse[13][11]=true;
-		isHouse[11][12]=true;
-		isHouse[12][12]=true;
-		isHouse[13][12]=true;
-		for(int i=7;i<18;i++)
-			for(int j=9;j<15;j++){
-				isStone[i][j]=true;
-				if((i==7||i==17||j==9)&&j!=14){
-				areBolders2[i][j] = true;
+
+	public void setHouse() {
+		isHouse[11][11] = true;
+		isHouse[12][11] = true;
+		isHouse[13][11] = true;
+		isHouse[11][12] = true;
+		isHouse[12][12] = true;
+		isHouse[13][12] = true;
+		for (int i = 7; i < 18; i++)
+			for (int j = 9; j < 15; j++) {
+				isStone[i][j] = true;
+				if ((i == 7 || i == 17 || j == 9) && j != 14) {
+					areBolders2[i][j] = true;
 				}
 			}
-		
+
 	}
-	
-	public void setWater(){
-		isWater[5][5]=true;
+
+	public void setWater() {
+		isWater[5][5] = true;
 	}
 
 	public void randomizeFlowers() {
@@ -114,9 +113,9 @@ public class Map {
 			for (int j = 6; j < 38; j++) {
 				areBolders2[i][j] = false;
 				areBolders2[j][i] = false;
-				if (maze[j-6][i-22]){
+				if (maze[j - 6][i - 22]) {
 					areBolders[j][i] = true;
-					areBolders[i][j] = true;
+					//areBolders[i][j] = true;
 				}
 			}
 	}
@@ -151,7 +150,7 @@ public class Map {
 				if (x == 0 || y == 0 || y == 41 || x == 45) {
 					screen.blit(tree, x * TILE_WIDTH, y * TILE_HEIGHT);
 				} else {
-					if(isStone[Math.abs(x) % 41][Math.abs(y) % 46])
+					if (isStone[Math.abs(x) % 41][Math.abs(y) % 46])
 						screen.blit(stone, x * TILE_WIDTH, y * TILE_HEIGHT);
 					if (areFlowers[Math.abs(x) % 41][Math.abs(y) % 46])
 						screen.blit(flowers, x * TILE_WIDTH, y * TILE_HEIGHT);
@@ -160,9 +159,10 @@ public class Map {
 					if (areBolders[Math.abs(x) % 41][Math.abs(y) % 46])
 						screen.blit(bolders, x * TILE_WIDTH, y * TILE_HEIGHT);
 					if (isWater[Math.abs(x) % 41][Math.abs(y) % 46])
-						screen.blit(water, x * TILE_WIDTH, y * TILE_HEIGHT);					
-					if(isHouse[Math.abs(x) % 41][Math.abs(y) % 46])
-						screen.blit(house[(Math.abs(x)-11)%3][(Math.abs(y)-11)%2], x * TILE_WIDTH, y * TILE_HEIGHT);
+						screen.blit(water, x * TILE_WIDTH, y * TILE_HEIGHT);
+					if (isHouse[Math.abs(x) % 41][Math.abs(y) % 46])
+						screen.blit(house[(Math.abs(x) - 11) % 3][(Math.abs(y) - 11) % 2], x * TILE_WIDTH,
+								y * TILE_HEIGHT);
 				}
 
 			}
@@ -180,9 +180,18 @@ public class Map {
 	}
 
 	public void useAxe(int i, int x, int y) {
-		if(i==0){
-			areBolders[22+x/64][22+y/64]=false;
+		if (i == 0) {//down
+			areBolders[22 + x / 64][22 + y / 64] = false;
 		}
-		
+		if (i == 2) {//left
+			areBolders[23 + x / 64][21 + y / 64] = false;
+		}
+		if (i == 1) {//right
+			areBolders[21 + x / 64][21 + y / 64] = false;
+		}
+		if (i == 3) {//up
+			areBolders[22 + x / 64][20 + y / 64] = false;
+		}
+
 	}
 }

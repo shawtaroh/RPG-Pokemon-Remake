@@ -54,7 +54,7 @@ public class Player implements Serializable {
 	private static boolean enterHome = false;
 	private Inventory myBag;
 	private int hp = 100;
-	private boolean hasAxe=true;
+	private boolean hasAxe = true;
 	private boolean[][] maze;
 
 	public boolean isHasAxe() {
@@ -279,19 +279,19 @@ public class Player implements Serializable {
 
 		for (int i = 22; i < 38; i++)
 			for (int j = 6; j < 38; j++) {
-				Point tmp1=new Point((j - 21) * TILE_WIDTH, (i - 22) * TILE_WIDTH);
-				Point tmp2=new Point((i - 21) * TILE_WIDTH, (j - 22) * TILE_WIDTH);
-				restrictedX.remove(tmp1);
+				Point tmp1 = new Point((j - 21) * TILE_WIDTH, (i - 22) * TILE_WIDTH);
+				Point tmp2 = new Point((i - 21) * TILE_WIDTH, (j - 22) * TILE_WIDTH);
+				//restrictedX.remove(tmp1);
 				restrictedX.remove(tmp2);
-				if (maze[j-6][i-22]){
-					restrictedX.add(tmp1);
+				if (maze[j - 6][i - 22]) {
+					//restrictedX.add(tmp1);
 					restrictedX.add(tmp2);
 				}
 			}
-		
-		for(int i=7;i<18;i++)
-			for(int j=9;j<15;j++){
-				if((i==7||i==17||j==9)&&j!=14){
+
+		for (int i = 7; i < 18; i++)
+			for (int j = 9; j < 15; j++) {
+				if ((i == 7 || i == 17 || j == 9) && j != 14) {
 					restrictedX.add(new Point((j - 21) * TILE_WIDTH, (i - 22) * TILE_WIDTH));
 				}
 			}
@@ -342,35 +342,44 @@ public class Player implements Serializable {
 	}
 
 	public void useAxe() {
-		if(this.facing==0){//down	
-			System.out.println((this.yPosition - 21 * TILE_WIDTH)+"," +(this.xPosition - 22 * TILE_WIDTH));
-			Point tmp1=new Point(this.yPosition - 21 * TILE_WIDTH-64, this.xPosition - 22 * TILE_WIDTH);
-			Point tmp2=new Point(this.xPosition - 21 * TILE_WIDTH, this.yPosition - 22 * TILE_WIDTH-64);
+		if (this.facing == 0) {// down
+			System.out.println((this.yPosition - 21 * TILE_WIDTH) + "," + (this.xPosition - 22 * TILE_WIDTH));
 			Point remove = null;
 			for (Point p : restrictedX)
-				if ((xPosition == p.getY() && yPosition-p.getX() <= 64)) 
-					remove=p;
-			if(restrictedX.remove(remove))
-				System.out.println("Noice");
-			for(Point p: restrictedX)
-				if(p.getY()==(this.yPosition - 21 * TILE_WIDTH-64)&p.getX()==(this.xPosition - 22 * TILE_WIDTH))
-					System.out.println("Weird");
-					if(restrictedX.remove(tmp1))
-						System.out.println("REMOVED");
-					if(restrictedX.remove(tmp2))
-						System.out.println("REMOVED");
+				if ((xPosition == p.getY() && yPosition - p.getX() == -64))
+					remove = p;
+			if (restrictedX.remove(remove))
+				System.out.println("removed");
 		}
 
-		if(this.facing==1){//right
-			
+		if (this.facing == 2) {// right
+			System.out.println((this.yPosition - 21 * TILE_WIDTH) + "," + (this.xPosition - 22 * TILE_WIDTH));
+			Point remove = null;
+			for (Point p : restrictedX)
+				if ((yPosition == p.getX() && xPosition - p.getY() == -64))
+					remove = p;
+			if (restrictedX.remove(remove))
+				System.out.println("removed");
 		}
-		if(this.facing==2){//left
-			
+		if (this.facing == 1) {// left
+			System.out.println((this.yPosition - 21 * TILE_WIDTH) + "," + (this.xPosition - 22 * TILE_WIDTH));
+			Point remove = null;
+			for (Point p : restrictedX)
+				if ((yPosition == p.getX() && xPosition - p.getY() == 64))
+					remove = p;
+			if (restrictedX.remove(remove))
+				System.out.println("removed");
 		}
-		if(this.facing==3){//up
-			
+		if (this.facing == 3) {// up
+			System.out.println((this.yPosition - 21 * TILE_WIDTH) + "," + (this.xPosition - 22 * TILE_WIDTH));
+			Point remove = null;
+			for (Point p : restrictedX)
+				if ((xPosition == p.getY() && yPosition - p.getX() == 64))
+					remove = p;
+			if (restrictedX.remove(remove))
+				System.out.println("removed");
 		}
-		
+
 	}
 
 	public int getFacing() {

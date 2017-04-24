@@ -50,6 +50,8 @@ public class Map {
 	protected static BitMap bolders = BitMap.load("/art/floor/highGround1.png");
 	protected static BitMap bolders2 = BitMap.load("/art/wall/grassbolder.png");
 	protected static BitMap pole = BitMap.load("/art/wall/poleOne.png");
+	protected static BitMap professor = BitMap.load("/art/misc/mercer.png");
+
 
 	private String name;
 	private Random generator = new Random(335);
@@ -59,6 +61,7 @@ public class Map {
 	private boolean isWater[][] = new boolean[42][46];
 	private boolean isHouse[][] = new boolean[42][46];
 	private boolean isStone[][] = new boolean[42][46];
+	private boolean isProfessor[][]=new boolean[42][46];
 
 	public Map(int w, int h, Player player, String name) {
 		this.width = w;
@@ -109,6 +112,8 @@ public class Map {
 
 		boolean[][] maze = new model.MazeGenerator().randomMaze();
 
+		boolean professorSet=false;
+		
 		for (int i = 22; i < 38; i++)
 			for (int j = 6; j < 38; j++) {
 				areBolders2[i][j] = false;
@@ -117,6 +122,11 @@ public class Map {
 					areBolders[j][i] = true;
 					//areBolders[i][j] = true;
 				}
+				else
+					if(!professorSet&&Math.random()>.97&&i>27&&j>16){
+						isProfessor[j][i]=true;		
+						professorSet=true;
+					}
 			}
 	}
 
@@ -154,6 +164,8 @@ public class Map {
 						screen.blit(stone, x * TILE_WIDTH, y * TILE_HEIGHT);
 					if (areFlowers[Math.abs(x) % 41][Math.abs(y) % 46])
 						screen.blit(flowers, x * TILE_WIDTH, y * TILE_HEIGHT);
+					if (isProfessor[Math.abs(x) % 41][Math.abs(y) % 46])
+						screen.blit(professor, x * TILE_WIDTH, y * TILE_HEIGHT);
 					if (areBolders2[Math.abs(x) % 41][Math.abs(y) % 46])
 						screen.blit(bolders2, x * TILE_WIDTH, y * TILE_HEIGHT);
 					if (areBolders[Math.abs(x) % 41][Math.abs(y) % 46])

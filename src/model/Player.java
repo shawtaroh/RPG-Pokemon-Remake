@@ -32,11 +32,7 @@ Implements Pokemon Trainer
 
 import java.util.ArrayList;
 import java.util.Random;
-
-import javax.swing.JOptionPane;
-
 import graphics.BitMap;
-import maps.Map;
 
 public class Player implements Serializable {
 
@@ -131,12 +127,11 @@ public class Player implements Serializable {
 	private byte animationTick = 0;
 	private byte animationPointer = 0;
 	private static BitMap[][] player;
-	private ArrayList<Point> restrictedX = new ArrayList<>();
+	private ArrayList<RPoint> restrictedX = new ArrayList<>();
 
 	private int xAccel;
 	private int yAccel;
 	private int winCondition;
-	private boolean justFoundItem = false;
 
 	boolean lockWalking;
 
@@ -261,26 +256,26 @@ public class Player implements Serializable {
 			}
 		return false;
 	}
-
 	// perimeter squares
 	private void loadRestrictions() {
-		restrictedX.add(new Point(-10 * TILE_WIDTH, -9 * TILE_WIDTH));
-		restrictedX.add(new Point(-10 * TILE_WIDTH, -10 * TILE_WIDTH));
-		restrictedX.add(new Point(-10 * TILE_WIDTH, -11 * TILE_WIDTH));
-		restrictedX.add(new Point(-9 * TILE_WIDTH, -9 * TILE_WIDTH));
-		restrictedX.add(new Point(-9 * TILE_WIDTH, -10 * TILE_WIDTH));
-		restrictedX.add(new Point(-9 * TILE_WIDTH, -11 * TILE_WIDTH));
+		//house
+		restrictedX.add(new RPoint(-10 * TILE_WIDTH, -9 * TILE_WIDTH,false));
+		restrictedX.add(new RPoint(-10 * TILE_WIDTH, -10 * TILE_WIDTH,false));
+		restrictedX.add(new RPoint(-10 * TILE_WIDTH, -11 * TILE_WIDTH,false));
+		restrictedX.add(new RPoint(-9 * TILE_WIDTH, -9 * TILE_WIDTH,false));
+		restrictedX.add(new RPoint(-9 * TILE_WIDTH, -10 * TILE_WIDTH,false));
+		restrictedX.add(new RPoint(-9 * TILE_WIDTH, -11 * TILE_WIDTH,false));
 		Random generator = new Random(420);
 		for (int i = 0; i < 41; i++)
 			for (int j = 0; j < 45; j++)
 				if (generator.nextDouble() > .97)
-					restrictedX.add(new Point((j - 21) * TILE_WIDTH, (i - 22) * TILE_WIDTH));
+					restrictedX.add(new RPoint((j - 21) * TILE_WIDTH, (i - 22) * TILE_WIDTH,false));
 		maze = new model.MazeGenerator().randomMaze();
 
 		for (int i = 22; i < 38; i++)
 			for (int j = 6; j < 38; j++) {
-				Point tmp1 = new Point((j - 21) * TILE_WIDTH, (i - 22) * TILE_WIDTH);
-				Point tmp2 = new Point((i - 21) * TILE_WIDTH, (j - 22) * TILE_WIDTH);
+				RPoint tmp1 = new RPoint((j - 21) * TILE_WIDTH, (i - 22) * TILE_WIDTH,true);
+				RPoint tmp2 = new RPoint((i - 21) * TILE_WIDTH, (j - 22) * TILE_WIDTH,true);
 				//restrictedX.remove(tmp1);
 				restrictedX.remove(tmp2);
 				if (maze[j - 6][i - 22]) {
@@ -288,11 +283,11 @@ public class Player implements Serializable {
 					restrictedX.add(tmp2);
 				}
 			}
-
+		//house perimeter
 		for (int i = 7; i < 18; i++)
 			for (int j = 9; j < 15; j++) {
 				if ((i == 7 || i == 17 || j == 9) && j != 14) {
-					restrictedX.add(new Point((j - 21) * TILE_WIDTH, (i - 22) * TILE_WIDTH));
+					restrictedX.add(new RPoint((j - 21) * TILE_WIDTH, (i - 22) * TILE_WIDTH,false));
 				}
 			}
 	}
@@ -344,39 +339,39 @@ public class Player implements Serializable {
 	public void useAxe() {
 		if (this.facing == 0) {// down
 			System.out.println((this.yPosition - 21 * TILE_WIDTH) + "," + (this.xPosition - 22 * TILE_WIDTH));
-			Point remove = null;
-			for (Point p : restrictedX)
+			RPoint remove = null;
+			for (RPoint p : restrictedX)
 				if ((xPosition == p.getY() && yPosition - p.getX() == -64))
 					remove = p;
-			if (restrictedX.remove(remove))
-				System.out.println("removed");
+				if (remove.isRemovable()&&restrictedX.remove(remove))
+					System.out.println("removed");
 		}
 
 		if (this.facing == 2) {// right
 			System.out.println((this.yPosition - 21 * TILE_WIDTH) + "," + (this.xPosition - 22 * TILE_WIDTH));
-			Point remove = null;
-			for (Point p : restrictedX)
+			RPoint remove = null;
+			for (RPoint p : restrictedX)
 				if ((yPosition == p.getX() && xPosition - p.getY() == -64))
 					remove = p;
-			if (restrictedX.remove(remove))
+			if (remove.isRemovable()&&restrictedX.remove(remove))
 				System.out.println("removed");
 		}
 		if (this.facing == 1) {// left
 			System.out.println((this.yPosition - 21 * TILE_WIDTH) + "," + (this.xPosition - 22 * TILE_WIDTH));
-			Point remove = null;
-			for (Point p : restrictedX)
+			RPoint remove = null;
+			for (RPoint p : restrictedX)
 				if ((yPosition == p.getX() && xPosition - p.getY() == 64))
 					remove = p;
-			if (restrictedX.remove(remove))
+			if (remove.isRemovable()&&restrictedX.remove(remove))
 				System.out.println("removed");
 		}
 		if (this.facing == 3) {// up
 			System.out.println((this.yPosition - 21 * TILE_WIDTH) + "," + (this.xPosition - 22 * TILE_WIDTH));
-			Point remove = null;
-			for (Point p : restrictedX)
+			RPoint remove = null;
+			for (RPoint p : restrictedX)
 				if ((xPosition == p.getY() && yPosition - p.getX() == 64))
 					remove = p;
-			if (restrictedX.remove(remove))
+			if (remove.isRemovable()&&restrictedX.remove(remove))
 				System.out.println("removed");
 		}
 

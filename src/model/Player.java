@@ -1,5 +1,7 @@
 package model;
 
+import java.io.Serializable;
+
 /*
 							Player.java
                                   ,'\
@@ -26,12 +28,8 @@ CS 335 Final Project
 Implements Pokemon Trainer
 */
 
-import java.awt.Point;
-import java.io.Serializable;
-
 import java.util.ArrayList;
 import java.util.Random;
-
 import graphics.BitMap;
 
 public class Player implements Serializable {
@@ -50,7 +48,10 @@ public class Player implements Serializable {
 	private static boolean enterHome = false;
 	private Inventory myBag;
 	private int hp = 100;
-	private ArrayList<Pokemon> myPokemon = new ArrayList<>();
+	private boolean hasAxe = true;
+	private boolean[][] maze;
+
+private ArrayList<Pokemon> myPokemon = new ArrayList<>();
 
 	public ArrayList<Pokemon> getMyPokemon() {
 
@@ -60,6 +61,15 @@ public class Player implements Serializable {
 	public void setMyPokemon(ArrayList<Pokemon> myPokemon) {
 
 		this.myPokemon = myPokemon;
+	}
+
+
+	public boolean isHasAxe() {
+		return hasAxe;
+	}
+
+	public void setHasAxe(boolean hasAxe) {
+		this.hasAxe = hasAxe;
 	}
 
 	public static boolean isEnterHome() {
@@ -128,12 +138,11 @@ public class Player implements Serializable {
 	private byte animationTick = 0;
 	private byte animationPointer = 0;
 	private static BitMap[][] player;
-	private ArrayList<Point> restrictedX = new ArrayList<>();
+	private ArrayList<RPoint> restrictedX = new ArrayList<>();
 
 	private int xAccel;
 	private int yAccel;
 	private int winCondition;
-	private boolean justFoundItem = false;
 
 	boolean lockWalking;
 
@@ -164,10 +173,6 @@ public class Player implements Serializable {
 
 	public int getMap() {
 		return map;
-	}
-
-	public void setLockWalking(Boolean bool) {
-		this.lockWalking = bool;
 	}
 
 	public void tick() {
@@ -246,7 +251,7 @@ public class Player implements Serializable {
 	}
 
 	private boolean perimeterTile(int x, int y) {
-		for (Point p : restrictedX)
+		for (RPoint p : restrictedX)
 			if ((x == p.getY() && Math.abs(p.getX() - y) <= 64) || (y == p.getX() && Math.abs(p.getY() - x) <= 64)) {
 				if (x == p.getY()) {
 					if ((y > p.getX()) && facing == 3)
@@ -262,20 +267,40 @@ public class Player implements Serializable {
 			}
 		return false;
 	}
-
 	// perimeter squares
 	private void loadRestrictions() {
-		restrictedX.add(new Point(-10 * TILE_WIDTH, -9 * TILE_WIDTH));
-		restrictedX.add(new Point(-10 * TILE_WIDTH, -10 * TILE_WIDTH));
-		restrictedX.add(new Point(-10 * TILE_WIDTH, -11 * TILE_WIDTH));
-		restrictedX.add(new Point(-9 * TILE_WIDTH, -9 * TILE_WIDTH));
-		restrictedX.add(new Point(-9 * TILE_WIDTH, -10 * TILE_WIDTH));
-		restrictedX.add(new Point(-9 * TILE_WIDTH, -11 * TILE_WIDTH));
+		//house
+		restrictedX.add(new RPoint(-10 * TILE_WIDTH, -9 * TILE_WIDTH,false));
+		restrictedX.add(new RPoint(-10 * TILE_WIDTH, -10 * TILE_WIDTH,false));
+		restrictedX.add(new RPoint(-10 * TILE_WIDTH, -11 * TILE_WIDTH,false));
+		restrictedX.add(new RPoint(-9 * TILE_WIDTH, -9 * TILE_WIDTH,false));
+		restrictedX.add(new RPoint(-9 * TILE_WIDTH, -10 * TILE_WIDTH,false));
+		restrictedX.add(new RPoint(-9 * TILE_WIDTH, -11 * TILE_WIDTH,false));
 		Random generator = new Random(420);
 		for (int i = 0; i < 41; i++)
 			for (int j = 0; j < 45; j++)
 				if (generator.nextDouble() > .97)
-					restrictedX.add(new Point((j - 21) * TILE_WIDTH, (i - 22) * TILE_WIDTH));
+					restrictedX.add(new RPoint((j - 21) * TILE_WIDTH, (i - 22) * TILE_WIDTH,false));
+		maze = new model.MazeGenerator().randomMaze();
+
+		for (int i = 22; i < 38; i++)
+			for (int j = 6; j < 38; j++) {
+				RPoint tmp1 = new RPoint((j - 21) * TILE_WIDTH, (i - 22) * TILE_WIDTH,true);
+				RPoint tmp2 = new RPoint((i - 21) * TILE_WIDTH, (j - 22) * TILE_WIDTH,true);
+				//restrictedX.remove(tmp1);
+				restrictedX.remove(tmp2);
+				if (maze[j - 6][i - 22]) {
+					//restrictedX.add(tmp1);
+					restrictedX.add(tmp2);
+				}
+			}
+		//house perimeter
+		for (int i = 7; i < 18; i++)
+			for (int j = 9; j < 15; j++) {
+				if ((i == 7 || i == 17 || j == 9) && j != 14) {
+					restrictedX.add(new RPoint((j - 21) * TILE_WIDTH, (i - 22) * TILE_WIDTH,false));
+				}
+			}
 	}
 
 	public void handleMovement() {
@@ -304,7 +329,7 @@ public class Player implements Serializable {
 		}
 		if (xPosition % TILE_WIDTH == 0 && yPosition % TILE_HEIGHT == 0) {
 			lockWalking = false;
-			if (stepTracker) {
+			if (stepTracker && winCondition == 0) {
 				// if corrupted save state doesnt save steps
 				if (steps > 500)
 					steps = 500;
@@ -320,6 +345,56 @@ public class Player implements Serializable {
 			turning = facing;
 		} else
 			lockWalking = true;
+	}
+
+	public void useAxe() {
+		if (this.facing == 0) {// down
+			System.out.println((this.yPosition - 21 * TILE_WIDTH) + "," + (this.xPosition - 22 * TILE_WIDTH));
+			RPoint remove = null;
+			for (RPoint p : restrictedX)
+				if ((xPosition == p.getY() && yPosition - p.getX() == -64))
+					remove = p;
+				if (remove!=null&&remove.isRemovable()&&restrictedX.remove(remove))
+					System.out.println("removed");
+		}
+
+		if (this.facing == 2) {// right
+			System.out.println((this.yPosition - 21 * TILE_WIDTH) + "," + (this.xPosition - 22 * TILE_WIDTH));
+			RPoint remove = null;
+			for (RPoint p : restrictedX)
+				if ((yPosition == p.getX() && xPosition - p.getY() == -64))
+					remove = p;
+			if (remove!=null&&remove.isRemovable()&&restrictedX.remove(remove))
+				System.out.println("removed");
+		}
+		if (this.facing == 1) {// left
+			System.out.println((this.yPosition - 21 * TILE_WIDTH) + "," + (this.xPosition - 22 * TILE_WIDTH));
+			RPoint remove = null;
+			for (RPoint p : restrictedX)
+				if ((yPosition == p.getX() && xPosition - p.getY() == 64))
+					remove = p;
+			if (remove!=null&&remove.isRemovable()&&restrictedX.remove(remove))
+				System.out.println("removed");
+		}
+		if (this.facing == 3) {// up
+			System.out.println((this.yPosition - 21 * TILE_WIDTH) + "," + (this.xPosition - 22 * TILE_WIDTH));
+			RPoint remove = null;
+			for (RPoint p : restrictedX)
+				if ((xPosition == p.getY() && yPosition - p.getX() == 64))
+					remove = p;
+			if (remove!=null&&remove.isRemovable()&&restrictedX.remove(remove))
+				System.out.println("removed");
+		}
+
+	}
+
+	public int getFacing() {
+		return facing;
+	}
+
+	public void setLockWalking(boolean b) {
+		lockWalking=b;
+		
 	}
 
 }

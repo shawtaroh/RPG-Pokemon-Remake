@@ -343,7 +343,7 @@ public class Player implements Serializable {
 			for (RPoint p : restrictedX)
 				if ((xPosition == p.getY() && yPosition - p.getX() == -64))
 					remove = p;
-				if (remove.isRemovable()&&restrictedX.remove(remove))
+				if (remove!=null&&remove.isRemovable()&&restrictedX.remove(remove))
 					System.out.println("removed");
 		}
 
@@ -353,7 +353,7 @@ public class Player implements Serializable {
 			for (RPoint p : restrictedX)
 				if ((yPosition == p.getX() && xPosition - p.getY() == -64))
 					remove = p;
-			if (remove.isRemovable()&&restrictedX.remove(remove))
+			if (remove!=null&&remove.isRemovable()&&restrictedX.remove(remove))
 				System.out.println("removed");
 		}
 		if (this.facing == 1) {// left
@@ -362,7 +362,7 @@ public class Player implements Serializable {
 			for (RPoint p : restrictedX)
 				if ((yPosition == p.getX() && xPosition - p.getY() == 64))
 					remove = p;
-			if (remove.isRemovable()&&restrictedX.remove(remove))
+			if (remove!=null&&remove.isRemovable()&&restrictedX.remove(remove))
 				System.out.println("removed");
 		}
 		if (this.facing == 3) {// up
@@ -371,7 +371,7 @@ public class Player implements Serializable {
 			for (RPoint p : restrictedX)
 				if ((xPosition == p.getY() && yPosition - p.getX() == 64))
 					remove = p;
-			if (remove.isRemovable()&&restrictedX.remove(remove))
+			if (remove!=null&&remove.isRemovable()&&restrictedX.remove(remove))
 				System.out.println("removed");
 		}
 

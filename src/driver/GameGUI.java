@@ -86,11 +86,11 @@ public class GameGUI extends JFrame implements Runnable {
 	private boolean isNextPage = false;
 	private int currentSteps = 500;
 	private boolean win=false;
-
 	private BufferedImage msgBox, clouds, fog;
 	private jPanel2 painting;
 	private ObjectWaitingForSongToEnd waiter = new ObjectWaitingForSongToEnd();
 	private ObjectWaitingForSongToEndWin WinWaiter = new ObjectWaitingForSongToEndWin();
+	private ObjectWaitingForSongToEndFinal finalWaiter = new ObjectWaitingForSongToEndFinal();
 
 	public GameGUI(int mapNum, int winCondition) {
 		loadTransperantImages();
@@ -218,6 +218,13 @@ public class GameGUI extends JFrame implements Runnable {
 					Pokedex.class.getResource("/art/sounds/101-opening.wav").toString().substring(6));
 		}
 	}
+	
+	public class ObjectWaitingForSongToEndFinal implements EndOfSongListener, Serializable {
+
+		public void songFinishedPlaying(EndOfSongEvent eosEvent) {
+
+		}
+	}
 
 	
 	public class ObjectWaitingForSongToEndWin implements EndOfSongListener, Serializable {
@@ -342,23 +349,33 @@ public class GameGUI extends JFrame implements Runnable {
 				}
 				System.out.println(pokemonGame.getPlayer().getxPosition() + "," + pokemonGame.getPlayer().getyPosition());
 				if(win){
+					isNextPage = false;
 					message = "You Win!";
 					message2="";
+					running=false;
 				}
-				if(!win&&Math.abs(pokemonGame.getPlayer().getxPosition()-pokemonGame.getWorld().getProfessorX())<64&&Math.abs(pokemonGame.getPlayer().getyPosition()-pokemonGame.getWorld().getProfessorY())<64){
+				if(pokemonGame.getPlayer().getWinCondition()==1&&!win&&Math.abs(pokemonGame.getPlayer().getxPosition()-pokemonGame.getWorld().getProfessorX())<64&&Math.abs(pokemonGame.getPlayer().getyPosition()-pokemonGame.getWorld().getProfessorY())<64){
+					SongPlayer.stopPlaying();
 					SongPlayer.playFile(WinWaiter, Pokedex.class.getResource("/art/sounds/win.wav").toString().substring(6));
+					isNextPage = false;
 					message = "You Win!";
 					message2="";
 					win=true;
 				}
 				if (pokemonGame.getPlayer().getxPosition() >=640 && pokemonGame.getPlayer().getxPosition() <=832 && pokemonGame.getPlayer().getyPosition() <= -896&&pokemonGame.getPlayer().getyPosition() >= -1024) {
 					pokemonGame.getPlayer().setSpeed(120);
+					if(!message.equals("SPEED!"))
+						SongPlayer.playFile(finalWaiter, Pokedex.class.getResource("/art/sounds/TornadoMagic.wav").toString().substring(6));
 					FPS=240;
+					isNextPage = false;
 					message = "SPEED!";
 					message2="";
 				}
 				if (pokemonGame.getPlayer().getxPosition() == -640 && pokemonGame.getPlayer().getyPosition() == -512) {
+					if(!pokemonGame.getPlayer().isHasAxe())
+						SongPlayer.playFile(finalWaiter, Pokedex.class.getResource("/art/sounds/item.wav").toString().substring(6));
 						pokemonGame.getPlayer().setHasAxe(true);
+						isNextPage = false;
 						message = "You found an axe! Press 'z' to clear obsticles in-front of you in the maze.";
 						message2="";
 				}
@@ -368,13 +385,18 @@ public class GameGUI extends JFrame implements Runnable {
 				renderMsgBoxAndClouds(g);
 				if ((pokemonGame.getPlayer().getSteps() % 15 == 0)) {
 					if (pokemonGame.getPlayer().getSteps() % 2 == 0) {
+						isNextPage = false;
 						message = "You found a pokemon! TODO: Iteration 2";
 						message2 = "";
 					} else {
-						if (pokemonGame.getPlayer().getSteps() % 5 == 0)
-							message = "You found an potion! TODO: Iteration 1";
-						if (currentSteps != pokemonGame.getPlayer().getSteps())
+						if (pokemonGame.getPlayer().getSteps() % 5 == 0){
+							isNextPage = false;
+							message = "You found a potion! TODO: Iteration 1";
+						}
+						if (currentSteps != pokemonGame.getPlayer().getSteps()){
 							pokemonGame.getPlayer().getMyBag().addItems("Potions", 1);
+							SongPlayer.playFile(finalWaiter, Pokedex.class.getResource("/art/sounds/item.wav").toString().substring(6));
+						}
 						message2 = "";
 					}
 					currentSteps = pokemonGame.getPlayer().getSteps();
@@ -467,7 +489,7 @@ public class GameGUI extends JFrame implements Runnable {
 				(((this.getWidth() - (width) * scale)) / 2) - 500 - pokemonGame.getPlayer().getxPosition() * scale,
 				((this.getHeight() - (height) * scale) / 2) + 1500 - pokemonGame.getPlayer().getyPosition() * scale,
 				width * scale, height * scale / 4, null);
-		if (pokemonGame.getPlayer().getWinCondition() == 1)
+		if (pokemonGame.getPlayer().getWinCondition() == 1&&!win)
 			g.drawImage(fog,
 					(((this.getWidth() - (width) * scale * 2)) / 2) - pokemonGame.getPlayer().getxPosition() * scale,
 					((this.getHeight() - (height) * scale) / 2) - pokemonGame.getPlayer().getyPosition() * scale - 600,
@@ -506,10 +528,13 @@ public class GameGUI extends JFrame implements Runnable {
 							pokemonGame.getPlayerYPos());
 					lastX=pokemonGame.getPlayerXPos();
 					lastY=pokemonGame.getPlayerYPos();
-					message = "The axe broke! You can't use it aynmore!";
+					SongPlayer.playFile(finalWaiter, Pokedex.class.getResource("/art/sounds/axe.wav").toString().substring(6));
+					isNextPage = false;
+					message = "The axe broke! You can't use it anymore!";
 					message2="";
 					pokemonGame.getPlayer().setHasAxe(false);
 				} else if(Math.abs(pokemonGame.getPlayerXPos()-lastX)>=64&&Math.abs(pokemonGame.getPlayerYPos()-lastY)>=64){
+					isNextPage = false;
 					message = "You don't have an axe!";
 					message2="";
 				}

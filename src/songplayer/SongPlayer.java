@@ -24,12 +24,15 @@ public class SongPlayer implements Serializable{
 	 * @param audioFileName
 	 *            The name of the file to be written to your output device.
 	 */
+	private static Thread playing;
+	
 	public static void playFile(final EndOfSongListener waiter, final String audioFileName) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 
 				Thread player = new AudioFilePlayer(audioFileName);
-
+				if(playing==null)
+					playing=player;
 				((AudioFilePlayer) player).addEndOfSongListener(waiter);
 
 				// AudioFilePlayer extends Thread. When start is called,
@@ -39,5 +42,17 @@ public class SongPlayer implements Serializable{
 				player.start();
 			}
 		});
+	}
+	public static void stopPlaying(){
+		if(playing!=null)
+			playing.stop();
+	}	public static void pausePlaying(){
+		if(playing!=null)
+			try {
+				playing.wait(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 }

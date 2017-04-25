@@ -31,6 +31,7 @@ import java.util.Random;
 
 import graphics.BitMap;
 import model.MazeGenerator;
+import model.NPC;
 import model.Player;
 
 public class Map {
@@ -40,6 +41,7 @@ public class Map {
 	private static int TILE_WIDTH = 64;
 	private static int TILE_HEIGHT = 64;
 	private Player myPlayer;
+	private NPC NPC;
 	protected static BitMap tile = BitMap.load("/art/floor/tile.png");
 	protected static BitMap lillies = BitMap.load("/art/wall/lillies.png");
 	protected static BitMap youth = BitMap.load("/art/wall/fountain of youth.png");
@@ -68,10 +70,11 @@ public class Map {
 	private boolean isStone[][] = new boolean[42][46];
 	private boolean isProfessor[][]=new boolean[42][46];
 
-	public Map(int w, int h, Player player, String name) {
+	public Map(int w, int h, Player player, NPC NPC, String name) {
 		this.width = w;
 		this.height = h;
 		this.myPlayer = player;
+		this.NPC=NPC;
 		this.name = name;
 		randomizeFlowers();
 		randomizeBolders();
@@ -165,8 +168,9 @@ public class Map {
 	}
 
 	public void tick() {
-
 		myPlayer.tick();
+		if(Math.random()<.25)
+			NPC.tick();
 	}
 
 	public void render(BitMap screen, int xScroll, int yScroll) {
@@ -184,6 +188,7 @@ public class Map {
 		this.renderTiles(screen, gridX0, gridY0, gridX1, gridY1);
 
 		myPlayer.render(screen);
+		NPC.render(screen);
 	}
 
 	private void renderTiles(BitMap screen, int x0, int y0, int x1, int y1) {

@@ -34,6 +34,7 @@ import maps.MapTypeTwo;
 
 public class PokemonGame {
 	private Player player;
+	private NPC NPC;
 	private ArrayList<Key> keys = new ArrayList<>();
 	private Map world;
 
@@ -43,11 +44,12 @@ public class PokemonGame {
 		keys.add(new Key("left"));
 		keys.add(new Key("right"));
 		player = new Player(keys, mapSelection, winCondition);
+		NPC = new NPC(null, mapSelection, winCondition);
 		if (mapSelection == 0) {
-			world = new MapTypeOne(90, 60, player);
+			world = new MapTypeOne(90, 60, player,NPC);
 		}
 		if (mapSelection == 1) {
-			world = new MapTypeTwo(180, 135, player);
+			world = new MapTypeTwo(180, 135, player,NPC);
 		}
 	}
 

@@ -33,8 +33,8 @@ public class MapTypeOne extends Map {
 
 	
 	
-	public MapTypeOne(int w, int h, Player player) {
-		super(w, h, player, "Map 1");
+	public MapTypeOne(int w, int h, Player player,model.NPC npc) {
+		super(w, h, player, npc, "Map 1");
 	}
 
 }

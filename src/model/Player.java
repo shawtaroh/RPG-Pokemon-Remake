@@ -48,7 +48,7 @@ public class Player implements Serializable {
 	private static boolean enterHome = false;
 	private Inventory myBag;
 	private int hp = 100;
-	private boolean hasAxe = true;
+	private boolean hasAxe = false;
 	private boolean[][] maze;
 
 private ArrayList<Pokemon> myPokemon = new ArrayList<>();
@@ -348,6 +348,8 @@ private ArrayList<Pokemon> myPokemon = new ArrayList<>();
 	}
 
 	public void useAxe() {
+		if(!hasAxe)
+			return;
 		if (this.facing == 0) {// down
 			System.out.println((this.yPosition - 21 * TILE_WIDTH) + "," + (this.xPosition - 22 * TILE_WIDTH));
 			RPoint remove = null;

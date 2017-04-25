@@ -328,7 +328,13 @@ public class GameGUI extends JFrame implements Runnable {
 					int yScroll = (pokemonGame.getPlayer().getyPosition());
 					pokemonGame.getWorld().render(screen, xScroll, yScroll);
 				}
-				// System.out.println(pokemonGame.getPlayer().getxPosition()+","+pokemonGame.getPlayer().getyPosition());
+				System.out
+						.println(pokemonGame.getPlayer().getxPosition() + "," + pokemonGame.getPlayer().getyPosition());
+				if (pokemonGame.getPlayer().getxPosition() == -640 && pokemonGame.getPlayer().getyPosition() == -512) {
+						pokemonGame.getPlayer().setHasAxe(true);
+						message = "You found an axe! Press 'z' to clear obsticles in-front of you in the maze.";
+						message2="";
+				}
 				// draws main screen
 				g.drawImage(screen.getBufferedImage(), 0, 0, width * scale, height * scale, null);
 				// draws environmental effects
@@ -449,6 +455,8 @@ public class GameGUI extends JFrame implements Runnable {
 
 		private ArrayList<Key> keys;
 		private int tick = 0;
+		private int lastX=0;
+		private int lastY=0;
 
 		public InputHandler(ArrayList<Key> keys) {
 			this.keys = keys;
@@ -465,9 +473,19 @@ public class GameGUI extends JFrame implements Runnable {
 			}
 
 			if (myKey == KeyEvent.VK_Z) {
-				pokemonGame.getPlayer().useAxe();
-				pokemonGame.getWorld().useAxe(pokemonGame.getPlayer().getFacing(), pokemonGame.getPlayerXPos(),
-						pokemonGame.getPlayerYPos());
+				if (pokemonGame.getPlayer().isHasAxe()) {
+					pokemonGame.getPlayer().useAxe();
+					pokemonGame.getWorld().useAxe(pokemonGame.getPlayer().getFacing(), pokemonGame.getPlayerXPos(),
+							pokemonGame.getPlayerYPos());
+					lastX=pokemonGame.getPlayerXPos();
+					lastY=pokemonGame.getPlayerYPos();
+					message = "The axe broke! You can't use it aynmore!";
+					message2="";
+					pokemonGame.getPlayer().setHasAxe(false);
+				} else if(Math.abs(pokemonGame.getPlayerXPos()-lastX)>=64&&Math.abs(pokemonGame.getPlayerYPos()-lastY)>=64){
+					message = "You don't have an axe!";
+					message2="";
+				}
 				System.out.println("AXED");
 			}
 

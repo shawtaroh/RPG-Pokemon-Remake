@@ -328,8 +328,13 @@ public class GameGUI extends JFrame implements Runnable {
 					int yScroll = (pokemonGame.getPlayer().getyPosition());
 					pokemonGame.getWorld().render(screen, xScroll, yScroll);
 				}
-				System.out
-						.println(pokemonGame.getPlayer().getxPosition() + "," + pokemonGame.getPlayer().getyPosition());
+				System.out.println(pokemonGame.getPlayer().getxPosition() + "," + pokemonGame.getPlayer().getyPosition());
+				if (pokemonGame.getPlayer().getxPosition() >=640 && pokemonGame.getPlayer().getxPosition() <=832 && pokemonGame.getPlayer().getyPosition() <= -896&&pokemonGame.getPlayer().getyPosition() >= -1024) {
+					pokemonGame.getPlayer().setSpeed(120);
+					FPS=240;
+					message = "SPEED!";
+					message2="";
+				}
 				if (pokemonGame.getPlayer().getxPosition() == -640 && pokemonGame.getPlayer().getyPosition() == -512) {
 						pokemonGame.getPlayer().setHasAxe(true);
 						message = "You found an axe! Press 'z' to clear obsticles in-front of you in the maze.";

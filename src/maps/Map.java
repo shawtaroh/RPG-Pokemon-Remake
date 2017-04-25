@@ -41,7 +41,10 @@ public class Map {
 	private static int TILE_HEIGHT = 64;
 	private Player myPlayer;
 	protected static BitMap tile = BitMap.load("/art/floor/tile.png");
+	protected static BitMap lillies = BitMap.load("/art/wall/lillies.png");
+	protected static BitMap youth = BitMap.load("/art/wall/fountain of youth.png");
 	protected static BitMap[][] house = BitMap.cut("/art/house/houseOne.png", 64, 64, 0, 0);
+	protected static BitMap[][] waterfall = BitMap.cut("/art/wall/waterfall.png", 64, 64, 0, 0);
 	protected static BitMap tree = BitMap.load("/art/wall/tree.png");
 	protected static BitMap water = BitMap.load("/art/wall/water.png");
 	protected static BitMap flowers = BitMap.load("/art/floor/flowersOne.png");
@@ -59,6 +62,9 @@ public class Map {
 	private boolean areBolders2[][] = new boolean[42][46];
 	private boolean isWater[][] = new boolean[42][46];
 	private boolean isHouse[][] = new boolean[42][46];
+	private boolean isWaterFall[][] = new boolean[42][46];
+	private boolean isLillies[][] = new boolean[42][46];
+	private boolean isYouth[][] = new boolean[42][46];
 	private boolean isStone[][] = new boolean[42][46];
 	private boolean isProfessor[][]=new boolean[42][46];
 
@@ -92,7 +98,37 @@ public class Map {
 	}
 
 	public void setWater() {
-		isWater[5][5] = true;
+		for (int i = 27; i < 41; i++)
+			for (int j = 1; j < 11; j++) {
+				if((((double)i-33.5)*((double)i-33.5)+((double)j-6.0)*((double)j-6.0))<25.0){
+				isWater[i][j]=true;
+					if((((double)i-33.5)*((double)i-33.5)+((double)j-6.0)*((double)j-6.0))<16.0&&(((double)i-33.5)*((double)i-33.5)+((double)j-6.0)*((double)j-6.0))>1.0){
+						isLillies[i][j]=true;
+					}
+					else if ((((double)i-33.5)*((double)i-33.5)+((double)j-6.0)*((double)j-6.0))<16.0)
+						isYouth[i][j]=true;
+				}
+				else
+					areBolders2[i][j] = true;
+			}
+		isWaterFall[31][0] = true;
+		isWaterFall[32][0] = true;
+		isWaterFall[33][0] = true;
+		isWaterFall[31][1] = true;
+		isWaterFall[32][1] = true;
+		isWaterFall[33][1] = true;
+		isWaterFall[31][2] = true;
+		isWaterFall[32][2] = true;
+		isWaterFall[33][2] = true;
+		isWaterFall[34][0] = true;
+		isWaterFall[35][0] = true;
+		isWaterFall[36][0] = true;
+		isWaterFall[34][1] = true;
+		isWaterFall[35][1] = true;
+		isWaterFall[36][1] = true;
+		isWaterFall[34][2] = true;
+		isWaterFall[35][2] = true;
+		isWaterFall[36][2] = true;
 	}
 
 	public void randomizeFlowers() {
@@ -157,6 +193,9 @@ public class Map {
 				screen.blit(tile, x * TILE_WIDTH, y * TILE_HEIGHT);
 				if (x == 0 || y == 0 || y == 41 || x == 45) {
 					screen.blit(tree, x * TILE_WIDTH, y * TILE_HEIGHT);
+					if (isWaterFall[Math.abs(x) % 41][Math.abs(y-1) % 46])
+						screen.blit(waterfall[(Math.abs(x) +10) % 2][(Math.abs(y) ) % 3], x * TILE_WIDTH,
+								y * TILE_HEIGHT);
 				} else {
 					if (isStone[Math.abs(x) % 41][Math.abs(y) % 46])
 						screen.blit(stone, x * TILE_WIDTH, y * TILE_HEIGHT);
@@ -173,6 +212,13 @@ public class Map {
 					if (isHouse[Math.abs(x) % 41][Math.abs(y) % 46])
 						screen.blit(house[(Math.abs(x) - 11) % 3][(Math.abs(y) - 11) % 2], x * TILE_WIDTH,
 								y * TILE_HEIGHT);
+					if (isWaterFall[Math.abs(x) % 41][Math.abs(y) % 46])
+						screen.blit(waterfall[(Math.abs(x) +10) % 2][(Math.abs(y) ) % 3], x * TILE_WIDTH,
+								y * TILE_HEIGHT);
+					if (isLillies[Math.abs(x) % 41][Math.abs(y) % 46])
+						screen.blit(lillies, x * TILE_WIDTH, y * TILE_HEIGHT);
+					if (isYouth[Math.abs(x) % 41][Math.abs(y) % 46])
+						screen.blit(youth, x * TILE_WIDTH, y * TILE_HEIGHT);
 				}
 
 			}

@@ -48,11 +48,16 @@ public class Player implements Serializable {
 	private static boolean enterHome = false;
 	private Inventory myBag;
 	private int hp = 100;
+	private int speed=30;
 	private boolean hasAxe = false;
 	private boolean[][] maze;
 
-private ArrayList<Pokemon> myPokemon = new ArrayList<>();
+	private ArrayList<Pokemon> myPokemon = new ArrayList<>();
 
+	public void setSpeed(int speed){
+		this.speed=speed;
+	}
+	
 	public ArrayList<Pokemon> getMyPokemon() {
 
 		return this.myPokemon;
@@ -62,7 +67,6 @@ private ArrayList<Pokemon> myPokemon = new ArrayList<>();
 
 		this.myPokemon = myPokemon;
 	}
-
 
 	public boolean isHasAxe() {
 		return hasAxe;
@@ -267,39 +271,51 @@ private ArrayList<Pokemon> myPokemon = new ArrayList<>();
 			}
 		return false;
 	}
+
 	// perimeter squares
 	private void loadRestrictions() {
-		//house
-		restrictedX.add(new RPoint(-10 * TILE_WIDTH, -9 * TILE_WIDTH,false));
-		restrictedX.add(new RPoint(-10 * TILE_WIDTH, -10 * TILE_WIDTH,false));
-		restrictedX.add(new RPoint(-10 * TILE_WIDTH, -11 * TILE_WIDTH,false));
-		restrictedX.add(new RPoint(-9 * TILE_WIDTH, -9 * TILE_WIDTH,false));
-		restrictedX.add(new RPoint(-9 * TILE_WIDTH, -10 * TILE_WIDTH,false));
-		restrictedX.add(new RPoint(-9 * TILE_WIDTH, -11 * TILE_WIDTH,false));
+		// house
+		restrictedX.add(new RPoint(-10 * TILE_WIDTH, -9 * TILE_WIDTH, false));
+		restrictedX.add(new RPoint(-10 * TILE_WIDTH, -10 * TILE_WIDTH, false));
+		restrictedX.add(new RPoint(-10 * TILE_WIDTH, -11 * TILE_WIDTH, false));
+		restrictedX.add(new RPoint(-9 * TILE_WIDTH, -9 * TILE_WIDTH, false));
+		restrictedX.add(new RPoint(-9 * TILE_WIDTH, -10 * TILE_WIDTH, false));
+		restrictedX.add(new RPoint(-9 * TILE_WIDTH, -11 * TILE_WIDTH, false));
 		Random generator = new Random(420);
 		for (int i = 0; i < 41; i++)
 			for (int j = 0; j < 45; j++)
 				if (generator.nextDouble() > .97)
-					restrictedX.add(new RPoint((j - 21) * TILE_WIDTH, (i - 22) * TILE_WIDTH,false));
+					restrictedX.add(new RPoint((j - 21) * TILE_WIDTH, (i - 22) * TILE_WIDTH, false));
 		maze = new model.MazeGenerator().randomMaze();
 
 		for (int i = 22; i < 38; i++)
 			for (int j = 6; j < 38; j++) {
-				RPoint tmp1 = new RPoint((j - 22) * TILE_WIDTH, (i - 21) * TILE_WIDTH,true);
-				RPoint tmp2 = new RPoint((i - 21) * TILE_WIDTH, (j - 22) * TILE_WIDTH,true);
-				//restrictedX.remove(tmp1);
+				RPoint tmp1 = new RPoint((j - 22) * TILE_WIDTH, (i - 21) * TILE_WIDTH, true);
+				RPoint tmp2 = new RPoint((i - 21) * TILE_WIDTH, (j - 22) * TILE_WIDTH, true);
+				// restrictedX.remove(tmp1);
 				restrictedX.remove(tmp2);
 				if (maze[j - 6][i - 22]) {
-					//restrictedX.add(tmp1);
+					// restrictedX.add(tmp1);
 					restrictedX.add(tmp2);
 				}
 			}
-		//house perimeter
+		// house perimeter
 		for (int i = 7; i < 18; i++)
 			for (int j = 9; j < 15; j++) {
 				if ((i == 7 || i == 17 || j == 9) && j != 14) {
-					restrictedX.add(new RPoint((j - 21) * TILE_WIDTH, (i - 22) * TILE_WIDTH,false));
+					restrictedX.add(new RPoint((j - 21) * TILE_WIDTH, (i - 22) * TILE_WIDTH, false));
 				}
+			}
+		// water-zone
+		for (int i = 27; i < 41; i++)
+			for (int j = 1; j < 11; j++) {
+				if ((((double) i - 33.5) * ((double) i - 33.5) + ((double) j - 6.0) * ((double) j - 6.0)) > 25.0) {
+					restrictedX.add(new RPoint((j - 21) * TILE_WIDTH, (i - 22) * TILE_WIDTH, false));
+				}
+				else
+					restrictedX.remove(new RPoint((j - 21) * TILE_WIDTH, (i - 22) * TILE_WIDTH, false));
+				if ((((double)i-33.5)*((double)i-33.5)+((double)j-6.0)*((double)j-6.0))<=1.0)
+					restrictedX.add(new RPoint((j - 21) * TILE_WIDTH, (i - 22) * TILE_WIDTH, false));
 			}
 	}
 
@@ -348,7 +364,7 @@ private ArrayList<Pokemon> myPokemon = new ArrayList<>();
 	}
 
 	public void useAxe() {
-		if(!hasAxe)
+		if (!hasAxe)
 			return;
 		if (this.facing == 0) {// down
 			System.out.println((this.yPosition - 21 * TILE_WIDTH) + "," + (this.xPosition - 22 * TILE_WIDTH));
@@ -356,8 +372,8 @@ private ArrayList<Pokemon> myPokemon = new ArrayList<>();
 			for (RPoint p : restrictedX)
 				if ((xPosition == p.getY() && yPosition - p.getX() == -64))
 					remove = p;
-				if (remove!=null&&remove.isRemovable()&&restrictedX.remove(remove))
-					System.out.println("removed");
+			if (remove != null && remove.isRemovable() && restrictedX.remove(remove))
+				System.out.println("removed");
 		}
 
 		if (this.facing == 2) {// right
@@ -366,7 +382,7 @@ private ArrayList<Pokemon> myPokemon = new ArrayList<>();
 			for (RPoint p : restrictedX)
 				if ((yPosition == p.getX() && xPosition - p.getY() == -64))
 					remove = p;
-			if (remove!=null&&remove.isRemovable()&&restrictedX.remove(remove))
+			if (remove != null && remove.isRemovable() && restrictedX.remove(remove))
 				System.out.println("removed");
 		}
 		if (this.facing == 1) {// left
@@ -375,7 +391,7 @@ private ArrayList<Pokemon> myPokemon = new ArrayList<>();
 			for (RPoint p : restrictedX)
 				if ((yPosition == p.getX() && xPosition - p.getY() == 64))
 					remove = p;
-			if (remove!=null&&remove.isRemovable()&&restrictedX.remove(remove))
+			if (remove != null && remove.isRemovable() && restrictedX.remove(remove))
 				System.out.println("removed");
 		}
 		if (this.facing == 3) {// up
@@ -384,7 +400,7 @@ private ArrayList<Pokemon> myPokemon = new ArrayList<>();
 			for (RPoint p : restrictedX)
 				if ((xPosition == p.getY() && yPosition - p.getX() == 64))
 					remove = p;
-			if (remove!=null&&remove.isRemovable()&&restrictedX.remove(remove))
+			if (remove != null && remove.isRemovable() && restrictedX.remove(remove))
 				System.out.println("removed");
 		}
 
@@ -395,8 +411,8 @@ private ArrayList<Pokemon> myPokemon = new ArrayList<>();
 	}
 
 	public void setLockWalking(boolean b) {
-		lockWalking=b;
-		
+		lockWalking = b;
+
 	}
 
 }

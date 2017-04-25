@@ -55,7 +55,7 @@ public class Map {
 	private String name;
 	private Random generator = new Random(335);
 	private boolean areFlowers[][] = new boolean[42][46];
-	private boolean areBolders[][] = new boolean[42][46];
+	private boolean areBolders[][] = new boolean[46][46];
 	private boolean areBolders2[][] = new boolean[42][46];
 	private boolean isWater[][] = new boolean[42][46];
 	private boolean isHouse[][] = new boolean[42][46];
@@ -115,7 +115,6 @@ public class Map {
 		
 		for (int i = 22; i < 38; i++)
 			for (int j = 6; j < 38; j++) {
-				areBolders2[i][j] = false;
 				areBolders2[j][i] = false;
 				if (maze[j - 6][i - 22]) {
 					areBolders[j][i] = true;

@@ -285,7 +285,7 @@ private ArrayList<Pokemon> myPokemon = new ArrayList<>();
 
 		for (int i = 22; i < 38; i++)
 			for (int j = 6; j < 38; j++) {
-				RPoint tmp1 = new RPoint((j - 21) * TILE_WIDTH, (i - 22) * TILE_WIDTH,true);
+				RPoint tmp1 = new RPoint((j - 22) * TILE_WIDTH, (i - 21) * TILE_WIDTH,true);
 				RPoint tmp2 = new RPoint((i - 21) * TILE_WIDTH, (j - 22) * TILE_WIDTH,true);
 				//restrictedX.remove(tmp1);
 				restrictedX.remove(tmp2);

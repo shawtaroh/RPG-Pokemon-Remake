@@ -75,7 +75,7 @@ public class GameGUI extends JFrame implements Runnable {
 	private static final long serialVersionUID = 60158402771325988L;
 	private int width = 2944;
 	private int height = 2688;
-	private int FPS = 120;
+	private int FPS = 240;
 	private BitMap screen;
 	private int scale;
 	private InGameMenu menu;
@@ -85,10 +85,12 @@ public class GameGUI extends JFrame implements Runnable {
 	private String message, message2, message3;
 	private boolean isNextPage = false;
 	private int currentSteps = 500;
+	private boolean win=false;
 
 	private BufferedImage msgBox, clouds, fog;
 	private jPanel2 painting;
 	private ObjectWaitingForSongToEnd waiter = new ObjectWaitingForSongToEnd();
+	private ObjectWaitingForSongToEndWin WinWaiter = new ObjectWaitingForSongToEndWin();
 
 	public GameGUI(int mapNum, int winCondition) {
 		loadTransperantImages();
@@ -217,6 +219,16 @@ public class GameGUI extends JFrame implements Runnable {
 		}
 	}
 
+	
+	public class ObjectWaitingForSongToEndWin implements EndOfSongListener, Serializable {
+
+		public void songFinishedPlaying(EndOfSongEvent eosEvent) {
+
+			SongPlayer.playFile(WinWaiter,
+					Pokedex.class.getResource("/art/sounds/win.wav").toString().substring(6));
+		}
+	}
+	
 	private class menuListener implements KeyListener {
 
 		@Override
@@ -329,6 +341,16 @@ public class GameGUI extends JFrame implements Runnable {
 					pokemonGame.getWorld().render(screen, xScroll, yScroll);
 				}
 				System.out.println(pokemonGame.getPlayer().getxPosition() + "," + pokemonGame.getPlayer().getyPosition());
+				if(win){
+					message = "You Win!";
+					message2="";
+				}
+				if(!win&&Math.abs(pokemonGame.getPlayer().getxPosition()-pokemonGame.getWorld().getProfessorX())<64&&Math.abs(pokemonGame.getPlayer().getyPosition()-pokemonGame.getWorld().getProfessorY())<64){
+					SongPlayer.playFile(WinWaiter, Pokedex.class.getResource("/art/sounds/win.wav").toString().substring(6));
+					message = "You Win!";
+					message2="";
+					win=true;
+				}
 				if (pokemonGame.getPlayer().getxPosition() >=640 && pokemonGame.getPlayer().getxPosition() <=832 && pokemonGame.getPlayer().getyPosition() <= -896&&pokemonGame.getPlayer().getyPosition() >= -1024) {
 					pokemonGame.getPlayer().setSpeed(120);
 					FPS=240;

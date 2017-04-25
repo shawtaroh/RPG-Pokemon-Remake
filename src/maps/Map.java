@@ -40,6 +40,23 @@ public class Map {
 	private final int height;
 	private static int TILE_WIDTH = 64;
 	private static int TILE_HEIGHT = 64;
+	private int professorX=100,professorY=100;
+	public int getProfessorX() {
+		return professorX;
+	}
+
+	public void setProfessorX(int professorX) {
+		this.professorX = professorX;
+	}
+
+	public int getProfessorY() {
+		return professorY;
+	}
+
+	public void setProfessorY(int professorY) {
+		this.professorY = professorY;
+	}
+
 	private Player myPlayer;
 	private NPC NPC;
 	protected static BitMap tile = BitMap.load("/art/floor/tile.png");
@@ -206,8 +223,12 @@ public class Map {
 						screen.blit(stone, x * TILE_WIDTH, y * TILE_HEIGHT);
 					if (areFlowers[Math.abs(x) % 41][Math.abs(y) % 46])
 						screen.blit(flowers, x * TILE_WIDTH, y * TILE_HEIGHT);
-					if (isProfessor[Math.abs(x) % 41][Math.abs(y) % 46])
+					if (isProfessor[Math.abs(x) % 41][Math.abs(y) % 46]){
 						screen.blit(professor, x * TILE_WIDTH, y * TILE_HEIGHT);
+						professorX=x* TILE_WIDTH-1408;
+						professorY=y* TILE_WIDTH-1344;
+						System.out.println("Prof x, Prof Y:"+professorX+","+professorY);
+					}
 					if (areBolders2[Math.abs(x) % 41][Math.abs(y) % 46])
 						screen.blit(bolders2, x * TILE_WIDTH, y * TILE_HEIGHT);
 					if (areBolders[Math.abs(x) % 41][Math.abs(y) % 46])

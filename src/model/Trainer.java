@@ -54,6 +54,16 @@ public class Trainer implements Serializable {
 
 	private ArrayList<Pokemon> myPokemon = new ArrayList<>();
 
+	public void changeWorld(int i){
+	
+		if(i < 1 || i > 2)
+			return;
+		
+		map = i;
+	}
+	
+	
+	
 	public void setSpeed(int speed){
 		this.speed=speed;
 	}

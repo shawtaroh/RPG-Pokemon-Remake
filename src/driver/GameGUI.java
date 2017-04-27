@@ -347,7 +347,7 @@ public class GameGUI extends JFrame implements Runnable {
 					int yScroll = (pokemonGame.getPlayer().getyPosition());
 					pokemonGame.getWorld().render(screen, xScroll, yScroll);
 				}
-				System.out.println(pokemonGame.getPlayer().getxPosition() + "," + pokemonGame.getPlayer().getyPosition());
+				//System.out.println(pokemonGame.getPlayer().getxPosition() + "," + pokemonGame.getPlayer().getyPosition());
 				if(win){
 					isNextPage = false;
 					message = "You Win!";

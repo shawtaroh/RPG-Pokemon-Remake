@@ -72,12 +72,12 @@ public class MazeGenerator {
 
 		for (boolean b[] : realMap) {
 			for (boolean c : b) {
-				if (c)
-					System.out.print("O");
-				else
-					System.out.print("X");
+				//if (c)
+					//System.out.print("O");
+				//else
+					//System.out.print("X");
 			}
-			System.out.println("");
+			//System.out.println("");
 
 		}
 	}

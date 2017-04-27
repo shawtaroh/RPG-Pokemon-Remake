@@ -57,6 +57,17 @@ public class Map {
 		this.professorY = professorY;
 	}
 
+	private int mapNum;
+	
+	public int getMapNum(){
+		return mapNum;
+	}
+	
+	public void setMapNum(int i){
+		mapNum = i;
+	}
+	
+	
 	private Player myPlayer;
 	private NPC NPC;
 	protected static BitMap tile = BitMap.load("/art/floor/tile.png");
@@ -227,7 +238,7 @@ public class Map {
 						screen.blit(professor, x * TILE_WIDTH, y * TILE_HEIGHT);
 						professorX=x* TILE_WIDTH-1408;
 						professorY=y* TILE_WIDTH-1344;
-						System.out.println("Prof x, Prof Y:"+professorX+","+professorY);
+						//System.out.println("Prof x, Prof Y:"+professorX+","+professorY);
 					}
 					if (areBolders2[Math.abs(x) % 41][Math.abs(y) % 46])
 						screen.blit(bolders2, x * TILE_WIDTH, y * TILE_HEIGHT);

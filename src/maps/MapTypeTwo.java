@@ -41,7 +41,7 @@ public class MapTypeTwo extends Map {
 		this.bolders2 = BitMap.load("/art/wall/snow.png");
 		this.bolders=BitMap.load("/art/floor/highGround2.png");
 
-
+		setMapNum(2);
 	}
 
 }

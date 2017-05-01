@@ -29,6 +29,7 @@
 package graphics;
 
 import java.awt.Color;
+import java.awt.Component;
 
 /*
  * InGameMenu.java
@@ -64,11 +65,16 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -76,6 +82,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import driver.GameGUI;
+import model.Pokemon;
 import model.PokemonGame;
 
 @SuppressWarnings("serial")
@@ -105,6 +112,13 @@ public class InGameMenu extends JPanel {
 	private String		potionStr;
 	private String		snacksStr;
 	
+	private Point		pokedexLoc		= new Point();
+	private Point		pokedexSize		= new Point();
+	private Pokemon[][]	pokes;
+	private int			rows;
+	private int			cols;
+	private Pokemon		selectedPoke	= null;
+	
 	
 	
 	public InGameMenu(PokemonGame model, GameGUI gui) {
@@ -112,6 +126,8 @@ public class InGameMenu extends JPanel {
 		
 		this.model = model;
 		this.gui = gui;
+		
+		this.addMouseListener(new PokedexListener());
 		
 		repaint();
 		
@@ -218,26 +234,6 @@ public class InGameMenu extends JPanel {
 		contents.add(quit);
 		
 	}
-	
-	/*
-	 * to view Player's Pokemon
-	 *
-	 * private void setupPlayersPokemon() {
-	 * 
-	 * int width = 75; int height = 75;
-	 * 
-	 * int x = this.getWidth() - width * 4; int y = 350;
-	 * 
-	 * int rows = 6; int cols = 4;
-	 * 
-	 * JPanel tiles = new JPanel(); tiles.setLocation(x, y); tiles.setSize(width
-	 * * cols, height * rows); this.add(tiles); tiles.setLayout(new
-	 * GridLayout(rows, cols));
-	 * 
-	 * for (int i = 0; i < rows * cols; i++) { JButton slot = new JButton("" +
-	 * i); slot.setPreferredSize(new Dimension(width, height)); tiles.add(slot);
-	 * } }
-	 */
 	
 	
 	
@@ -353,38 +349,181 @@ public class InGameMenu extends JPanel {
 	
 	
 	/*
+	 * For choosing which pokemon to show stats for
+	 */
+	private class PokedexListener implements MouseListener {
+		
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			
+			final int x = arg0.getX();
+			final int y = arg0.getY();
+			
+			showStats(getPokemon(x, y));
+		}
+		
+		
+		
+		@Override
+		public void mouseEntered(MouseEvent arg0) {
+			
+		}
+		
+		
+		
+		@Override
+		public void mouseExited(MouseEvent arg0) {
+			
+		}
+		
+		
+		
+		@Override
+		public void mousePressed(MouseEvent arg0) {
+			
+		}
+		
+		
+		
+		@Override
+		public void mouseReleased(MouseEvent arg0) {
+			
+		}
+		
+	}
+	
+	
+	
+	/*
 	 * Draw Player's Pokedex Inventory
 	 */
 	private void drawPokedex(Graphics2D g2) {
 		
-		int width = 75;
-		int height = 75;
+		/* TESTING -- PRELOADED/PRECAUGHT POKEMON *
+		try {
+			ArrayList<Pokemon> temp = new ArrayList<>();
+			temp.add(
+			        new Pokemon(0, "Abra",
+			                ImageIO.read(this.getClass()
+			                        .getResource("/art/pokemon/abra.gif")),
+			                "Rare"));
+			temp.add(new Pokemon(0, "Abomasnow",
+			        ImageIO.read(this.getClass()
+			                .getResource("/art/pokemon/abomasnow.gif")),
+			        "Uncommon"));
+			model.getPlayer().setMyPokemon(temp);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		*/
+		
+		final ArrayList<Pokemon> pokeList = model.getPlayer().getMyPokemon();
+		
+		int width = 70;
+		int height = 70;
 		
 		int x = this.getWidth() - width * 4 - 50;
-		int y = 160;
+		int y = 155;
 		
 		g2.setFont(new Font("Verdana", Font.BOLD, 20));
-		g2.drawString("Pokedex", x + 15, y - 5);
+		g2.drawString("Pokedex (" + pokeList.size() + " Caught)", x + 15,
+		        y - 5);
 		
-		int rows = 6;
-		int cols = 4;
+		rows = 6;
+		cols = 4;
 		
-		Image tile = new ImageIcon(this.getClass()
-		        .getResource("/art/on_screen_icons/pokemon_placeholder.png"))
+		pokedexLoc.setLocation(x, y);
+		pokedexSize.setLocation(width * cols, height * rows);
+		pokes = new Pokemon[rows][cols];
+		
+		Image emptyTile = new ImageIcon(this.getClass()
+		        .getResource("/art/on_screen_icons/pokemon_empty.png"))
 		                .getImage();
 		
-		for (int c = 0; c < cols; c++) {
-			for (int r = 0; r < rows; r++) {
-				g2.drawImage(tile, x + c * width, y + r * height, width, height,
-				        Color.GRAY, null);
+		int p = 0;
+		
+		for (int r = 0; r < rows; r++) {
+			for (int c = 0; c < cols; c++) {
+				g2.drawImage(emptyTile, x + c * width, y + r * height, width,
+				        height, null, null);
+				
+				if (p < pokeList.size()) {
+					pokes[r][c] = pokeList.get(p);
+					final int offset = 5;
+					g2.drawImage(pokes[r][c].getSprite(),
+					        offset + x + c * width, offset + y + r * height,
+					        width - offset * 2, height - offset * 2, null,
+					        null);
+				}
+				p++;
 			}
 		}
 		
-		g2.setFont(new Font("Verdana", Font.BOLD, 20));
-		g2.drawString(
-		        "Pokemon Caught: " + model.getPlayer().getMyPokemon().size(),
-		        x + 15, y + rows * height + 20);
+		final int statsX = x;
+		final int statsY = y + rows * height;
 		
+		Image statsBox = new ImageIcon(this.getClass()
+		        .getResource("/art/on_screen_icons/poke_stats.png")).getImage();
+		g2.drawImage(statsBox, statsX, statsY, width * cols, height + 20, null,
+		        null);
+		
+		if (this.selectedPoke != null) {
+			g2.setColor(Color.LIGHT_GRAY);
+			g2.setFont(new Font("Verdana", Font.BOLD, 15));
+			g2.drawString("Name: " + selectedPoke.getName(), statsX + 15,
+			        statsY + 20);
+			g2.drawString("Type: " + selectedPoke.getType(), statsX + 15,
+			        statsY + 40);
+			g2.drawString(
+			        "Health: " + selectedPoke.getCurrentHP() + "/"
+			                + selectedPoke.getMaxHP(),
+			        statsX + 15, statsY + 60);
+			g2.drawString("Run Odds: " + selectedPoke.getProbabilityToRun(),
+			        statsX + 15, statsY + 80);
+		}
+		
+	}
+	
+	
+	
+	/*
+	 * paint stats on stats box in pokedex for selected pokemon
+	 */
+	public void showStats(Pokemon pokemon) {
+		
+		selectedPoke = pokemon;
+		this.repaint();
+	}
+	
+	
+	
+	/*
+	 * return corresponding pokemon in pokes[][] from mouse x,y
+	 */
+	public Pokemon getPokemon(int x, int y) {
+		
+		if (x < this.pokedexLoc.x || x > this.pokedexLoc.x + this.pokedexSize.x)
+			return null;
+		
+		if (y < this.pokedexLoc.y || y > this.pokedexLoc.y + this.pokedexSize.y)
+			return null;
+		
+		// TODO get specific pokemon %'ing
+		
+		final int relX = x - this.pokedexLoc.x;
+		final int relY = y - this.pokedexLoc.y;
+		
+		// System.out.println("y: " + relY + ", x: " + relX);
+		
+		final int col = (int) (((double) relX / (double) this.pokedexSize.x)
+		        * cols);
+		final int row = (int) (((double) relY / (double) this.pokedexSize.y)
+		        * rows);
+		
+		// System.out.println("row: " + row + ", col: " + col);
+		
+		return pokes[row][col];
 	}
 	
 	

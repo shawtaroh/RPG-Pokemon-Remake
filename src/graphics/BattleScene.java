@@ -240,6 +240,8 @@ public void paintComponent(Graphics g) {
 			if (button == run) {
 				//TODO: Implement Run
 				updateStats();
+				gui.resumeFromBattle();
+				System.out.println("YES");
 			}
 			if (button == pokeball) {
 				//TODO: Implement Pokeball Throw

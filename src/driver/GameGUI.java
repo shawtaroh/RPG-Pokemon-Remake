@@ -53,6 +53,7 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
@@ -80,9 +81,10 @@ public class GameGUI extends JFrame implements Runnable {
 	private BitMap screen;
 	private int scale;
 	private InGameMenu menu;
-	private BattleScene battle;
 	private boolean running = true;
+	private int pokemonFoundSteps=600;//outofbounds by default
 	private InputHandler inputHandler;
+	private BattleScene battle;
 	private PokemonGame pokemonGame;
 	private String message, message2, message3;
 	private boolean isNextPage = false;
@@ -114,20 +116,15 @@ public class GameGUI extends JFrame implements Runnable {
 		painting.setFocusable(false);
 		add(painting);
 
-		// Menu Second for Layering
-		menu = new InGameMenu(pokemonGame, this);
-		menu.setVisible(false);
-		add(menu);
+		JLayeredPane pane = new JLayeredPane();
 		
 		// Menu Second for Layering
 		menu = new InGameMenu(pokemonGame, this);
 		menu.setVisible(false);
 		add(menu);
+		
 
-		// Menu Second for Layering
-		battle = new BattleScene(pokemonGame, this);
-		battle.setVisible(false);
-		add(battle);
+		// Battle Menu for Layering
 
 		pack();
 		setResizable(true);
@@ -183,6 +180,17 @@ public class GameGUI extends JFrame implements Runnable {
 
 	}
 
+	private void pauseToBattle() {
+
+		stop();
+		battle = new BattleScene(pokemonGame, this);
+		battle.setVisible(false);
+		add(battle);
+		battle.on();
+		painting.setVisible(false);
+		repaint();
+	}
+	
 	// makes art files transperant
 	public void loadTransperantImages() {
 		try {
@@ -295,22 +303,27 @@ public class GameGUI extends JFrame implements Runnable {
 		start();
 		repaint();
 	}
+	
+	public void resumeFromBattle() {
+
+		running = true;
+		battle.off();
+		painting.setVisible(true);
+		battle.setFocusable(false);
+		this.remove(battle);
+		this.remove(menu);
+		this.add(menu);
+		this.requestFocus();
+		start();
+		repaint();
+	}
 
 	/*
 	 * invoke menu
 	 */
 	private void pauseToMenu() {
-
 		stop();
 		menu.on();
-		painting.setVisible(false);
-		repaint();
-	}
-	
-	private void pauseToBattle() {
-
-		stop();
-		battle.on();
 		painting.setVisible(false);
 		repaint();
 	}
@@ -404,10 +417,11 @@ public class GameGUI extends JFrame implements Runnable {
 				// draws environmental effects
 				renderMsgBoxAndClouds(g);
 				if ((pokemonGame.getPlayer().getSteps() % 15 == 0)) {
-					if (pokemonGame.getPlayer().getSteps() % 2 == 0) {
+					if (pokemonGame.getPlayer().getSteps() % 2 == 0&&pokemonFoundSteps!=pokemonGame.getPlayer().getSteps()) {
 						isNextPage = false;
 						message = "You found a pokemon! TODO: Iteration 2";
 						message2 = "";
+						pokemonFoundSteps=pokemonGame.getPlayer().getSteps();
 						pauseToBattle();
 					} else {
 						if (pokemonGame.getPlayer().getSteps() % 5 == 0){

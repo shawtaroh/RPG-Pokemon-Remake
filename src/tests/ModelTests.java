@@ -296,9 +296,5 @@ public class ModelTests {
 	      keys.add(new Key("left"));
 	      keys.add(new Key("right"));
 		Player player = new Player(keys, 0, 0);
-		Map map = new Map(100, 0, player, "TheMap");
-		map.tick();
-		BitMap screen = new BitMap(500, 500);
-		map.render(screen, 50, 50);
 	}
 }

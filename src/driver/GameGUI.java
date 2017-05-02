@@ -56,6 +56,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
+import graphics.BattleScene;
 import graphics.BitMap;
 import graphics.InGameMenu;
 import graphics.SplashScreen;
@@ -79,6 +80,7 @@ public class GameGUI extends JFrame implements Runnable {
 	private BitMap screen;
 	private int scale;
 	private InGameMenu menu;
+	private BattleScene battle;
 	private boolean running = true;
 	private InputHandler inputHandler;
 	private PokemonGame pokemonGame;
@@ -116,6 +118,16 @@ public class GameGUI extends JFrame implements Runnable {
 		menu = new InGameMenu(pokemonGame, this);
 		menu.setVisible(false);
 		add(menu);
+		
+		// Menu Second for Layering
+		menu = new InGameMenu(pokemonGame, this);
+		menu.setVisible(false);
+		add(menu);
+
+		// Menu Second for Layering
+		battle = new BattleScene(pokemonGame, this);
+		battle.setVisible(false);
+		add(battle);
 
 		pack();
 		setResizable(true);
@@ -294,6 +306,14 @@ public class GameGUI extends JFrame implements Runnable {
 		painting.setVisible(false);
 		repaint();
 	}
+	
+	private void pauseToBattle() {
+
+		stop();
+		battle.on();
+		painting.setVisible(false);
+		repaint();
+	}
 
 	// stops graphics rendering thread
 	public void stop() {
@@ -388,6 +408,7 @@ public class GameGUI extends JFrame implements Runnable {
 						isNextPage = false;
 						message = "You found a pokemon! TODO: Iteration 2";
 						message2 = "";
+						pauseToBattle();
 					} else {
 						if (pokemonGame.getPlayer().getSteps() % 5 == 0){
 							isNextPage = false;

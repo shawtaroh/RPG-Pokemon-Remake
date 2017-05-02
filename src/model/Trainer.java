@@ -143,6 +143,11 @@ public class Trainer implements Serializable {
 
 		return hp;
 	}
+	
+	public void setHP(int newHP) {
+
+		hp = newHP;
+	}
 
 	protected static int TILE_WIDTH = 64;
 	private static int TILE_HEIGHT = 64;

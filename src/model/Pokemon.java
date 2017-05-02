@@ -69,12 +69,15 @@ public class Pokemon {
 		if (this.type == "Rare") {
 			probabilityToRun = .8;
 			maxHP = (int) (140 + 20 * (new Random().nextGaussian()));
+			currentHP = maxHP;
 		} else if (this.type == "Uncommon") {
 			probabilityToRun = .6;
 			maxHP = (int) (70 + 20 * (new Random().nextGaussian()));
+			currentHP = maxHP;
 		} else {
 			probabilityToRun = .2;
 			maxHP = (int) (35 + 20 * (new Random().nextGaussian()));
+			currentHP = maxHP;
 		}
 	}
 

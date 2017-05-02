@@ -32,8 +32,8 @@ import model.Player;
 
 public class MapTypeOne extends Map {
 	
-	public MapTypeOne(int w, int h, Player player, model.NPC npc) {
-		super(w, h, player, npc, "Map 1");
+	public MapTypeOne(int w, int h, Player player) {
+		super(w, h, player, "Map 1");
 		
 		this.tile = BitMap.load("/art/floor/tile.png");
 		this.house = BitMap.cut("/art/house/houseOne.png", 64, 64, 0, 0);

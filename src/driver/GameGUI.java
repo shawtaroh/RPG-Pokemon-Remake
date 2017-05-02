@@ -94,6 +94,7 @@ public class GameGUI extends JFrame implements Runnable {
 	private jPanel2 painting;
 	private ObjectWaitingForSongToEnd waiter = new ObjectWaitingForSongToEnd();
 	private ObjectWaitingForSongToEndWin WinWaiter = new ObjectWaitingForSongToEndWin();
+	private ObjectWaitingForSongToEndBattle battleWaiter = new ObjectWaitingForSongToEndBattle();
 	private ObjectWaitingForSongToEndFinal finalWaiter = new ObjectWaitingForSongToEndFinal();
 
 	public GameGUI(int mapNum, int winCondition) {
@@ -245,6 +246,15 @@ public class GameGUI extends JFrame implements Runnable {
 
 		}
 	}
+	
+	public class ObjectWaitingForSongToEndBattle implements EndOfSongListener, Serializable {
+
+		public void songFinishedPlaying(EndOfSongEvent eosEvent) {
+
+			SongPlayer.playFile(battleWaiter,
+					Pokedex.class.getResource("/art/sounds/battle.wav").toString().substring(6));
+		}
+	}
 
 	
 	public class ObjectWaitingForSongToEndWin implements EndOfSongListener, Serializable {
@@ -294,7 +304,9 @@ public class GameGUI extends JFrame implements Runnable {
 	 * resuming game-play from menu
 	 */
 	public void resumeFromMenu() {
-
+		isNextPage = false;
+		message = "You encountered a pokemon! ";
+		message2 = "";
 		running = true;
 		menu.off();
 		painting.setVisible(true);
@@ -314,6 +326,8 @@ public class GameGUI extends JFrame implements Runnable {
 		this.remove(menu);
 		this.add(menu);
 		this.requestFocus();
+		SongPlayer.stopPlaying();
+		SongPlayer.playFile(waiter, Pokedex.class.getResource("/art/sounds/101-opening.wav").toString().substring(6));
 		start();
 		repaint();
 	}
@@ -419,18 +433,33 @@ public class GameGUI extends JFrame implements Runnable {
 				if ((pokemonGame.getPlayer().getSteps() % 15 == 0)) {
 					if (pokemonGame.getPlayer().getSteps() % 2 == 0&&pokemonFoundSteps!=pokemonGame.getPlayer().getSteps()) {
 						isNextPage = false;
-						message = "You found a pokemon! TODO: Iteration 2";
+						message = "You encountered a pokemon! ";
 						message2 = "";
+						SongPlayer.stopPlaying();
+						SongPlayer.playFile(battleWaiter, Pokedex.class.getResource("/art/sounds/battle.wav").toString().substring(6));
 						pokemonFoundSteps=pokemonGame.getPlayer().getSteps();
 						pauseToBattle();
 					} else {
-						if (pokemonGame.getPlayer().getSteps() % 5 == 0){
+						boolean foundSnack=false;
+						if (pokemonGame.getPlayer().getSteps() % 5 == 0&&pokemonFoundSteps!=pokemonGame.getPlayer().getSteps()){
+							if(Math.random()<.15)
+								foundSnack=true;
 							isNextPage = false;
-							message = "You found a potion! TODO: Iteration 1";
-						}
-						if (currentSteps != pokemonGame.getPlayer().getSteps()){
-							pokemonGame.getPlayer().getMyBag().addItems("Potions", 1);
-							SongPlayer.playFile(finalWaiter, Pokedex.class.getResource("/art/sounds/item.wav").toString().substring(6));
+							if(!foundSnack)
+								message = "You found a potion!";
+							else
+								message = "You found a snack!";
+							
+							if (currentSteps != pokemonGame.getPlayer().getSteps()){
+								if(!foundSnack)
+									pokemonGame.getPlayer().getMyBag().addItems("Potions", 1);
+								else{
+									pokemonGame.getPlayer().getMyBag().addItems("Snacks", 1);
+									pokemonGame.getPlayer().setSteps(pokemonGame.getPlayer().getSteps()+29);
+									currentSteps+=29;
+								}
+								SongPlayer.playFile(finalWaiter, Pokedex.class.getResource("/art/sounds/item.wav").toString().substring(6));
+							}
 						}
 						message2 = "";
 					}

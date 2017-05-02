@@ -44,8 +44,10 @@ public class SongPlayer implements Serializable{
 		});
 	}
 	public static void stopPlaying(){
-		if(playing!=null)
+		if(playing!=null){
 			playing.stop();
+			playing=null;
+		}
 	}	public static void pausePlaying(){
 		if(playing!=null)
 			try {

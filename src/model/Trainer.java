@@ -69,7 +69,6 @@ public class Trainer implements Serializable {
 		
 		if (i < 1 || i > 2)
 			return;
-		
 		map = i;
 	}
 	

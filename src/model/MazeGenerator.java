@@ -8,7 +8,7 @@ import java.util.Arrays;
  * recursive backtracking algorithm
  * shamelessly borrowed from the ruby at
  * http://weblog.jamisbuck.org/2010/12/27/maze-generation-recursive-backtracking
- * Significantly modified though!
+ * Significantly modified though! had to change formatting quite a bit, but algorithm itself is borrowed
  */
 public class MazeGenerator {
 	private int x;

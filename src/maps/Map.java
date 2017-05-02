@@ -30,7 +30,6 @@ _,-'       `.     |    |  /`.   \,-'    |   \  /   |   |    \  |`.
 import java.util.Random;
 
 import graphics.BitMap;
-import model.MazeGenerator;
 import model.Player;
 
 public class Map {

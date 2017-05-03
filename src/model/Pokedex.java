@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,9 +47,9 @@ public class Pokedex {
 	private ArrayList<Pokemon> pokedex;
 
 	public Pokedex() {
-		Random generator = new Random(314);
+		Random generator = new Random();
 		pokedex = new ArrayList<>();
-		File[] files = new File(Pokedex.class.getResource("/art/pokemon").getFile()).listFiles();
+		File[] files = new File(Pokedex.class.getResource("/art/pokemon/").getFile()).listFiles();
 		int pokeNum = 1;
 
 		for (File file : files) {
@@ -58,18 +59,23 @@ public class Pokedex {
 				String rarity;
 				if (rand > .4)
 					rarity = Common;
-				if (rand < .3)
+				else if (rand < .3)
 					rarity = Uncommon;
 				else
 					rarity = Rare;
-				pokedex.add(new Pokemon(pokeNum, file.getName().replaceFirst(".gif", ""), ImageIO.read(file), rarity));
-
+				String name = file.getName().replaceFirst(".gif", "");
+				name = name.substring(0, 1).toUpperCase() + name.substring(1);
+				pokedex.add(new Pokemon(pokeNum, name, ImageIO.read(file), rarity));
+				pokeNum++;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		for (Pokemon p : pokedex) {
-			//System.out.println(p.getName());
-		}
+	}
+	
+	public Pokemon getRandomPokemon(){
+		Random generator = new Random();
+		Pokemon pokemon = pokedex.get(generator.nextInt(pokedex.size()));
+		return new Pokemon(pokemon.getPokeNumber(), pokemon.getName(), pokemon.getSprite(), pokemon.getType());
 	}
 }

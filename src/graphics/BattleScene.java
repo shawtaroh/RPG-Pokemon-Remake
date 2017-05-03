@@ -28,6 +28,7 @@
 package graphics;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -39,12 +40,21 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
+import javax.imageio.ImageIO;
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 /*
 						BattleScene.java
@@ -75,6 +85,7 @@ Implements Pokemon SafariZone BattleScene GUI
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 
 import driver.GameGUI;
@@ -115,13 +126,22 @@ public class BattleScene extends JPanel {
 	private String		potionStr;
 	private String		snacksStr;
 	
+	private Boolean isThrown, willRun, isCaught;
+	
+	private ImageIcon playerThrow;
+	private JLabel pokemonStats3;
+	private JLabel pokemonStats4;
+	private JLabel pokemonStats5;
+	
 	public BattleScene(PokemonGame model, GameGUI gui) {
 		super();
-		
+				
 		this.model = model;
 		this.gui = gui;
-		this.pokemon = new Pokemon(0, "Guy", null, "Rare");
-		//TODO: Randomize pokemon creation
+		this.pokemon = model.getRandomPokemon();
+		this.isThrown = false;
+		willRun = false;
+		isCaught = false;
 		
 		repaint();
 		
@@ -132,10 +152,11 @@ public class BattleScene extends JPanel {
 		setupPokemonPanel();
 		
 		//if(model.getPlayer() != null)
-			//updateStats();
+		updateStats();
 		
 		setupContainer();
 		this.add(container);
+       
 	}	
 	
 	public void updateStats(){
@@ -158,16 +179,20 @@ public class BattleScene extends JPanel {
 		int pokemonMultiplier = 0;
 		if(pokemonHP != 0)
 			pokemonMultiplier = (int) Math.floor(playerHP / 10);
-		String stats12 = "    HP [";
+		String hpBar = "HP [";
 		if (pokemonMultiplier != 0)
-			stats12 += "+++++++++++++++".substring(0, pokemonMultiplier);
-		stats12 += "---------------".substring(0, 10-pokemonMultiplier);
-		stats12 += "]";
-		String stats11 = pokemon.getType() + "  " + pokemonHP + "/" + pokemon.getMaxHP() + "             "; 
-		pokemonStats1.setText(stats11);
-		pokemonStats2.setText(stats12);
-	}
+			hpBar += "+++++++++++++++".substring(0, pokemonMultiplier);
+		hpBar += "---------------".substring(0, 10-pokemonMultiplier);
+		hpBar += "]  " + pokemon.getCurrentHP() + "/" + pokemon.getMaxHP();;
+		pokemonStats1.setText(pokemon.getName());
+		pokemonStats2.setText(hpBar);
+		pokemonStats3.setText(pokemon.getType());
+		pokemonStats4.setText("Chance to Run: " + String.format("%.2f",pokemon.getProbabilityToRun() * 100) + "%");
+		pokemonStats5.setText("Chance of Capture: " + String.format("%.2f",pokemon.getProbabilityToCapture() * 100) + "%");
+		pokemonPanel.validate();
 
+	}
+@Override
 public void paintComponent(Graphics g) {
 		
 		super.paintComponent(g);
@@ -175,7 +200,7 @@ public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 		        RenderingHints.VALUE_ANTIALIAS_ON);
-		
+
 		//Background
 		Image bkgnd = new ImageIcon(this.getClass().getResource(backgroundPNG)).getImage();
 		g2.drawImage(bkgnd, 0, 0, this.getWidth(), this.getHeight(), null, null);
@@ -191,10 +216,17 @@ public void paintComponent(Graphics g) {
 		        50 + metricsHdr.getHeight() / 2);
 		
 		//Draw Pokemon
-		//TODO: Implement Pokemon Drawing
+		if(!willRun && !isCaught)
+			g2.drawImage(new ImageIcon(GameGUI.class.getResource("/art/pokemon/" + pokemon.getName() + ".gif")).getImage(),this.getSize().width/2,this.getSize().height/2,this);
 		
+		playerThrow = new ImageIcon(GameGUI.class.getResource("/art/player/ballThrow.gif"));
 		//Draw Player
-		//TODO: Implement Player Drawing
+		if(isThrown){
+			g2.drawImage(playerThrow.getImage(), 30, this.getSize().height-300, this);
+		}else{
+			g2.drawImage(new ImageIcon(GameGUI.class.getResource("/art/player/playerBattle.png")).getImage(), 30, this.getSize().height-300, this);
+		}
+		
 	}
 
 	public void on() {
@@ -229,24 +261,56 @@ public void paintComponent(Graphics g) {
 		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			willRun = pokemon.checkIfRuns(); //Done before to calculate probability based on current stats
+			playerThrow.getImage().flush();
 			if (button == rock) {
-				//TODO: Implement Rock Throw
+				isThrown = true;
+				if (!pokemon.throwRock()){
+					willRun = true;
+					updateStats();
+					repaint();
+					JOptionPane.showMessageDialog(null, pokemon.getName() + " has fainted."); 
+					gui.resumeFromBattle();
+					return;
+				}
 				updateStats();
 			}
 			if (button == bait) {
-				//TODO: Implement Bait Throw
+				pokemon.giveBait();
+				isThrown = true;
+
 				updateStats();
 			}
 			if (button == run) {
 				//TODO: Implement Run
 				updateStats();
 				gui.resumeFromBattle();
-				System.out.println("YES");
+				return;
 			}
 			if (button == pokeball) {
 				//TODO: Implement Pokeball Throw
+				isThrown = true;
+				if(pokemon.throwBall()){
+					isCaught = true;
+					updateStats();
+					repaint();
+					model.getPlayer().getMyPokemon().add(pokemon);
+					JOptionPane.showMessageDialog(null, "You have caught " + pokemon.getName() + "!");
+					gui.resumeFromBattle();
+					return;
+				}
 				updateStats();
 			}
+
+			if(willRun){
+				updateStats();
+				repaint();
+				JOptionPane.showMessageDialog(null, pokemon.getName() + " has ran off."); 
+				gui.resumeFromBattle();
+				return;
+			}
+			
+			repaint();
 		}
 		
 	}
@@ -257,26 +321,43 @@ public void paintComponent(Graphics g) {
 		pokemonPanel.setBorder(new LineBorder(new Color(255, 255, 255, 0), 10, true));
 		
 		//Setup Contents
-		JPanel spacePanel = new JPanel();
-		spacePanel.setBackground(new Color(230, 230, 230, 0));
-		spacePanel.setBorder(new LineBorder(new Color(255, 255, 255, 0), 10, true));
-		spacePanel.setPreferredSize(new Dimension(400,100));
+		//JPanel spacePanel = new JPanel();
+		//spacePanel.setBackground(new Color(230, 230, 230, 0));
+		//spacePanel.setBorder(new LineBorder(new Color(255, 255, 255, 0), 10, true));
+		//spacePanel.setPreferredSize(new Dimension(400,100));
 		
 		JPanel pokemonStatus = new JPanel();
 		pokemonStatus.setBackground(new Color(230, 230, 230, 123));
 		pokemonStatus.setBorder(new LineBorder(new Color(255, 255, 255, 123), 10, true));
-		pokemonStatus.setPreferredSize(new Dimension(320,100));
-		pokemonStats1 = new JLabel("Pokemon  ");
+		pokemonStatus.setPreferredSize(new Dimension(420,200));
+		pokemonStatus.setLayout(new BoxLayout(pokemonStatus, BoxLayout.PAGE_AXIS));
+		pokemonStats1 = new JLabel();
 		pokemonStats1.setFont(new Font("Arial", Font.BOLD, 25));
-		pokemonStats2 = new JLabel("It didn't work");
+		pokemonStats1.setAlignmentX(Component.CENTER_ALIGNMENT);
+		pokemonStats2 = new JLabel();
 		pokemonStats2.setFont(new Font("Arial", Font.BOLD, 25));
+		pokemonStats2.setAlignmentX(Component.CENTER_ALIGNMENT);
+		pokemonStats3 = new JLabel();
+		pokemonStats3.setFont(new Font("Arial", Font.BOLD, 25));
+		pokemonStats3.setAlignmentX(Component.CENTER_ALIGNMENT);
+		pokemonStats4 = new JLabel();
+		pokemonStats4.setFont(new Font("Arial", Font.BOLD, 25));
+		pokemonStats4.setAlignmentX(Component.CENTER_ALIGNMENT);
+		pokemonStats5 = new JLabel();
+		pokemonStats5.setFont(new Font("Arial", Font.BOLD, 25));
+		pokemonStats5.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		
 		pokemonStatus.add(pokemonStats1);
 		pokemonStatus.add(pokemonStats2);
+		pokemonStatus.add(pokemonStats3);
+		pokemonStatus.add(pokemonStats4);
+		pokemonStatus.add(pokemonStats5);
 		
 		//Add Contents
-		pokemonPanel.add(spacePanel);
+//		pokemonPanel.add(spacePanel);
 		pokemonPanel.add(pokemonStatus);
-	}
+		}
 	
 	public void setupPlayerPanel(){
 		//JPanel Setup
@@ -315,7 +396,6 @@ public void paintComponent(Graphics g) {
 		gameStatus.setForeground(Color.BLACK);
 		gameStatus.setBackground(new Color(230, 230, 230, 0)); 
 		
-		//Adding Contents
 		playerPanel.add(playerStatus);
 		playerPanel.add(buttonspace3);
 		playerPanel.add(buttonspace4);
@@ -411,7 +491,7 @@ public void paintComponent(Graphics g) {
 		JPanel space10 = new JPanel();
 		space10.setVisible(false);
 		JPanel space11 = new JPanel();
-		space11.setVisible(false);
+		space11.setVisible(false);		
 		
 		//JPanel Setup
 		container = new JPanel();
@@ -420,7 +500,6 @@ public void paintComponent(Graphics g) {
 		container.setOpaque(false);
 		container.setLocation(400, 400);
 		container.setBackground(Color.BLACK);
-		
 		
 		container.add(space1);
 		container.add(space2);

@@ -36,7 +36,7 @@ public class Pokemon {
 	private BufferedImage sprite;
 	private String type;
 	private int maxHP;
-	private double probabilityToRun;
+	private double prevProbabilityToRun, probabilityToRun, probabilityToCapture, baseProbabilityToCapture;
 	// null for pokedex types
 	private int currentHP;
 
@@ -59,6 +59,10 @@ public class Pokemon {
 	public double getProbabilityToRun() {
 		return probabilityToRun;
 	}
+	
+	public double getProbabilityToCapture(){
+		return probabilityToCapture;
+	}
 
 	public Pokemon(int pokeNumber, String name, BufferedImage sprite, String type) {
 		this.pokeNumber = pokeNumber;
@@ -67,18 +71,23 @@ public class Pokemon {
 		this.type = type;
 		// type dependent + gaussian randomness
 		if (this.type == "Rare") {
-			probabilityToRun = .8;
+			probabilityToRun = .5;
+			baseProbabilityToCapture = 0.1;
 			maxHP = (int) (140 + 20 * (new Random().nextGaussian()));
 			currentHP = maxHP;
 		} else if (this.type == "Uncommon") {
-			probabilityToRun = .6;
+			probabilityToRun = .3;
+			baseProbabilityToCapture = 0.3;
 			maxHP = (int) (70 + 20 * (new Random().nextGaussian()));
 			currentHP = maxHP;
 		} else {
-			probabilityToRun = .2;
+			probabilityToRun = .1;
+			baseProbabilityToCapture = 0.5;
 			maxHP = (int) (35 + 20 * (new Random().nextGaussian()));
 			currentHP = maxHP;
 		}
+		
+		updateProbabilityToCapture(0);
 	}
 
 	public int getPokeNumber() {
@@ -93,4 +102,69 @@ public class Pokemon {
 		return sprite;
 	}
 
+	public void giveBait() {
+		incrementProbabilityToRun(-0.075);
+		updateProbabilityToCapture(-0.05);
+	}
+
+
+	public Boolean throwRock() {
+		incrementProbabilityToRun(0.05);
+		incrementHP(-10);
+		updateProbabilityToCapture(0.0);	
+		
+		if(currentHP == 0){
+			return false;
+		}else{
+			return true;
+		}
+	}
+
+
+	private void incrementHP(int value) {
+		currentHP += value;
+		
+		if(currentHP > maxHP){
+			currentHP = maxHP;
+		}else if(currentHP < 0){
+			currentHP = 0;
+		}
+	}
+	
+	private void incrementProbabilityToRun(double value) {
+		probabilityToRun += value;
+		if(probabilityToRun > 1.0){
+			probabilityToRun = 1.0;
+		}else if(probabilityToRun < 0.0){
+			probabilityToRun = 0.0;
+		}
+		
+	}
+
+	private void updateProbabilityToCapture(double value){
+		baseProbabilityToCapture += value;
+		probabilityToCapture = baseProbabilityToCapture + (maxHP-currentHP)/(double)maxHP;
+		if(probabilityToCapture > 1.0){
+			probabilityToCapture = 1.0;
+		}
+	}
+
+	public boolean checkIfRuns() {
+		Random rand = new Random();
+		if (rand.nextDouble() < probabilityToRun){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	public boolean throwBall() {
+		Random rand = new Random();
+		if (rand.nextDouble() < probabilityToCapture){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
 }

@@ -38,6 +38,7 @@ public class PokemonGame {
 	private Player			player;
 	private ArrayList<Key>	keys	= new ArrayList<>();
 	private Map				world;
+	private Pokedex pokedex;
 	
 	
 	
@@ -53,6 +54,8 @@ public class PokemonGame {
 		if (mapSelection == 1) {
 			world = new MapTypeTwo(180, 135, player);
 		}
+		
+		pokedex = new Pokedex();
 	}
 	
 	
@@ -131,6 +134,11 @@ public class PokemonGame {
 	public int getPlayerYPos() {
 		
 		return player.getyPosition();
+	}
+
+
+	public Pokemon getRandomPokemon() {
+		return pokedex.getRandomPokemon();
 	}
 	
 }

@@ -1,7 +1,5 @@
 package model;
 
-import java.io.Serializable;
-
 /*
 							Player.java
                                   ,'\
@@ -29,7 +27,7 @@ Implements Pokemon Trainer
 */
 
 import java.util.ArrayList;
-import java.util.Random;
+
 import graphics.BitMap;
 
 public class Player extends Trainer {
@@ -37,6 +35,15 @@ public class Player extends Trainer {
 	public Player(ArrayList<Key> keys, int map, int winCondition) {
 		super(keys, map, winCondition);
 		this.player = BitMap.cut("/art/player/NPC.png", 64, 64, 0, 0);
+	}
+
+	/*
+	 * Remove snack from inventory if applicable
+	 */
+	public void eatSnack() {
+		
+		if(this.getMyBag().useItem("Snacks"))
+			this.setSteps(this.getSteps() + 14);
 	}
 
 }

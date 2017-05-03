@@ -72,4 +72,6 @@ public class Inventory implements Serializable{
 	public int getNumItems(){
 		return items.size();
 	}
+
+	
 }

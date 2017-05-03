@@ -38,6 +38,7 @@ public class Pokemon implements Serializable{
 	private String type;
 	private int maxHP;
 	private double prevProbabilityToRun, probabilityToRun, probabilityToCapture, baseProbabilityToCapture;
+	
 	// null for pokedex types
 	private int currentHP;
 

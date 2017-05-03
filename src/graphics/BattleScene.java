@@ -42,6 +42,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -89,11 +90,16 @@ import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 
 import driver.GameGUI;
+import driver.GameGUI.ObjectWaitingForSongToEndFinal;
 import model.Player;
+import model.Pokedex;
 import model.Pokemon;
 //import graphics.InGameMenu.MenuListener;
 //import graphics.InGameMenu.MenuListener;
 import model.PokemonGame;
+import songplayer.EndOfSongEvent;
+import songplayer.EndOfSongListener;
+import songplayer.SongPlayer;
 
 public class BattleScene extends JPanel {
 	
@@ -132,6 +138,15 @@ public class BattleScene extends JPanel {
 	private JLabel pokemonStats3;
 	private JLabel pokemonStats4;
 	private JLabel pokemonStats5;
+	
+	private ObjectWaitingForSongToEndFinal finalWaiter = new ObjectWaitingForSongToEndFinal();
+	
+	public class ObjectWaitingForSongToEndFinal implements EndOfSongListener, Serializable {
+
+		public void songFinishedPlaying(EndOfSongEvent eosEvent) {
+
+		}
+	}
 	
 	public BattleScene(PokemonGame model, GameGUI gui) {
 		super();
@@ -263,6 +278,7 @@ public void paintComponent(Graphics g) {
 		public void actionPerformed(ActionEvent arg0) {
 			willRun = pokemon.checkIfRuns(); //Done before to calculate probability based on current stats
 			playerThrow.getImage().flush();
+			SongPlayer.playFile(finalWaiter, Pokedex.class.getResource("/art/sounds/item.wav").toString().substring(6));
 			if (button == rock) {
 				isThrown = true;
 				if (!pokemon.throwRock()){
@@ -289,6 +305,7 @@ public void paintComponent(Graphics g) {
 			}
 			if (button == pokeball) {
 				//TODO: Implement Pokeball Throw
+				model.getPlayer().getMyBag().useItem("Safari Balls");
 				isThrown = true;
 				if(pokemon.throwBall()){
 					isCaught = true;

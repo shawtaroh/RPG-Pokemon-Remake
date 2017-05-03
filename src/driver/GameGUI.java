@@ -160,10 +160,10 @@ public class GameGUI extends JFrame implements Runnable {
 				game.getPokemonGame().getPlayer().setyLastPosition(loaded.getyLastPosition());
 				game.getPokemonGame().getPlayer().setWinCondition(loaded.getWinCondition());
 				
-				int imageCount = (int) inFile.readObject();
+				int imageCount =inFile.readInt();
 				ArrayList<Pokemon> toAdd=game.getPokemonGame().getPlayer().getMyPokemon();
 				for(int i=0;i<imageCount;i++){
-					int pNum= (int) inFile.readObject();
+					int pNum= inFile.readInt();
 					String name=(String) inFile.readObject();
 					String type= (String) inFile.readObject();
 					
@@ -691,10 +691,10 @@ public class GameGUI extends JFrame implements Runnable {
 		ArrayList<Pokemon> savePokemon= pokemonGame.getPlayer().getMyPokemon();
 		pokemonGame.getPlayer().setMyPokemon(null);
 		outFile.writeObject(pokemonGame.getPlayer());
-		outFile.writeObject(savePokemon.size());
+		outFile.writeInt(savePokemon.size());
 		
 		for(Pokemon p:savePokemon){
-			outFile.writeObject(p.getPokeNumber());
+			outFile.writeInt(p.getPokeNumber());
 			outFile.writeObject(p.getName());
 			outFile.writeObject(p.getType());
 			ImageIO.write(p.getSprite(), "gif", outFile);

@@ -41,11 +41,15 @@ import driver.GameGUI;
 
 public class Pokemon implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8784965869253570309L;
 	private int pokeNumber;
 	private String name;
 	private String type;
 	private int maxHP;
-	private double prevProbabilityToRun, probabilityToRun, probabilityToCapture, baseProbabilityToCapture;
+	private double probabilityToRun, probabilityToCapture, baseProbabilityToCapture;
 	
 	// null for pokedex types
 	private int currentHP;
@@ -79,12 +83,12 @@ public class Pokemon implements Serializable{
 		this.name = name;
 		this.type = type;
 		// type dependent + gaussian randomness
-		if (this.type == "Rare") {
+		if (this.type.equals("Rare")) {
 			probabilityToRun = .5;
 			baseProbabilityToCapture = 0.1;
 			maxHP = (int) (140 + 20 * (new Random().nextGaussian()));
 			currentHP = maxHP;
-		} else if (this.type == "Uncommon") {
+		} else if (this.type.equals("Uncommon")) {
 			probabilityToRun = .3;
 			baseProbabilityToCapture = 0.3;
 			maxHP = (int) (70 + 20 * (new Random().nextGaussian()));
@@ -93,6 +97,11 @@ public class Pokemon implements Serializable{
 			probabilityToRun = .1;
 			baseProbabilityToCapture = 0.5;
 			maxHP = (int) (35 + 20 * (new Random().nextGaussian()));
+			currentHP = maxHP;
+		}
+		
+		if(maxHP <= 0){
+			maxHP = 1;
 			currentHP = maxHP;
 		}
 		

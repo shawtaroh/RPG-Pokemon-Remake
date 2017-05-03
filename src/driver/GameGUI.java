@@ -158,23 +158,10 @@ public class GameGUI extends JFrame implements Runnable {
 				game.getPokemonGame().getPlayer().setyPosition(loaded.getyPosition());
 				game.getPokemonGame().getPlayer().setxLastPosition(loaded.getxLastPosition());
 				game.getPokemonGame().getPlayer().setyLastPosition(loaded.getyLastPosition());
+				game.getPokemonGame().getPlayer().setMyBag(loaded.getMyBag());
 				game.getPokemonGame().getPlayer().setWinCondition(loaded.getWinCondition());
-				
-				int imageCount =inFile.readInt();
-				ArrayList<Pokemon> toAdd=game.getPokemonGame().getPlayer().getMyPokemon();
-				for(int i=0;i<imageCount;i++){
-					int pNum= inFile.readInt();
-					String name=(String) inFile.readObject();
-					String type= (String) inFile.readObject();
-					
-					BufferedImage sprite=ImageIO.read(inFile);
-					Pokemon add = new Pokemon(pNum, name, sprite, type);
-					int hp=(int)inFile.readInt();
-					add.setCurrentHP(hp);
-					toAdd.add(add);
-
-				}
-				game.getPokemonGame().getPlayer().setMyPokemon(toAdd);
+				game.getPokemonGame().getPlayer().setMyPokemon(loaded.getMyPokemon());
+				game.menu.setModel(game.getPokemonGame());
 
 			} catch (ClassNotFoundException | IOException e) {
 				e.printStackTrace();
@@ -689,22 +676,7 @@ public class GameGUI extends JFrame implements Runnable {
 		FileOutputStream savefile = new FileOutputStream("game.save");
 		ObjectOutputStream outFile = new ObjectOutputStream(savefile);
 		ArrayList<Pokemon> savePokemon= pokemonGame.getPlayer().getMyPokemon();
-		pokemonGame.getPlayer().setMyPokemon(null);
 		outFile.writeObject(pokemonGame.getPlayer());
-		outFile.writeInt(savePokemon.size());
-		
-		for(Pokemon p:savePokemon){
-			outFile.writeInt(p.getPokeNumber());
-			outFile.writeObject(p.getName());
-			outFile.writeObject(p.getType());
-			ImageIO.write(p.getSprite(), "gif", outFile);
-			
-			outFile.writeInt(p.getCurrentHP());
-			//outFile.writeObject(p.getMaxHP());
-			//outFile.writeObject(p.getProbabilityToCapture());
-			//outFile.writeObject(p.getProbabilityToRun());
-
-		}
 		outFile.close();
 
 	}

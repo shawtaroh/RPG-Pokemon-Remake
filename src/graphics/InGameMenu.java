@@ -91,7 +91,7 @@ public class InGameMenu extends JPanel {
 	private int			cols;
 	private Pokemon		selectedPoke	= null;
 	private JButton eat;
-	
+	private ArrayList<Pokemon> pokeList;
 	
 	
 	public InGameMenu(PokemonGame model, GameGUI gui) {
@@ -410,8 +410,9 @@ public class InGameMenu extends JPanel {
 		 * e.printStackTrace(); }
 		 */
 		
-		final ArrayList<Pokemon> pokeList = model.getPlayer().getMyPokemon();
-		
+		pokeList = model.getPlayer().getMyPokemon();
+		if(pokeList==null)
+			return;
 		int width = 70;
 		int height = 70;
 		
@@ -479,6 +480,30 @@ public class InGameMenu extends JPanel {
 	
 	
 	
+	public PokemonGame getModel() {
+		return model;
+	}
+
+
+
+	public void setModel(PokemonGame model) {
+		this.model = model;
+	}
+
+
+
+	public ArrayList<Pokemon> getPokeList() {
+		return pokeList;
+	}
+
+
+
+	public void setPokeList(ArrayList<Pokemon> pokeList) {
+		this.pokeList = pokeList;
+	}
+
+
+
 	/*
 	 * paint stats on stats box in pokedex for selected pokemon
 	 */

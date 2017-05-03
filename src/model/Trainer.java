@@ -66,6 +66,12 @@ public class Trainer implements Serializable {
 	
 	
 	
+	public void setMyBag(Inventory myBag) {
+		this.myBag = myBag;
+	}
+
+
+
 	public void setSpeed(int speed) {
 		
 		this.speed = speed;

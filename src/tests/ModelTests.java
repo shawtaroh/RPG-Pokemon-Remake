@@ -292,7 +292,7 @@ public class ModelTests {
 	@Test
 	   public void testPokemon() {
 		BufferedImage aNull = new BufferedImage(10, 10, 10);
-		Pokemon pokemon = new Pokemon(0,"Guy",aNull,"CoolGuy");
+		Pokemon pokemon = new Pokemon(0,"Guy","CoolGuy");
 		pokemon.setCurrentHP(100);
 		assertTrue(pokemon.getPokeNumber() == 0);
 		assertTrue(pokemon.getName() == "Guy");

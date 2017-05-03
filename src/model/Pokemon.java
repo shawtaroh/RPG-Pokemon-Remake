@@ -1,5 +1,7 @@
 package model;
 
+import java.awt.Image;
+
 /*
 							Pokemon.java
                                   ,'\
@@ -27,14 +29,20 @@ Implements Pokemon SafariZone pokemon object
 */
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Random;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+
+import driver.GameGUI;
 
 public class Pokemon implements Serializable{
 
 	private int pokeNumber;
 	private String name;
-	private BufferedImage sprite;
 	private String type;
 	private int maxHP;
 	private double prevProbabilityToRun, probabilityToRun, probabilityToCapture, baseProbabilityToCapture;
@@ -66,10 +74,9 @@ public class Pokemon implements Serializable{
 		return probabilityToCapture;
 	}
 
-	public Pokemon(int pokeNumber, String name, BufferedImage sprite, String type) {
+	public Pokemon(int pokeNumber, String name, String type) {
 		this.pokeNumber = pokeNumber;
 		this.name = name;
-		this.sprite = sprite;
 		this.type = type;
 		// type dependent + gaussian randomness
 		if (this.type == "Rare") {
@@ -100,8 +107,9 @@ public class Pokemon implements Serializable{
 		return name;
 	}
 
-	public BufferedImage getSprite() {
-		return sprite;
+	public Image getSprite() {
+			return new ImageIcon(GameGUI.class.getResource("/art/pokemon/" + name + ".gif")).getImage();
+
 	}
 
 	public void giveBait() {

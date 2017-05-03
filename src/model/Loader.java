@@ -47,18 +47,14 @@ public class Loader {
 		File[] files = new File(Pokedex.class.getResource("/art/pokemon").getFile()).listFiles();
 		int pokeNum = 1;
 		for (File file : files) {
-			try {
 				// consistent random types with ratios 6:3:1 like in the spec
 				double rand = generator.nextDouble();
 				if (rand > .4)
-					pokedex.add(new Pokemon(pokeNum, file.getName(), ImageIO.read(file), Common));
+					pokedex.add(new Pokemon(pokeNum, file.getName(), Common));
 				if (rand < .3)
-					pokedex.add(new Pokemon(pokeNum, file.getName(), ImageIO.read(file), Uncommon));
+					pokedex.add(new Pokemon(pokeNum, file.getName(), Uncommon));
 				else
-					pokedex.add(new Pokemon(pokeNum, file.getName(), ImageIO.read(file), Rare));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+					pokedex.add(new Pokemon(pokeNum, file.getName(), Rare));
 		}
 		for (Pokemon p : pokedex) {
 			// System.out.println(p.getName());

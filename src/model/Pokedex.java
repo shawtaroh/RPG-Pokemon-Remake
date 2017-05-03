@@ -53,7 +53,6 @@ public class Pokedex {
 		int pokeNum = 1;
 
 		for (File file : files) {
-			try {
 				// consistent random types with ratios 6:3:1 like in the spec
 				double rand = generator.nextDouble();
 				String rarity;
@@ -65,17 +64,14 @@ public class Pokedex {
 					rarity = Rare;
 				String name = file.getName().replaceFirst(".gif", "");
 				name = name.substring(0, 1).toUpperCase() + name.substring(1);
-				pokedex.add(new Pokemon(pokeNum, name, ImageIO.read(file), rarity));
+				pokedex.add(new Pokemon(pokeNum, name, rarity));
 				pokeNum++;
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 	}
 	
 	public Pokemon getRandomPokemon(){
 		Random generator = new Random();
 		Pokemon pokemon = pokedex.get(generator.nextInt(pokedex.size()));
-		return new Pokemon(pokemon.getPokeNumber(), pokemon.getName(), pokemon.getSprite(), pokemon.getType());
+		return new Pokemon(pokemon.getPokeNumber(), pokemon.getName(), pokemon.getType());
 	}
 }

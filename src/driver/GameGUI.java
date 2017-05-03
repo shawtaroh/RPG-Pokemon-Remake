@@ -63,6 +63,7 @@ import graphics.InGameMenu;
 import graphics.SplashScreen;
 import model.Player;
 import model.Pokedex;
+import model.Pokemon;
 import model.PokemonGame;
 import model.Key;
 import songplayer.EndOfSongEvent;
@@ -158,6 +159,22 @@ public class GameGUI extends JFrame implements Runnable {
 				game.getPokemonGame().getPlayer().setxLastPosition(loaded.getxLastPosition());
 				game.getPokemonGame().getPlayer().setyLastPosition(loaded.getyLastPosition());
 				game.getPokemonGame().getPlayer().setWinCondition(loaded.getWinCondition());
+				
+				int imageCount = (int) inFile.readObject();
+				ArrayList<Pokemon> toAdd=game.getPokemonGame().getPlayer().getMyPokemon();
+				for(int i=0;i<imageCount;i++){
+					int pNum= (int) inFile.readObject();
+					String name=(String) inFile.readObject();
+					String type= (String) inFile.readObject();
+					
+					BufferedImage sprite=ImageIO.read(inFile);
+					Pokemon add = new Pokemon(pNum, name, sprite, type);
+					int hp=(int)inFile.readInt();
+					add.setCurrentHP(hp);
+					toAdd.add(add);
+
+				}
+				game.getPokemonGame().getPlayer().setMyPokemon(toAdd);
 
 			} catch (ClassNotFoundException | IOException e) {
 				e.printStackTrace();
@@ -455,8 +472,6 @@ public class GameGUI extends JFrame implements Runnable {
 									pokemonGame.getPlayer().getMyBag().addItems("Potions", 1);
 								else{
 									pokemonGame.getPlayer().getMyBag().addItems("Snacks", 1);
-									pokemonGame.getPlayer().setSteps(pokemonGame.getPlayer().getSteps()+29);
-									currentSteps+=29;
 								}
 								SongPlayer.playFile(finalWaiter, Pokedex.class.getResource("/art/sounds/item.wav").toString().substring(6));
 							}
@@ -673,7 +688,23 @@ public class GameGUI extends JFrame implements Runnable {
 
 		FileOutputStream savefile = new FileOutputStream("game.save");
 		ObjectOutputStream outFile = new ObjectOutputStream(savefile);
+		ArrayList<Pokemon> savePokemon= pokemonGame.getPlayer().getMyPokemon();
+		pokemonGame.getPlayer().setMyPokemon(null);
 		outFile.writeObject(pokemonGame.getPlayer());
+		outFile.writeObject(savePokemon.size());
+		
+		for(Pokemon p:savePokemon){
+			outFile.writeObject(p.getPokeNumber());
+			outFile.writeObject(p.getName());
+			outFile.writeObject(p.getType());
+			ImageIO.write(p.getSprite(), "gif", outFile);
+			
+			outFile.writeInt(p.getCurrentHP());
+			//outFile.writeObject(p.getMaxHP());
+			//outFile.writeObject(p.getProbabilityToCapture());
+			//outFile.writeObject(p.getProbabilityToRun());
+
+		}
 		outFile.close();
 
 	}

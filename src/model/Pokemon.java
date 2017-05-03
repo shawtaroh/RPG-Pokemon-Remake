@@ -27,9 +27,10 @@ Implements Pokemon SafariZone pokemon object
 */
 
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.Random;
 
-public class Pokemon {
+public class Pokemon implements Serializable{
 
 	private int pokeNumber;
 	private String name;

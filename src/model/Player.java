@@ -1,5 +1,7 @@
 package model;
 
+import java.io.Serializable;
+
 /*
 							Player.java
                                   ,'\
@@ -30,11 +32,10 @@ import java.util.ArrayList;
 
 import graphics.BitMap;
 
-public class Player extends Trainer {
+public class Player extends Trainer implements Serializable{
 
 	public Player(ArrayList<Key> keys, int map, int winCondition) {
 		super(keys, map, winCondition);
-		this.player = BitMap.cut("/art/player/NPC.png", 64, 64, 0, 0);
 	}
 
 	/*

@@ -208,7 +208,6 @@ public class Trainer implements Serializable {
 	private int turning = 0;
 	protected byte animationTick = 0;
 	protected byte animationPointer = 0;
-	protected BitMap[][] player;
 	private ArrayList<RPoint> restrictedX = new ArrayList<>();
 
 	protected int xAccel;
@@ -233,7 +232,6 @@ public class Trainer implements Serializable {
 		this.map = map;
 		this.winCondition = winCondition;
 		loadRestrictions();
-		player = BitMap.cut("/art/player/NPC.png", 64, 64, 0, 0);
 		myBag = new Inventory();
 		
 	}
@@ -335,7 +333,7 @@ public class Trainer implements Serializable {
 	
 	
 	public void render(BitMap screen) {
-		
+		BitMap[][]player = BitMap.cut("/art/player/NPC.png", 64, 64, 0, 0);
 		if (lockWalking) {
 			screen.blit(player[turning][animationPointer],
 			        (screen.getWidth() - TILE_WIDTH * 2) / 2 + xPosition,

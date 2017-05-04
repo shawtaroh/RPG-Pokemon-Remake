@@ -446,9 +446,7 @@ public class InGameMenu extends JPanel {
 					final int offset = 5;
 					g2.drawImage(pokes[r][c].getSprite(),
 					        offset + x + c * width, offset + y + r * height,
-					        width - offset * 2, height - offset * 2, null,
-					        null);
-				}
+					        width - offset * 2, height - offset * 2, this);				}
 				p++;
 			}
 		}

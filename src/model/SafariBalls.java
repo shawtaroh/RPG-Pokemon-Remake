@@ -1,7 +1,7 @@
 package model;
 
 /*
-							Potions.java
+							SafariBalls.java
                                   ,'\
     _.----.        ____         ,'  _\   ___    ___     ____
 _,-'       `.     |    |  /`.   \,-'    |   \  /   |   |    \  |`.

@@ -305,7 +305,11 @@ public void paintComponent(Graphics g) {
 			}
 			if (button == pokeball) {
 				//TODO: Implement Pokeball Throw
-				model.getPlayer().getMyBag().useItem("Safari Balls");
+				if(!model.getPlayer().getMyBag().useItem("Safari Balls")){
+					JOptionPane.showMessageDialog(null, "You are out of Safari Balls!");
+					gui.resumeFromBattle();
+					return;
+				}
 				isThrown = true;
 				if(pokemon.throwBall()){
 					isCaught = true;

@@ -38,7 +38,7 @@ public class Inventory implements Serializable{
 	
 	public Inventory() {
 		items = new TreeMap<String, ItemList>();
-		items.put("Safari Balls", new SafariBalls(30));
+		items.put("Safari Balls", new SafariBalls(2));
 		items.put("Potions", new Potions(0));
 		items.put("Snacks", new Potions(0));
 

@@ -311,18 +311,17 @@ public class GameGUI extends JFrame implements Runnable {
 		isNextPage = false;
 		message = "You encountered a pokemon! ";
 		message2 = "";
-		running = true;
 		menu.off();
 		painting.setVisible(true);
 		menu.setFocusable(false);
 		this.requestFocus();
 		start();
 		repaint();
+		running = true;
 	}
 	
 	public void resumeFromBattle() {
 
-		running = true;
 		battle.off();
 		painting.setVisible(true);
 		battle.setFocusable(false);
@@ -334,6 +333,7 @@ public class GameGUI extends JFrame implements Runnable {
 		SongPlayer.playFile(waiter, Pokedex.class.getResource("/art/sounds/101-opening.wav").toString().substring(6));
 		start();
 		repaint();
+		running = true;
 	}
 
 	/*
@@ -358,7 +358,7 @@ public class GameGUI extends JFrame implements Runnable {
 		long lastTime = System.nanoTime();
 		double unprocessed = 0.0;
 		int tick = 0;
-
+		int counter=0;
 		while (running) {
 			double nsPerTick = 1000000000.0 / (double) FPS;
 			boolean shouldRender = false;
@@ -399,6 +399,37 @@ public class GameGUI extends JFrame implements Runnable {
 					pokemonGame.getWorld().render(screen, xScroll, yScroll);
 				}
 				//System.out.println(pokemonGame.getPlayer().getxPosition() + "," + pokemonGame.getPlayer().getyPosition());
+				if(pokemonGame.getPlayer().getMyBag().getNumItem("Safari Balls")==0){
+					counter++;
+					isNextPage = false;
+					message = "You ran out of safari balls! Game over! Summary:";
+					message2="You caught "+pokemonGame.getPlayer().getMyPokemon().size()+" pokemon.";
+				}
+				if(pokemonGame.getPlayer().getMyPokemon().size()==24){
+					counter++;
+					isNextPage = false;
+					message = "Your pokedex is full, you caught them all. Congratulations, you win! Summary:";
+					message2="You caught "+pokemonGame.getPlayer().getMyPokemon().size()+" pokemon.";
+				}
+				
+				if(pokemonGame.getPlayer().getMyPokemon().size()==24&&counter>25){
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					running=false;
+				}
+				if(pokemonGame.getPlayer().getMyBag().getNumItem("Safari Balls")==0&&counter>25){
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					running=false;
+				}
 				if(win){
 					isNextPage = false;
 					message = "You Win!";

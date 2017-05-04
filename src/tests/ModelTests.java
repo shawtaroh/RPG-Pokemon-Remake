@@ -21,6 +21,7 @@ import model.Pokedex;
 import model.Pokemon;
 import model.PokemonGame;
 import model.Potions;
+import model.RPoint;
 import model.SafariBalls;
 import model.Snacks;
 
@@ -281,7 +282,9 @@ public class ModelTests {
 	      player.tick();
 	      keys.get(3).setTappedDown(false);
 	      player.tick();
-	      player.useAxe();
+	      player.useAxe(); 
+	      //player.getMyBag().addItems("Snack", 100);
+	      //player.eatSnack();
 	   }
 	
 	@Test
@@ -292,15 +295,35 @@ public class ModelTests {
 	@Test
 	   public void testPokemon() {
 		BufferedImage aNull = new BufferedImage(10, 10, 10);
-		Pokemon pokemon = new Pokemon(0,"Guy","CoolGuy");
+		Pokemon pokemon = new Pokemon(0,"abra","abra");
 		pokemon.setCurrentHP(100);
 		assertTrue(pokemon.getPokeNumber() == 0);
-		assertTrue(pokemon.getName() == "Guy");
-		assertTrue(pokemon.getSprite() == aNull);
+		assertTrue(pokemon.getName() == "abra");
+		assertTrue(pokemon.getSprite() != aNull);
 		int x =  pokemon.getMaxHP();
 		Double prob = pokemon.getProbabilityToRun();
 		assertTrue(pokemon.getCurrentHP() == 100);
-		assertTrue(pokemon.getType() == "CoolGuy");
+		assertTrue(pokemon.getType() == "abra");
+		pokemon.giveBait();
+		pokemon.throwRock();
+		pokemon.checkIfRuns();
+		pokemon.throwBall();
+		pokemon.throwRock();
+		pokemon.throwRock();
+		pokemon.throwBall();
+		pokemon.checkIfRuns();
+		pokemon.throwRock();
+		pokemon.throwBall();
+		pokemon.checkIfRuns();
+		pokemon.throwRock();
+		pokemon.checkIfRuns();
+		pokemon.throwBall();
+		pokemon.throwRock();
+		pokemon.checkIfRuns();
+		pokemon.throwRock();
+		pokemon.throwBall();
+		pokemon.checkIfRuns();
+		pokemon.throwRock();
 	}
 	
 	@Test
@@ -332,5 +355,14 @@ public class ModelTests {
 	      keys.add(new Key("left"));
 	      keys.add(new Key("right"));
 		Player player = new Player(keys, 0, 0);
+	}
+	
+	@Test 
+		public void testRPoint(){
+		RPoint r = new RPoint(0, 0, false);
+		r.setRemovable(true);
+		assertTrue(r.isRemovable() == true);
+		
+		
 	}
 }

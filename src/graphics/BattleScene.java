@@ -285,21 +285,26 @@ public void paintComponent(Graphics g) {
 					willRun = true;
 					updateStats();
 					repaint();
-					JOptionPane.showMessageDialog(null, pokemon.getName() + " has fainted."); 
+					gameStatus.setText("You threw a rock, " + pokemon.getName() + " has fainted.");
+					JOptionPane.showMessageDialog(null, pokemon.getName() + " has fainted.");
 					gui.resumeFromBattle();
 					return;
+				}
+				else{
+					gameStatus.setText("You threw a rock, smart move.");
 				}
 				updateStats();
 			}
 			if (button == bait) {
 				pokemon.giveBait();
 				isThrown = true;
-
+				gameStatus.setText("You threw bait, smart move.");
 				updateStats();
 			}
 			if (button == run) {
 				//TODO: Implement Run
 				updateStats();
+				gameStatus.setText("You ran away, smart move.");
 				gui.resumeFromBattle();
 				return;
 			}
@@ -316,9 +321,13 @@ public void paintComponent(Graphics g) {
 					updateStats();
 					repaint();
 					model.getPlayer().getMyPokemon().add(pokemon);
+					gameStatus.setText("You have caught " + pokemon.getName() + "!");
 					JOptionPane.showMessageDialog(null, "You have caught " + pokemon.getName() + "!");
 					gui.resumeFromBattle();
 					return;
+				}
+				else{
+					gameStatus.setText("Throw was unsuccessful, try again");
 				}
 				updateStats();
 			}
@@ -326,6 +335,7 @@ public void paintComponent(Graphics g) {
 			if(willRun){
 				updateStats();
 				repaint();
+				gameStatus.setText(pokemon.getName() + " has ran off.");
 				JOptionPane.showMessageDialog(null, pokemon.getName() + " has ran off."); 
 				gui.resumeFromBattle();
 				return;

@@ -63,6 +63,8 @@ public class ModelTests {
 	      game1.changeWorld(99);
 	      game1.changeWorld(1);
 	      game1.changeWorld(2);
+	      game1.changeWorld(2);
+	      game1.changeWorld(1);
 	      Player player = game1.getPlayer();
 	      Map world = game1.getWorld();
 	      game1.setPlayer(player);
@@ -72,7 +74,7 @@ public class ModelTests {
 	      assertTrue(world != null);
 	      int X = game1.getPlayerXPos();
 	      int Y = game1.getPlayerYPos();
-	      //game2.invertory();
+	      game2.getRandomPokemon();
 	   }
 	
 	@Test
@@ -283,8 +285,9 @@ public class ModelTests {
 	      keys.get(3).setTappedDown(false);
 	      player.tick();
 	      player.useAxe(); 
-	      //player.getMyBag().addItems("Snack", 100);
-	      //player.eatSnack();
+	      player.getMyBag().addItems("Snacks", 2);
+	      player.eatSnack();
+	      player.setMyBag(null);
 	   }
 	
 	@Test
@@ -362,7 +365,5 @@ public class ModelTests {
 		RPoint r = new RPoint(0, 0, false);
 		r.setRemovable(true);
 		assertTrue(r.isRemovable() == true);
-		
-		
 	}
 }

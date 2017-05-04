@@ -469,7 +469,7 @@ public class GameGUI extends JFrame implements Runnable {
 				}
 				if (pokemonGame.getPlayer().getSteps() <= 0) {
 					JOptionPane.showMessageDialog(null,
-							"You ran out of steps, and caught no pokemon. This is only iteration one, goodbye.");
+							"You ran out of steps! Congratulations on catching " + pokemonGame.getPlayer().getMyPokemon().size() + " pokemon! Goodbye.");
 					stop();
 					System.exit(0);
 				}

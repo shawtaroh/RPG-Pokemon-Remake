@@ -87,23 +87,21 @@ public class Pokemon implements Serializable{
 			probabilityToRun = .5;
 			baseProbabilityToCapture = 0.1;
 			maxHP = (int) (140 + 20 * (new Random().nextGaussian()));
-			currentHP = maxHP;
 		} else if (this.type.equals("Uncommon")) {
 			probabilityToRun = .3;
 			baseProbabilityToCapture = 0.3;
 			maxHP = (int) (70 + 20 * (new Random().nextGaussian()));
-			currentHP = maxHP;
 		} else {
 			probabilityToRun = .1;
 			baseProbabilityToCapture = 0.5;
 			maxHP = (int) (35 + 20 * (new Random().nextGaussian()));
-			currentHP = maxHP;
 		}
 		
 		if(maxHP <= 0){
 			maxHP = 1;
-			currentHP = maxHP;
 		}
+		
+		currentHP = maxHP;
 		
 		updateProbabilityToCapture(0);
 	}

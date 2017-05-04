@@ -163,6 +163,8 @@ public class Pokemon implements Serializable{
 		probabilityToCapture = baseProbabilityToCapture + (maxHP-currentHP)/(double)maxHP;
 		if(probabilityToCapture > 1.0){
 			probabilityToCapture = 1.0;
+		}else if (probabilityToCapture < 0.0){
+			probabilityToCapture = 0.0;
 		}
 	}
 

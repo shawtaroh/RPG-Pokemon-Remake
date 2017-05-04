@@ -315,8 +315,6 @@ public void paintComponent(Graphics g) {
 					JOptionPane.showMessageDialog(null, "You have caught " + pokemon.getName() + "!");
 					gui.resumeFromBattle();
 					return;
-				}else{
-					JOptionPane.showMessageDialog(null, "The " + pokemon.getName() + " dodged the Safari Ball!");
 				}
 				updateStats();
 			}

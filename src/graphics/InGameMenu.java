@@ -50,6 +50,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -90,7 +91,7 @@ public class InGameMenu extends JPanel {
 	private int			rows;
 	private int			cols;
 	private Pokemon		selectedPoke	= null;
-	private JButton eat;
+	private JButton eat, potion;
 	private ArrayList<Pokemon> pokeList;
 	
 	
@@ -144,7 +145,22 @@ public class InGameMenu extends JPanel {
 		eat.addActionListener(new MenuListener(eat));
 		eat.setFont(buttonFont);
 		eat.setForeground(Color.WHITE);
+		eat.setToolTipText("Eat a Snack to gain 14 steps back");
 		contents.add(eat);
+		
+
+		potion = new JButton("Give Pokemon Potion");
+		potion.setBackground(Color.MAGENTA);
+		potion.setHorizontalTextPosition(SwingConstants.CENTER);
+		potion.setVerticalTextPosition(SwingConstants.CENTER);
+		// mapOne.setHorizontalAlignment(JButton.CENTER);
+		potion.setMaximumSize(buttonSize);
+		potion.addActionListener(new MenuListener(potion));
+		potion.setFont(buttonFont);
+		potion.setForeground(Color.WHITE);
+		potion.setToolTipText("Select a Pokemon to give it a potion");
+		potion.setEnabled(false);
+		contents.add(potion);
 		
 		spacer = new JLabel(" ");
 		spacer.setMaximumSize(buttonSize);
@@ -276,8 +292,20 @@ public class InGameMenu extends JPanel {
 				gui.resumeFromMenu();
 			}
 			else if (button == eat){
-				model.getPlayer().eatSnack();
-				gui.resumeFromMenu();
+				if(model.getPlayer().getMyBag().getNumItem("Snacks") > 0){
+					model.getPlayer().eatSnack();
+					on();
+				}else{
+					JOptionPane.showMessageDialog(null, "You have no snacks in your inventory");
+				}
+			}else if (button == potion){
+				if(model.getPlayer().getMyBag().getNumItem("Potions") > 0){
+					selectedPoke.givePotion();
+					model.getPlayer().getMyBag().useItem("Potions");
+					on();
+				}else{
+					JOptionPane.showMessageDialog(null, "You have no potions in your inventory");
+				}
 			}
 		}
 		
@@ -351,6 +379,8 @@ public class InGameMenu extends JPanel {
 	/*
 	 * For choosing which pokemon to show stats for
 	 */
+	
+	
 	private class PokedexListener implements MouseListener {
 		
 		@Override
@@ -359,7 +389,16 @@ public class InGameMenu extends JPanel {
 			final int x = arg0.getX();
 			final int y = arg0.getY();
 			
-			showStats(getPokemon(x, y));
+			Pokemon poke = getPokemon(x,y);
+			
+			showStats(poke);
+			if(poke != null){
+				potion.setEnabled(true);
+				potion.setToolTipText("Give a Pokemon 10 HP");
+			}else{
+				potion.setEnabled(false);
+				potion.setToolTipText("Select a Pokemon to give it a potion");
+			}
 		}
 		
 		

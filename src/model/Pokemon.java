@@ -185,5 +185,9 @@ public class Pokemon implements Serializable{
 			return false;
 		}
 	}
+
+	public void givePotion() {
+		incrementHP(10);
+	}
 	
 }

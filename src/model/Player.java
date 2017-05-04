@@ -45,6 +45,8 @@ public class Player extends Trainer implements Serializable{
 		
 		if(this.getMyBag().useItem("Snacks"))
 			this.setSteps(this.getSteps() + 14);
+		else
+			System.out.println("happens");
 	}
 
 }
